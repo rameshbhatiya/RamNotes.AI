@@ -1,64 +1,43 @@
-# ⚡ RameshNotes AI
+# 🧠 RamNotes AI - Social Learning & Academic Engine
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54" alt="Python" />
-  <img src="https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi" alt="FastAPI" />
-  <img src="https://img.shields.io/badge/Google%20Gemini-8E75B2?style=for-the-badge&logo=googlegemini&logoColor=white" alt="Gemini AI" />
-  <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5" />
+  <a href="https://ramnotes-ai.onrender.com" target="_blank">
+    <img src="https://img.shields.io/badge/🚀_Live_App-Click_Here_To_Open-indigo?style=for-the-badge&logo=render&logoColor=white" alt="Live App Link"/>
+  </a>
 </p>
 
-An adaptive, full-stack study assistant that transforms raw study material, lecture notes, and textbook excerpts into structured Markdown notes tailored for **Class 9 through University students**.
+---
+
+### 🌐 Live Application Link
+
+🔗 **Access the Live Platform:** [https://ramnotes-ai.onrender.com](https://ramnotes-ai.onrender.com)
 
 ---
 
-## 🌟 Key Features
+### ✨ Key Features
 
-* 🎓 **Multi-Level Academic Formatting:** Automatically adjusts depth, formulas, and language based on the target level (Class 9–10, Class 11–12 PCM/PCB, or University).
-* 📐 **LaTeX & Math Support:** Renders mathematical formulas and chemical equations clearly.
-* 📝 **Revision & Flashcards:** Generates quick revision bullet points and key takeaways alongside structured concepts.
-* ⚡ **Lightweight & Fast:** Built on Python FastAPI and powered by the Google Gemini API.
-
----
-
-## 🛠️ Tech Stack
-
-* **Backend:** Python, FastAPI, Uvicorn
-* **AI Engine:** Google Gemini API (`gemini-1.5-flash`)
-* **Frontend:** HTML5, CSS3, JavaScript, Marked.js
+* **📱 Meta / YouTube-Style Dashboard UI:** Modern dark-themed dashboard feed designed for seamless social learning.
+* **🔐 Multi-Authentication Portal:** Flexible verification options including Mobile Phone OTP, Email Verification, and Single Sign-On (SSO).
+* **🎓 Multi-Stream Academic Coverage:**
+  * **School Curriculums:** CBSE, RBSE, and NCERT frameworks for Classes 9 through 12.
+  * **Senior Secondary Streams:** Science (PCM / PCB), Commerce, and Arts / Humanities.
+  * **Higher Education:** University-level course materials across B.Tech/B.E, B.Sc, B.Com, B.A, and BCA/MCA programs.
+* **⚡ Gemini AI Integration:** Instant generation of chapter notes, formula sheets, previous year solved questions (PYQs), and sample papers.
+* **💾 Persistent History Engine:** Built-in database storage ensuring all generated study feeds remain accessible on your personal timeline.
 
 ---
 
-## 🚀 Quick Start
+### 👨‍💻 Lead Developer
 
-### 1. Install Dependencies
-```bash
-pip install fastapi uvicorn google-generativeai
-```
-
-### 2. Configure API Key & Run
-Set your Gemini API key in your terminal and launch the server:
-
-**Windows (CMD/PowerShell):**
-```cmd
-set GEMINI_API_KEY=your_gemini_api_key_here
-uvicorn app:app --reload
-```
-
-**Linux / Mac:**
-```bash
-export GEMINI_API_KEY="your_gemini_api_key_here"
-uvicorn app:app --reload
-```
-
-### 3. Open Application
-Navigate to `http://127.0.0.1:8000` in your web browser.
+<h2 align="center">
+  Developed with ❤️ by 
+  <a href="https://github.com">
+    <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=700&size=28&pause=1000&color=2563EB&center=true&vCenter=true&width=435&lines=Ramesh+Kumawat;Creator+of+RamNotes+AI" alt="Ramesh Kumawat - Lead Developer" />
+  </a>
+</h2>
 
 ---
 
-## 📁 Project Structure
-
-```text
-rameshnotes-ai/
-├── app.py          # Unified FastAPI backend & embedded frontend
-└── README.md       # Project documentation
-```
+<p align="center">
+  <i>RamNotes AI — Powering Smarter Academic Workflows</i>
+</p>
