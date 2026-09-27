@@ -9,7 +9,7 @@ import google.generativeai as genai
 
 app = FastAPI(
     title="RamNotes AI Engine",
-    description="Multi-Subject Academic AI Platform",
+    description="NCERT & Academic Core AI Portal",
     version="2.0.0"
 )
 
@@ -24,13 +24,13 @@ def init_db():
     c.execute("""
         CREATE TABLE IF NOT EXISTS notes (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT,
-            level TEXT,
-            subject TEXT,
-            category TEXT,
-            topic TEXT,
-            content TEXT,
-            created_at TEXT
+            username TEXT NOT NULL,
+            level TEXT NOT NULL,
+            subject TEXT NOT NULL,
+            category TEXT NOT NULL,
+            topic TEXT NOT NULL,
+            content TEXT NOT NULL,
+            created_at TEXT NOT NULL
         )
     """)
     conn.commit()
@@ -49,29 +49,28 @@ class GenerateRequest(BaseModel):
     topic: str
     api_key: str = ""
 
-# Serve static frontend folder
+# Serve Static Assets
 os.makedirs("static", exist_ok=True)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # ---------------------------------------------------------
-# ROUTES
+# ENDPOINTS
 # ---------------------------------------------------------
 
 @app.get("/")
 async def serve_index():
-    """Serves the main Instagram/YouTube-style single-page interface."""
+    """Serves the NCERT Books & Solutions UI dashboard."""
     return FileResponse("static/index.html")
 
 @app.post("/api/generate")
 async def generate_note(req: GenerateRequest):
-    """Handles AI generation requests and persists posts into SQLite."""
-    # Retrieve key from user input or environment variable
+    """Generates NCERT/CBSE notes using Gemini AI and stores them in SQLite."""
     key = req.api_key.strip() if req.api_key else os.environ.get("GEMINI_API_KEY", "").strip()
     
     if not key:
         raise HTTPException(
             status_code=400, 
-            detail="Gemini API Key is missing. Please set GEMINI_API_KEY in your deployment environment or enter it manually."
+            detail="Gemini API key missing. Please ensure GEMINI_API_KEY is configured in Render Environment Variables."
         )
 
     try:
@@ -79,33 +78,33 @@ async def generate_note(req: GenerateRequest):
         model = genai.GenerativeModel("gemini-1.5-flash")
 
         prompt = f"""
-        You are RamNotes AI, an elite academic assistant engine for student learning.
-        Academic Level: {req.level}
+        You are RamNotes AI, an expert academic engine specialized in NCERT books, solutions, and CBSE board standards.
+        Academic Target: {req.level}
         Subject: {req.subject}
-        Content Format: {req.category}
-        Topic / Problem Statement: "{req.topic}"
+        Category/Feature: {req.category}
+        Topic: "{req.topic}"
 
-        Provide comprehensive, highly structured academic material:
-        # 📌 {req.subject}: {req.topic}
-        **Level:** {req.level} | **Category:** {req.category}
+        Generate structured educational content:
+        # 📌 {req.subject} ({req.level}) - {req.topic}
+        **Type:** {req.category}
 
-        ## 💡 Core Theoretical Concepts
-        Provide a clear step-by-step breakdown.
+        ## 💡 Core Definitions & Concepts
+        Provide clear, step-by-step explanations according to official NCERT standards.
 
-        ## 📐 Formulas, Reactions & Equations
-        Use precise formatting ($inline$ or $$display$$ for math).
+        ## 📐 Formulas, Reactions & Key Equations
+        Use standard mathematical/scientific notation.
 
-        ## 📝 Model Exam Questions & Answers
-        Include typical board/university standard questions with answers.
+        ## 📝 NCERT Solutions & Exam Questions
+        Provide solved short and long answer questions with step-by-step marking schemes.
 
-        ## ⚡ Key Revision Points
-        Bullet points summarizing key takeaways.
+        ## ⚡ Quick Revision Notes
+        Summary bullet points for fast exam prep.
         """
 
         response = model.generate_content(prompt)
         content = response.text
 
-        # Save generated post to database
+        # Persist generated note to database
         conn = sqlite3.connect(DB_FILE)
         c = conn.cursor()
         c.execute(
@@ -121,9 +120,9 @@ async def generate_note(req: GenerateRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Generation Error: {str(e)}")
 
-@app.get("/api/feed/{username}")
+@app.get("/api/feed/{username:path}")
 async def get_user_feed(username: str):
-    """Retrieves all generated timeline posts for the user."""
+    """Fetches user study bank history from SQLite."""
     conn = sqlite3.connect(DB_FILE)
     c = conn.cursor()
     c.execute(
