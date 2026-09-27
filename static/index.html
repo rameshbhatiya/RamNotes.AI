@@ -3,92 +3,250 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RamNotes AI | Social Learning Feed</title>
+    <title>RamNotes AI | NCERT Books & Solutions</title>
+    <!-- Font Awesome Icons & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        body { background-color: #0f172a; color: #f8fafc; padding: 20px; }
-        .container { max-width: 900px; margin: 0 auto; }
-        .header { background: linear-gradient(90deg, #1e1b4b, #312e81); padding: 20px; border-radius: 12px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #4338ca; }
-        .card { background-color: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
-        input, select, textarea, button { width: 100%; padding: 12px; margin-top: 8px; margin-bottom: 16px; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: white; font-size: 14px; }
-        button { background: linear-gradient(90deg, #6366f1, #4f46e5); font-weight: bold; cursor: pointer; border: none; }
-        button:hover { opacity: 0.9; }
-        .post-meta { font-size: 12px; color: #94a3b8; margin-bottom: 8px; }
-        .post-content { background: #0f172a; padding: 15px; border-radius: 8px; white-space: pre-wrap; font-family: monospace; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+        body { background-color: #f3f4f6; color: #1f2937; -webkit-tap-highlight-color: transparent; }
+        
+        /* AUTHENTICATION SCREEN */
+        .auth-container { max-width: 420px; margin: 40px auto; padding: 25px; background: white; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); text-align: center; }
+        .auth-logo { font-size: 26px; font-weight: 700; color: #4f46e5; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .auth-tabs { display: flex; border-bottom: 2px solid #e5e7eb; margin-bottom: 20px; }
+        .auth-tab { flex: 1; padding: 12px; font-weight: 600; cursor: pointer; color: #6b7280; border-bottom: 3px solid transparent; }
+        .auth-tab.active { color: #4f46e5; border-color: #4f46e5; }
+        
+        .form-group { margin-bottom: 15px; text-align: left; }
+        .phone-input-group { display: flex; gap: 8px; }
+        .phone-input-group select { width: 110px; padding: 12px; border: 1px solid #d1d5db; border-radius: 10px; background: #f9fafb; font-size: 14px; }
+        .form-control { width: 100%; padding: 12px 15px; border: 1px solid #d1d5db; border-radius: 10px; background: #f9fafb; font-size: 14px; outline: none; }
+        .form-control:focus { border-color: #4f46e5; background: #fff; }
+        
+        .btn-primary { width: 100%; padding: 13px; border: none; border-radius: 10px; background: #4f46e5; color: white; font-weight: 600; font-size: 15px; cursor: pointer; margin-top: 10px; }
+        .btn-primary:hover { background: #4338ca; }
+        
+        .social-divider { margin: 20px 0; position: relative; text-align: center; }
+        .social-divider::before { content: ""; position: absolute; top: 50%; left: 0; width: 100%; height: 1px; background: #e5e7eb; z-index: 1; }
+        .social-divider span { position: relative; z-index: 2; background: white; padding: 0 12px; color: #9ca3af; font-size: 12px; }
+        
+        .social-btns { display: flex; gap: 12px; }
+        .social-btn { flex: 1; padding: 11px; border: 1px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 500; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .social-btn:hover { background: #f9fafb; }
+
+        /* APP HEADER BAR (Matching Screenshot) */
+        .app-header { background-color: #536dfe; color: white; padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 8px rgba(0,0,0,0.15); position: sticky; top: 0; z-index: 100; }
+        .app-header .left { display: flex; align-items: center; gap: 18px; }
+        .app-header .title { font-size: 18px; font-weight: 600; }
+        .app-header i { font-size: 20px; cursor: pointer; }
+
+        /* APP DASHBOARD GRID (Matching Screenshot) */
+        .dashboard-container { max-width: 600px; margin: 20px auto; padding: 0 15px; }
+        .grid-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        
+        .grid-card { background: white; border-radius: 12px; padding: 20px 15px; text-align: center; box-shadow: 0 3px 10px rgba(0,0,0,0.05); cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; border: 1px solid #f0f0f0; }
+        .grid-card:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0,0,0,0.1); }
+        .grid-card img, .grid-card i { font-size: 38px; margin-bottom: 12px; color: #536dfe; }
+        .grid-card .card-title { font-size: 14px; font-weight: 600; color: #374151; line-height: 1.3; }
+
+        /* GENERATOR MODAL/PANEL */
+        .generator-panel { background: white; border-radius: 16px; padding: 20px; margin-top: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); display: none; }
+        .feed-card { background: white; border-radius: 12px; padding: 20px; margin-top: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .feed-header { font-size: 12px; color: #6b7280; margin-bottom: 8px; font-weight: 500; }
+        .feed-title { font-size: 16px; font-weight: 600; color: #111827; margin-bottom: 10px; }
+        .feed-content { background: #f9fafb; padding: 15px; border-radius: 8px; font-size: 14px; line-height: 1.6; white-space: pre-wrap; border: 1px solid #e5e7eb; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🧠 RamNotes AI Dashboard</h1>
-            <span>Meta / YouTube Theme</span>
-        </div>
 
-        <div class="card" id="authCard">
-            <h3>🔑 Account Access</h3>
-            <input type="text" id="username" placeholder="Enter Username / Email">
-            <input type="password" id="apiKey" placeholder="Optional: Override Gemini API Key">
-            <button onclick="login()">Enter Dashboard</button>
-        </div>
-
-        <div class="card" id="appCard" style="display:none;">
-            <h3>✍️ Create Post Feed</h3>
-            <label>Level:</label>
-            <select id="level">
-                <option>Class 9 - 10</option>
-                <option>Class 11 - 12 (PCB/PCM)</option>
-                <option>University / Higher Ed</option>
-            </select>
-
-            <label>Subject:</label>
-            <select id="subject">
-                <option>Biology</option>
-                <option>Biotechnology</option>
-                <option>Physics</option>
-                <option>Chemistry</option>
-                <option>Mathematics</option>
-                <option>Computer Applications</option>
-            </select>
-
-            <label>Topic Prompt:</label>
-            <textarea id="topic" placeholder="Describe the topic or question..."></textarea>
+    <!-- 1. LOGIN / SIGNUP SCREEN -->
+    <div id="authScreen">
+        <div class="auth-container">
+            <div class="auth-logo"><i class="fa-solid fa-graduation-cap"></i> RamNotes AI</div>
             
-            <button onclick="generateNote()">🚀 Generate & Publish</button>
+            <div class="auth-tabs">
+                <div class="auth-tab active" onclick="switchTab('signin')">Sign In</div>
+                <div class="auth-tab" onclick="switchTab('signup')">Sign Up</div>
+            </div>
+
+            <form id="authForm" onsubmit="handleAuth(event)">
+                <div class="form-group" id="nameGroup" style="display: none;">
+                    <input type="text" id="fullname" class="form-control" placeholder="Full Name">
+                </div>
+
+                <div class="form-group">
+                    <div class="phone-input-group">
+                        <select id="countryCode">
+                            <option value="+91">🇮🇳 +91</option>
+                            <option value="+1">🇺🇸 +1</option>
+                            <option value="+44">🇬🇧 +44</option>
+                            <option value="+971">🇦🇪 +971</option>
+                            <option value="+61">🇦🇺 +61</option>
+                            <option value="+1">🇨🇦 +1</option>
+                        </select>
+                        <input type="tel" id="identifier" class="form-control" placeholder="Mobile Number or Email" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <input type="password" id="password" class="form-control" placeholder="Password" required>
+                </div>
+
+                <button type="submit" class="btn-primary" id="authBtn">Sign In</button>
+            </form>
+
+            <div class="social-divider"><span>OR</span></div>
+
+            <div class="social-btns">
+                <button class="social-btn" onclick="socialLogin('Google')"><i class="fa-brands fa-google" style="color: #ea4335;"></i> Google</button>
+                <button class="social-btn" onclick="socialLogin('Facebook')"><i class="fa-brands fa-facebook" style="color: #1877f2;"></i> Facebook</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. MAIN APP INTERFACE (HIDDEN UNTIL LOGIN) -->
+    <div id="appScreen" style="display: none;">
+        <!-- APP TOP BAR (Matching Screenshot) -->
+        <div class="app-header">
+            <div class="left">
+                <i class="fa-solid fa-bars"></i>
+                <div class="title">Ncert Books & Solutions</div>
+            </div>
+            <i class="fa-regular fa-bell"></i>
         </div>
 
-        <div id="feedContainer"></div>
+        <div class="dashboard-container">
+            <!-- APP FEATURE GRID (Matching Screenshot) -->
+            <div class="grid-layout">
+                <div class="grid-card" onclick="openFeature('NCERT Books (English Medium)')">
+                    <i class="fa-solid fa-book-bookmark" style="color: #f59e0b;"></i>
+                    <div class="card-title">NCERT Books<br>(English Medium)</div>
+                </div>
+
+                <div class="grid-card" onclick="openFeature('NCERT Books (Hindi Medium)')">
+                    <i class="fa-solid fa-book-open-reader" style="color: #ef4444;"></i>
+                    <div class="card-title">NCERT किताबें<br>(हिंदी माध्यम)</div>
+                </div>
+
+                <div class="grid-card" onclick="openFeature('NCERT Solutions')">
+                    <i class="fa-solid fa-lightbulb" style="color: #10b981;"></i>
+                    <div class="card-title">NCERT Solutions</div>
+                </div>
+
+                <div class="grid-card" onclick="openFeature('NCERT Notes')">
+                    <i class="fa-solid fa-clipboard-list" style="color: #3b82f6;"></i>
+                    <div class="card-title">NCERT Notes</div>
+                </div>
+
+                <div class="grid-card" onclick="openFeature('NCERT Videos')">
+                    <i class="fa-solid fa-circle-play" style="color: #dc2626;"></i>
+                    <div class="card-title">NCERT Videos</div>
+                </div>
+
+                <div class="grid-card" onclick="openFeature('CBSE Papers')">
+                    <i class="fa-solid fa-file-pen" style="color: #8b5cf6;"></i>
+                    <div class="card-title">CBSE Papers</div>
+                </div>
+            </div>
+
+            <!-- AI GENERATOR PANEL -->
+            <div class="generator-panel" id="generatorPanel">
+                <h3 id="featureHeading" style="margin-bottom: 12px; font-size: 16px; color: #536dfe;">🚀 Generate Material</h3>
+                <div class="form-group">
+                    <select id="levelSelect" class="form-control">
+                        <option>Class 12</option>
+                        <option>Class 11</option>
+                        <option>Class 10</option>
+                        <option>Class 9</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <select id="subjectSelect" class="form-control">
+                        <option>Biology</option>
+                        <option>Physics</option>
+                        <option>Chemistry</option>
+                        <option>Mathematics</option>
+                        <option>Computer Applications</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="topicInput" class="form-control" placeholder="Enter Chapter / Topic (e.g. Organic Chemistry)">
+                </div>
+                <button class="btn-primary" onclick="generateContent()" style="background: #536dfe;">Generate & Save</button>
+            </div>
+
+            <!-- SAVED TIMELINE FEED -->
+            <div id="feedList"></div>
+        </div>
     </div>
 
     <script>
-        let user = "";
+        let currentUser = "";
+        let currentMode = "signin";
 
-        function login() {
-            user = document.getElementById("username").value.trim();
-            if(!user) return alert("Enter username");
-            document.getElementById("authCard").style.display = "none";
-            document.getElementById("appCard").style.display = "block";
+        function switchTab(mode) {
+            currentMode = mode;
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            if(mode === 'signin') {
+                event.target.classList.add('active');
+                document.getElementById('nameGroup').style.display = 'none';
+                document.getElementById('authBtn').innerText = 'Sign In';
+            } else {
+                event.target.classList.add('active');
+                document.getElementById('nameGroup').style.display = 'block';
+                document.getElementById('authBtn').innerText = 'Sign Up';
+            }
+        }
+
+        function handleAuth(e) {
+            e.preventDefault();
+            const code = document.getElementById('countryCode').value;
+            const input = document.getElementById('identifier').value;
+            currentUser = code + " " + input;
+            
+            document.getElementById('authScreen').style.display = 'none';
+            document.getElementById('appScreen').style.display = 'block';
             loadFeed();
         }
 
-        async function generateNote() {
-            const level = document.getElementById("level").value;
-            const subject = document.getElementById("subject").value;
-            const topic = document.getElementById("topic").value;
-            const apiKey = document.getElementById("apiKey").value;
+        function socialLogin(provider) {
+            currentUser = provider + "_User";
+            document.getElementById('authScreen').style.display = 'none';
+            document.getElementById('appScreen').style.display = 'block';
+            loadFeed();
+        }
 
-            if(!topic) return alert("Enter topic");
+        function openFeature(featureName) {
+            document.getElementById('generatorPanel').style.display = 'block';
+            document.getElementById('featureHeading').innerText = "🚀 " + featureName;
+            window.scrollTo({ top: 300, behavior: 'smooth' });
+        }
+
+        async function generateContent() {
+            const level = document.getElementById('levelSelect').value;
+            const subject = document.getElementById('subjectSelect').value;
+            const topic = document.getElementById('topicInput').value;
+
+            if(!topic) return alert("Please enter a topic.");
 
             const res = await fetch("/api/generate", {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify({
-                    username: user, level: level, subject: subject, category: "Notes", topic: topic, api_key: apiKey
+                    username: currentUser,
+                    level: level,
+                    subject: subject,
+                    category: "Study Material",
+                    topic: topic,
+                    api_key: ""
                 })
             });
 
             const data = await res.json();
             if(res.ok) {
                 alert("Generated successfully!");
+                document.getElementById('topicInput').value = "";
                 loadFeed();
             } else {
                 alert(data.detail || "Error generating content");
@@ -96,17 +254,22 @@
         }
 
         async function loadFeed() {
-            const res = await fetch("/api/feed/" + user);
+            const res = await fetch("/api/feed/" + encodeURIComponent(currentUser));
             const data = await res.json();
-            const container = document.getElementById("feedContainer");
-            container.innerHTML = "<h3>📜 Your Activity Feed</h3><br>";
+            const container = document.getElementById('feedList');
+            container.innerHTML = "<h3 style='margin: 20px 0 10px; font-size: 16px; color: #374151;'>📜 Your Study Bank</h3>";
+
+            if(!data.feed || data.feed.length === 0) {
+                container.innerHTML += "<p style='color:#9ca3af; font-size:13px;'>No generated notes yet. Tap any icon above to create!</p>";
+                return;
+            }
 
             data.feed.forEach(item => {
                 container.innerHTML += `
-                    <div class="card">
-                        <div class="post-meta">RN • ${item.created_at} • ${item.subject} (${item.level})</div>
-                        <h2>${item.topic}</h2>
-                        <div class="post-content">${item.content}</div>
+                    <div class="feed-card">
+                        <div class="feed-header">${item.created_at} • ${item.subject} (${item.level})</div>
+                        <div class="feed-title">${item.topic}</div>
+                        <div class="feed-content">${item.content}</div>
                     </div>
                 `;
             });
