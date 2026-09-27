@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RamNotes AI | Social Learning Feed</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background-color: #0f172a; color: #f8fafc; padding: 20px; }
+        .container { max-width: 900px; margin: 0 auto; }
+        .header { background: linear-gradient(90deg, #1e1b4b, #312e81); padding: 20px; border-radius: 12px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #4338ca; }
+        .card { background-color: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+        input, select, textarea, button { width: 100%; padding: 12px; margin-top: 8px; margin-bottom: 16px; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: white; font-size: 14px; }
+        button { background: linear-gradient(90deg, #6366f1, #4f46e5); font-weight: bold; cursor: pointer; border: none; }
+        button:hover { opacity: 0.9; }
+        .post-meta { font-size: 12px; color: #94a3b8; margin-bottom: 8px; }
+        .post-content { background: #0f172a; padding: 15px; border-radius: 8px; white-space: pre-wrap; font-family: monospace; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧠 RamNotes AI Dashboard</h1>
+            <span>Meta / YouTube Theme</span>
+        </div>
+
+        <div class="card" id="authCard">
+            <h3>🔑 Account Access</h3>
+            <input type="text" id="username" placeholder="Enter Username / Email">
+            <input type="password" id="apiKey" placeholder="Optional: Override Gemini API Key">
+            <button onclick="login()">Enter Dashboard</button>
+        </div>
+
+        <div class="card" id="appCard" style="display:none;">
+            <h3>✍️ Create Post Feed</h3>
+            <label>Level:</label>
+            <select id="level">
+                <option>Class 9 - 10</option>
+                <option>Class 11 - 12 (PCB/PCM)</option>
+                <option>University / Higher Ed</option>
+            </select>
+
+            <label>Subject:</label>
+            <select id="subject">
+                <option>Biology</option>
+                <option>Biotechnology</option>
+                <option>Physics</option>
+                <option>Chemistry</option>
+                <option>Mathematics</option>
+                <option>Computer Applications</option>
+            </select>
+
+            <label>Topic Prompt:</label>
+            <textarea id="topic" placeholder="Describe the topic or question..."></textarea>
+            
+            <button onclick="generateNote()">🚀 Generate & Publish</button>
+        </div>
+
+        <div id="feedContainer"></div>
+    </div>
+
+    <script>
+        let user = "";
+
+        function login() {
+            user = document.getElementById("username").value.trim();
+            if(!user) return alert("Enter username");
+            document.getElementById("authCard").style.display = "none";
+            document.getElementById("appCard").style.display = "block";
+            loadFeed();
+        }
+
+        async function generateNote() {
+            const level = document.getElementById("level").value;
+            const subject = document.getElementById("subject").value;
+            const topic = document.getElementById("topic").value;
+            const apiKey = document.getElementById("apiKey").value;
+
+            if(!topic) return alert("Enter topic");
+
+            const res = await fetch("/api/generate", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({
+                    username: user, level: level, subject: subject, category: "Notes", topic: topic, api_key: apiKey
+                })
+            });
+
+            const data = await res.json();
+            if(res.ok) {
+                alert("Generated successfully!");
+                loadFeed();
+            } else {
+                alert(data.detail || "Error generating content");
+            }
+        }
+
+        async function loadFeed() {
+            const res = await fetch("/api/feed/" + user);
+            const data = await res.json();
+            const container = document.getElementById("feedContainer");
+            container.innerHTML = "<h3>📜 Your Activity Feed</h3><br>";
+
+            data.feed.forEach(item => {
+                container.innerHTML += `
+                    <div class="card">
+                        <div class="post-meta">RN • ${item.created_at} • ${item.subject} (${item.level})</div>
+                        <h2>${item.topic}</h2>
+                        <div class="post-content">${item.content}</div>
+                    </div>
+                `;
+            });
+        }
+    </script>
+</body>
+</html>
