@@ -1,23 +1,30 @@
 # ⚡ RameshNotes AI
 
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54" alt="Python" />
+  <img src="https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi" alt="FastAPI" />
+  <img src="https://img.shields.io/badge/Google%20Gemini-8E75B2?style=for-the-badge&logo=googlegemini&logoColor=white" alt="Gemini AI" />
+  <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5" />
+</p>
+
 An adaptive, full-stack study assistant that transforms raw study material, lecture notes, and textbook excerpts into structured Markdown notes tailored for **Class 9 through University students**.
 
 ---
 
 ## 🌟 Key Features
 
-- 🎓 **Multi-Level Academic Formatting:** Automatically adjusts depth, formulas, and language based on the target level (Class 9–10, Class 11–12 PCM/PCB, or University).
-- 📐 **LaTeX & Math Support:** Renders mathematical formulas and chemical equations clearly.
-- 📝 **Revision & Flashcards:** Generates quick revision bullet points and key takeaways alongside structured concepts.
-- ⚡ **Lightweight & Fast:** Built on Python FastAPI and powered by the Google Gemini API.
+* 🎓 **Multi-Level Academic Formatting:** Automatically adjusts depth, formulas, and language based on the target level (Class 9–10, Class 11–12 PCM/PCB, or University).
+* 📐 **LaTeX & Math Support:** Renders mathematical formulas and chemical equations clearly.
+* 📝 **Revision & Flashcards:** Generates quick revision bullet points and key takeaways alongside structured concepts.
+* ⚡ **Lightweight & Fast:** Built on Python FastAPI and powered by the Google Gemini API.
 
 ---
 
 ## 🛠️ Tech Stack
 
-- **Backend:** Python, FastAPI, Uvicorn
-- **AI Engine:** Google Gemini API (`gemini-1.5-flash`)
-- **Frontend:** HTML5, CSS3, JavaScript, Marked.js
+* **Backend:** Python, FastAPI, Uvicorn
+* **AI Engine:** Google Gemini API (`gemini-1.5-flash`)
+* **Frontend:** HTML5, CSS3, JavaScript, Marked.js
 
 ---
 
