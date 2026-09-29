@@ -11,7 +11,7 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
         body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; padding-bottom: 70px; -webkit-tap-highlight-color: transparent; }
         
-        /* EDUCATIONAL BACKGROUND OVERLAYS - pointer-events:none fixes click blocking */
+        /* EDUCATIONAL BACKGROUND OVERLAYS */
         .bg-overlay { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             z-index: 0; opacity: 0.12; background-size: cover; background-position: center; 
@@ -30,20 +30,8 @@
         .app-header .left { display: flex; align-items: center; gap: 15px; }
         .app-header .title { font-size: 18px; font-weight: 700; letter-spacing: 0.5px; }
         
-        /* AUTHENTICATION SCREEN */
-        .auth-container { max-width: 420px; margin: 40px auto; padding: 25px; background: rgba(30, 41, 59, 0.95); border-radius: 20px; border: 1px solid #334155; text-align: center; }
-        .auth-logo { font-size: 26px; font-weight: 700; color: #6366f1; margin-bottom: 20px; }
-        .auth-tabs { display: flex; border-bottom: 2px solid #334155; margin-bottom: 20px; }
-        .auth-tab { flex: 1; padding: 12px; font-weight: 600; cursor: pointer; color: #94a3b8; border-bottom: 3px solid transparent; }
-        .auth-tab.active { color: #6366f1; border-color: #6366f1; }
-        
         .form-control { width: 100%; padding: 12px 15px; border: 1px solid #334155; border-radius: 10px; background: #0f172a; color: white; margin-bottom: 15px; outline: none; }
-        .phone-group { display: flex; gap: 8px; margin-bottom: 15px; }
-        .phone-group select { width: 110px; padding: 12px; border: 1px solid #334155; border-radius: 10px; background: #0f172a; color: white; }
-        
         .btn-action { width: 100%; padding: 12px; border: none; border-radius: 10px; background: linear-gradient(90deg, #6366f1, #4f46e5); color: white; font-weight: 600; cursor: pointer; margin-top: 5px; }
-        .social-btns { display: flex; gap: 10px; margin-top: 15px; }
-        .social-btn { flex: 1; padding: 10px; border: 1px solid #334155; border-radius: 10px; background: #1e293b; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
 
         /* DASHBOARD GRID */
         .dashboard-container { max-width: 700px; margin: 20px auto; padding: 0 15px; }
@@ -95,45 +83,11 @@
                 <i class="fa-solid fa-graduation-cap" style="font-size: 22px; color: #818cf8;"></i>
                 <div class="title">RamNotes</div>
             </div>
-            <i class="fa-solid fa-power-off" onclick="logout()" style="cursor: pointer;" title="Logout"></i>
+            <i class="fa-regular fa-bell" style="cursor: pointer;"></i>
         </div>
 
-        <!-- 1. AUTHENTICATION SCREEN -->
-        <div id="authScreen">
-            <div class="auth-container">
-                <div class="auth-logo"><i class="fa-solid fa-brain"></i> RamNotes</div>
-                
-                <div class="auth-tabs">
-                    <div class="auth-tab active" id="tabSignIn" onclick="switchAuth('signin')">Sign In</div>
-                    <div class="auth-tab" id="tabSignUp" onclick="switchAuth('signup')">Sign Up</div>
-                </div>
-
-                <form onsubmit="handleLogin(event)">
-                    <input type="text" id="fullName" class="form-control" placeholder="Full Name" style="display: none;">
-                    <div class="phone-group">
-                        <select id="countryCode">
-                            <option value="+91">🇮🇳 +91</option>
-                            <option value="+1">🇺🇸 +1</option>
-                            <option value="+44">🇬🇧 +44</option>
-                            <option value="+971">🇦🇪 +971</option>
-                        </select>
-                        <input type="text" id="userInput" class="form-control" placeholder="Mobile Number or Email" required style="margin-bottom:0;">
-                    </div>
-                    <input type="password" id="passInput" class="form-control" placeholder="Password" required>
-                    <button type="submit" class="btn-action" id="authBtn">Sign In</button>
-                </form>
-
-                <div style="margin: 15px 0; color: #64748b; font-size: 12px;">OR</div>
-
-                <div class="social-btns">
-                    <button type="button" class="social-btn" onclick="socialLogin('Google')"><i class="fa-brands fa-google" style="color:#ea4335;"></i> Google</button>
-                    <button type="button" class="social-btn" onclick="socialLogin('Facebook')"><i class="fa-brands fa-facebook" style="color:#1877f2;"></i> Facebook</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- 2. MAIN APP DASHBOARD -->
-        <div id="appScreen" style="display: none;">
+        <!-- MAIN APP DASHBOARD -->
+        <div id="appScreen">
             <div class="dashboard-container">
                 
                 <!-- GRID DASHBOARD -->
@@ -260,18 +214,13 @@
 
     <!-- SCRIPT ENGINE -->
     <script>
-        let user = "";
+        const user = "Guest_Student";
 
-        // Auto restore user session on load
         window.addEventListener('DOMContentLoaded', () => {
-            const savedUser = localStorage.getItem("ramnotes_user");
-            if (savedUser) {
-                user = savedUser;
-                showApp();
-            }
+            loadFeed();
         });
 
-        // Sound synthesizer
+        // Sound synthesizer for quiz
         function playSound(type) {
             const AudioCtx = window.AudioContext || window.webkitAudioContext;
             if(!AudioCtx) return;
@@ -295,37 +244,120 @@
             }
         }
 
-        function switchAuth(mode) {
-            if(mode === 'signup') {
-                document.getElementById('tabSignUp').classList.add('active');
-                document.getElementById('tabSignIn').classList.remove('active');
-                document.getElementById('fullName').style.display = 'block';
-                document.getElementById('authBtn').innerText = 'Sign Up';
+        function openPanel(id, bgUrl) {
+            closePanels();
+            document.getElementById(id).style.display = 'block';
+            if(bgUrl) document.getElementById('bgOverlay').style.backgroundImage = `url('${bgUrl}')`;
+        }
+
+        function closePanels() {
+            document.querySelectorAll('.panel').forEach(p => p.style.display = 'none');
+        }
+
+        async function generateNote(category) {
+            let lvl = "Class 12", sub = "Physics", top = "Chapter Note";
+            if(category === 'NCERT Books') {
+                lvl = document.getElementById('bookClass').value;
+                sub = document.getElementById('bookSubject').value;
+                top = document.getElementById('bookChapter').value;
             } else {
-                document.getElementById('tabSignIn').classList.add('active');
-                document.getElementById('tabSignUp').classList.remove('active');
-                document.getElementById('fullName').style.display = 'none';
-                document.getElementById('authBtn').innerText = 'Sign In';
+                lvl = document.getElementById('solClass').value;
+                sub = document.getElementById('solSubject').value;
+                top = document.getElementById('solChapter').value;
+            }
+
+            if(!top) return alert("Please enter chapter name/number");
+
+            try {
+                const res = await fetch("/api/generate", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({ username: user, level: lvl, subject: sub, category: category, topic: top })
+                });
+
+                if(res.ok) { alert("Material generated successfully!"); closePanels(); loadFeed(); }
+            } catch(e) {
+                alert("Server unreachable");
             }
         }
 
-        async function handleLogin(e) {
-            e.preventDefault();
-            const code = document.getElementById('countryCode').value;
-            const input = document.getElementById('userInput').value.trim();
-            const fullName = document.getElementById('fullName').value.trim();
+        async function solveDoubt() {
+            const lvl = document.getElementById('doubtClass').value;
+            const sub = document.getElementById('doubtSubject').value;
+            const ch = document.getElementById('doubtChapter').value;
+            const doubt = document.getElementById('doubtText').value;
 
-            if(!input) return alert("Please enter mobile number or email");
-
-            user = code + " " + input;
+            if(!doubt) return alert("Please enter your doubt");
 
             try {
-                const res = await fetch('/api/auth/login', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ username: user, full_name: fullName, auth_provider: 'phone_email' })
+                const res = await fetch("/api/doubt/solve", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({ username: user, level: lvl, subject: sub, chapter: ch, doubt: doubt })
                 });
 
-                if(res.ok) {
-                    localStorage.setItem("ramnotes_user", user);
-                    showApp();
+                if(res.ok) { alert("Doubt solved!"); closePanels(); loadFeed(); }
+            } catch(e) {
+                alert("Server unreachable");
+            }
+        }
+
+        async function answerQuiz(isCorrect) {
+            if(isCorrect) {
+                playSound('correct');
+                alert("🎉 Correct! Good Job! (+20 Marks)");
+                try {
+                    await fetch("/api/quiz/submit", {
+                        method: "POST",
+                        headers: {"Content-Type": "application/json"},
+                        body: JSON.stringify({ username: user, level: "Class 12", subject: "Physics", score: 20 })
+                    });
+                } catch(e){}
+            } else {
+                playSound('wrong');
+                alert("❌ Incorrect Answer!");
+            }
+            closePanels();
+        }
+
+        async function loadLeaderboard() {
+            try {
+                const res = await fetch("/api/leaderboard/Class 12/Physics");
+                const data = await res.json();
+                const body = document.getElementById("lbTableBody");
+                body.innerHTML = "";
+                
+                if(!data.leaderboard || data.leaderboard.length === 0) {
+                    body.innerHTML = "<tr><td colspan='4' style='text-align:center;'>No high scores yet! Play a quiz first.</td></tr>";
+                    return;
+                }
+
+                data.leaderboard.forEach(r => {
+                    body.innerHTML += `<tr><td>#${r.rank}</td><td>${r.username}</td><td>${r.top_score}</td><td>${r.quizzes_played}</td></tr>`;
+                });
+            } catch(e) {}
+        }
+
+        async function loadFeed() {
+            try {
+                const res = await fetch("/api/feed/" + encodeURIComponent(user));
+                const data = await res.json();
+                const container = document.getElementById('feedContainer');
+                container.innerHTML = "<h3>📜 Saved Solutions Timeline</h3>";
+
+                if(data.feed) {
+                    data.feed.forEach(item => {
+                        container.innerHTML += `
+                            <div class="feed-card">
+                                <div class="feed-header">${item.created_at} • ${item.subject} (${item.level})</div>
+                                <div class="feed-title">${item.topic}</div>
+                                <div class="feed-content">${item.content}</div>
+                            </div>
+                        `;
+                    });
+                }
+            } catch(e){}
+        }
+    </script>
+</body>
+</html>
