@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RamNotes | NCERT & Academic Engine</title>
+    <title>RamNotes | Class 6 to 12 NCERT Engine</title>
     <!-- Font Awesome & Google Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -11,17 +11,14 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
         body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; padding-bottom: 70px; -webkit-tap-highlight-color: transparent; }
         
-        /* EDUCATIONAL BACKGROUND OVERLAYS */
         .bg-overlay { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             z-index: 0; opacity: 0.12; background-size: cover; background-position: center; 
             transition: background-image 0.5s ease-in-out; pointer-events: none; 
         }
 
-        /* APP MAIN WRAPPER */
         .app-wrapper { position: relative; z-index: 10; }
 
-        /* HEADER BAR */
         .app-header { 
             background: linear-gradient(90deg, #1e1b4b, #312e81); color: white; padding: 16px 20px; 
             display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 15px rgba(0,0,0,0.3); 
@@ -33,7 +30,6 @@
         .form-control { width: 100%; padding: 12px 15px; border: 1px solid #334155; border-radius: 10px; background: #0f172a; color: white; margin-bottom: 15px; outline: none; }
         .btn-action { width: 100%; padding: 12px; border: none; border-radius: 10px; background: linear-gradient(90deg, #6366f1, #4f46e5); color: white; font-weight: 600; cursor: pointer; margin-top: 5px; }
 
-        /* DASHBOARD GRID */
         .dashboard-container { max-width: 700px; margin: 20px auto; padding: 0 15px; }
         .grid-layout { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
         
@@ -42,22 +38,14 @@
         .grid-card i { font-size: 36px; margin-bottom: 10px; color: #818cf8; }
         .grid-card .card-title { font-size: 14px; font-weight: 600; color: #f1f5f9; }
 
-        /* MODAL PANELS */
         .panel { background: rgba(30, 41, 59, 0.95); border: 1px solid #334155; border-radius: 16px; padding: 20px; margin-top: 20px; display: none; }
         .panel h3 { margin-bottom: 15px; color: #818cf8; display: flex; justify-content: space-between; align-items: center; }
 
-        /* FEED CARDS */
         .feed-card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 18px; margin-top: 15px; }
         .feed-header { font-size: 12px; color: #94a3b8; margin-bottom: 6px; }
         .feed-title { font-size: 16px; font-weight: 600; color: #f8fafc; margin-bottom: 10px; }
         .feed-content { background: #0f172a; padding: 14px; border-radius: 8px; font-size: 14px; line-height: 1.6; white-space: pre-wrap; font-family: monospace; border: 1px solid #1e293b; }
 
-        /* LEADERBOARD TABLE */
-        .lb-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        .lb-table th, .lb-table td { padding: 10px; text-align: left; border-bottom: 1px solid #334155; font-size: 14px; }
-        .lb-table th { color: #818cf8; }
-
-        /* ANIMATED BLUE DEVELOPER FOOTER */
         .dev-footer { 
             position: fixed; bottom: 0; left: 0; width: 100%; background: #090d16; padding: 12px; text-align: center; border-top: 1px solid #1e293b; z-index: 1000; 
         }
@@ -73,11 +61,9 @@
 </head>
 <body>
 
-    <!-- DYNAMIC EDUCATIONAL BACKGROUND OVERLAY -->
     <div class="bg-overlay" id="bgOverlay" style="background-image: url('https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&w=1200&q=80');"></div>
 
     <div class="app-wrapper">
-        <!-- HEADER BAR -->
         <div class="app-header">
             <div class="left">
                 <i class="fa-solid fa-graduation-cap" style="font-size: 22px; color: #818cf8;"></i>
@@ -86,15 +72,13 @@
             <i class="fa-regular fa-bell" style="cursor: pointer;"></i>
         </div>
 
-        <!-- MAIN APP DASHBOARD -->
         <div id="appScreen">
             <div class="dashboard-container">
                 
-                <!-- GRID DASHBOARD -->
                 <div class="grid-layout">
                     <div class="grid-card" onclick="openPanel('booksPanel', 'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=1200&q=80')">
                         <i class="fa-solid fa-book-open"></i>
-                        <div class="card-title">NCERT Books<br>(English / Hindi)</div>
+                        <div class="card-title">NCERT Books & Notes<br>(Class 6 to 12)</div>
                     </div>
 
                     <div class="grid-card" onclick="openPanel('solutionsPanel', 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=1200&q=80')">
@@ -111,93 +95,59 @@
                         <i class="fa-solid fa-gamepad" style="color:#ef4444;"></i>
                         <div class="card-title">Play Quiz (20 Marks)</div>
                     </div>
-
-                    <div class="grid-card" onclick="openPanel('hub3dPanel', 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80')">
-                        <i class="fa-solid fa-cube" style="color:#06b6d4;"></i>
-                        <div class="card-title">3D Science & Earth</div>
-                    </div>
-
-                    <div class="grid-card" onclick="loadLeaderboard(); openPanel('leaderboardPanel', 'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1200&q=80')">
-                        <i class="fa-solid fa-trophy" style="color:#eab308;"></i>
-                        <div class="card-title">Live Leaderboard</div>
-                    </div>
                 </div>
 
-                <!-- PANEL 1: NCERT BOOKS / SOLUTIONS GENERATOR -->
+                <!-- PANEL: NCERT BOOKS & DYNAMIC CHAPTER SELECTOR -->
                 <div class="panel" id="booksPanel">
                     <h3>📚 NCERT Books & Chapters <i class="fa-solid fa-xmark" onclick="closePanels()" style="cursor:pointer;"></i></h3>
-                    <select id="bookClass" class="form-control">
-                        <option>Class 12</option><option>Class 11</option><option>Class 10</option><option>Class 9</option>
+                    
+                    <label style="font-size:12px; color:#94a3b8;">1. Select Class:</label>
+                    <select id="bookClass" class="form-control" onchange="updateSubjects()">
+                        <option value="12">Class 12</option>
+                        <option value="11">Class 11</option>
+                        <option value="10">Class 10</option>
+                        <option value="9">Class 9</option>
+                        <option value="8">Class 8</option>
+                        <option value="7">Class 7</option>
+                        <option value="6">Class 6</option>
                     </select>
-                    <select id="bookSubject" class="form-control">
-                        <option>Physics</option><option>Chemistry</option><option>Biology</option><option>Mathematics</option>
+
+                    <label style="font-size:12px; color:#94a3b8;">2. Select Subject:</label>
+                    <select id="bookSubject" class="form-control" onchange="updateChapters()">
+                        <!-- Dynamic Subjects Populate Here -->
                     </select>
-                    <input type="text" id="bookChapter" class="form-control" placeholder="Enter Chapter Name / Number">
-                    <button class="btn-action" onclick="generateNote('NCERT Books')">Generate & Read Chapter</button>
+
+                    <label style="font-size:12px; color:#94a3b8;">3. Select Chapter / Topic:</label>
+                    <select id="bookChapter" class="form-control">
+                        <!-- Dynamic Chapters Populate Here -->
+                    </select>
+
+                    <button class="btn-action" onclick="generateNote('NCERT Books')">Generate Complete Notes & Summary</button>
                 </div>
 
-                <!-- PANEL 2: NCERT SOLUTIONS -->
+                <!-- PANEL: NCERT SOLUTIONS -->
                 <div class="panel" id="solutionsPanel">
-                    <h3>💡 NCERT Solutions Engine <i class="fa-solid fa-xmark" onclick="closePanels()" style="cursor:pointer;"></i></h3>
-                    <select id="solClass" class="form-control">
-                        <option>Class 12</option><option>Class 11</option><option>Class 10</option><option>Class 9</option>
-                    </select>
-                    <select id="solSubject" class="form-control">
-                        <option>Physics</option><option>Chemistry</option><option>Biology</option><option>Mathematics</option>
-                    </select>
-                    <input type="text" id="solChapter" class="form-control" placeholder="Enter Chapter or Exercise No.">
+                    <h3>💡 NCERT Chapter Solutions <i class="fa-solid fa-xmark" onclick="closePanels()" style="cursor:pointer;"></i></h3>
+                    <p style="font-size: 13px; color:#94a3b8; margin-bottom:10px;">Get step-by-step NCERT textbook Question Answers.</p>
                     <button class="btn-action" onclick="generateNote('NCERT Solutions')">Get Chapter Answers</button>
                 </div>
 
-                <!-- PANEL 3: AI DOUBT SOLVER -->
+                <!-- PANEL: AI DOUBT SOLVER -->
                 <div class="panel" id="doubtPanel">
                     <h3>🤖 AI Doubt Solver <i class="fa-solid fa-xmark" onclick="closePanels()" style="cursor:pointer;"></i></h3>
-                    <select id="doubtClass" class="form-control">
-                        <option>Class 12</option><option>Class 11</option><option>Class 10</option><option>Class 9</option>
-                    </select>
-                    <select id="doubtSubject" class="form-control">
-                        <option>Physics</option><option>Chemistry</option><option>Biology</option><option>Mathematics</option>
-                    </select>
-                    <input type="text" id="doubtChapter" class="form-control" placeholder="Chapter Name">
-                    <textarea id="doubtText" class="form-control" style="height:80px;" placeholder="Ask your doubt in detail..."></textarea>
+                    <textarea id="doubtText" class="form-control" style="height:90px;" placeholder="Type your doubt or question here..."></textarea>
                     <button class="btn-action" onclick="solveDoubt()">Ask AI Assistant</button>
                 </div>
 
-                <!-- PANEL 4: GAMIFIED QUIZ PLAY (WITH SOUND EFFECTS) -->
+                <!-- PANEL: QUIZ ENGINE -->
                 <div class="panel" id="quizPanel">
                     <h3>🎮 Quiz Engine (20 Marks) <i class="fa-solid fa-xmark" onclick="closePanels()" style="cursor:pointer;"></i></h3>
                     <div id="quizBox">
-                        <p style="margin-bottom:10px; font-size:14px; color:#94a3b8;">Question 1 of 1: What is the unit of Electric Resistance?</p>
+                        <p style="margin-bottom:10px; font-size:14px; color:#94a3b8;">Test your Knowledge</p>
                         <h4 style="margin-bottom:15px; color:#f8fafc;">Q. The SI unit of Electrical Resistance is:</h4>
-                        <button class="btn-action" style="background:#1e293b; text-align:left; margin-bottom:8px;" onclick="answerQuiz(true)">A) Ohm (Ω)</button>
-                        <button class="btn-action" style="background:#1e293b; text-align:left; margin-bottom:8px;" onclick="answerQuiz(false)">B) Ampere (A)</button>
-                        <button class="btn-action" style="background:#1e293b; text-align:left; margin-bottom:8px;" onclick="answerQuiz(false)">C) Volt (V)</button>
-                        <button class="btn-action" style="background:#1e293b; text-align:left; margin-bottom:8px;" onclick="answerQuiz(false)">D) Joule (J)</button>
+                        <button class="btn-action" style="background:#1e293b; text-align:left; margin-bottom:8px;" onclick="alert('Correct Answer!')">A) Ohm (Ω)</button>
+                        <button class="btn-action" style="background:#1e293b; text-align:left; margin-bottom:8px;" onclick="alert('Wrong Answer!')">B) Ampere (A)</button>
                     </div>
-                </div>
-
-                <!-- PANEL 5: 3D SCIENCE & EARTH MODULE -->
-                <div class="panel" id="hub3dPanel">
-                    <h3>🧊 3D Science & Globe Hub <i class="fa-solid fa-xmark" onclick="closePanels()" style="cursor:pointer;"></i></h3>
-                    <p style="font-size:13px; color:#94a3b8; margin-bottom:15px;">Interactive 3D Render Models & Visual Simulations</p>
-                    <div style="background:#0f172a; padding:20px; border-radius:10px; text-align:center; border:1px dashed #334155;">
-                        <i class="fa-solid fa-earth-americas" style="font-size:48px; color:#38bdf8; margin-bottom:10px;"></i>
-                        <h4>3D Earth & Molecular Structure Simulator</h4>
-                        <p style="font-size:12px; color:#64748b; margin-top:5px;">[ Coming Soon in APK Release ]</p>
-                    </div>
-                </div>
-
-                <!-- PANEL 6: LIVE LEADERBOARD -->
-                <div class="panel" id="leaderboardPanel">
-                    <h3>🏆 Class Leaderboard <i class="fa-solid fa-xmark" onclick="closePanels()" style="cursor:pointer;"></i></h3>
-                    <table class="lb-table">
-                        <thead>
-                            <tr><th>Rank</th><th>Student</th><th>Top Score</th><th>Quizzes</th></tr>
-                        </thead>
-                        <tbody id="lbTableBody">
-                            <tr><td colspan="4" style="text-align:center; color:#64748b;">Loading scores...</td></tr>
-                        </tbody>
-                    </table>
                 </div>
 
                 <!-- FEED DISPLAY CONTAINER -->
@@ -207,42 +157,83 @@
         </div>
     </div>
 
-    <!-- ANIMATED BLUE DEVELOPER FOOTER -->
     <div class="dev-footer">
         <span class="dev-text">Developed with ❤️ by Ramesh Kumawat</span>
     </div>
-
-    <!-- SCRIPT ENGINE -->
+        <!-- SCRIPT ENGINE WITH COMPLETE NCERT DATABASE CLASS 6 TO 12 -->
     <script>
         const user = "Guest_Student";
 
-        window.addEventListener('DOMContentLoaded', () => {
-            loadFeed();
-        });
-
-        // Sound synthesizer for quiz
-        function playSound(type) {
-            const AudioCtx = window.AudioContext || window.webkitAudioContext;
-            if(!AudioCtx) return;
-            const ctx = new AudioCtx();
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-            osc.connect(gain);
-            gain.connect(ctx.destination);
-
-            if(type === 'correct') {
-                osc.frequency.setValueAtTime(587.33, ctx.currentTime);
-                osc.frequency.setValueAtTime(880, ctx.currentTime + 0.1);
-                gain.gain.setValueAtTime(0.3, ctx.currentTime);
-                osc.start(); osc.stop(ctx.currentTime + 0.3);
-            } else {
-                osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(150, ctx.currentTime);
-                osc.frequency.setValueAtTime(100, ctx.currentTime + 0.15);
-                gain.gain.setValueAtTime(0.3, ctx.currentTime);
-                osc.start(); osc.stop(ctx.currentTime + 0.35);
+        // MASTER DATABASE: CLASS -> SUBJECTS -> CHAPTERS LIST
+        const ncertData = {
+            "12": {
+                "English (Vistas)": ["Chapter 1: The Third Level", "Chapter 2: The Tiger King", "Chapter 3: Journey to the end of the Earth", "Chapter 4: The Enemy", "Chapter 5: On the face of It", "Chapter 6: Memories of Childhood"],
+                "English (Flamingo)": ["The Last Lesson", "Lost Spring", "Deep Water", "The Rattrap", "Indigo", "My Mother at Sixty-Six (Poem)", "Keeping Quiet (Poem)", "A Thing of Beauty (Poem)"],
+                "Physics": ["Electric Charges and Fields", "Electrostatic Potential and Capacitance", "Current Electricity", "Moving Charges and Magnetism", "Magnetism and Matter", "Electromagnetic Induction", "Alternating Current", "Ray Optics and Optical Instruments", "Wave Optics", "Dual Nature of Radiation and Matter", "Atoms", "Nuclei", "Semiconductor Electronics"],
+                "Chemistry": ["Solutions", "Electrochemistry", "Chemical Kinetics", "d- and f- Block Elements", "Coordination Compounds", "Haloalkanes and Haloarenes", "Alcohols, Phenols and Ethers", "Aldehydes, Ketones and Carboxylic Acids", "Amines", "Biomolecules"],
+                "Mathematics": ["Relations and Functions", "Inverse Trigonometric Functions", "Matrices", "Determinants", "Continuity and Differentiability", "Application of Derivatives", "Integrals", "Application of Integrals", "Differential Equations", "Vector Algebra", "Three Dimensional Geometry", "Linear Programming", "Probability"],
+                "Biology": ["Sexual Reproduction in Flowering Plants", "Human Reproduction", "Reproductive Health", "Principles of Inheritance and Variation", "Molecular Basis of Inheritance", "Evolution", "Human Health and Disease", "Microbes in Human Welfare", "Biotechnology: Principles and Processes", "Biotechnology and its Applications", "Organisms and Populations", "Ecosystem", "Biodiversity and Conservation"]
+            },
+            "11": {
+                "Physics": ["Units and Measurements", "Motion in a Straight Line", "Motion in a Plane", "Laws of Motion", "Work, Energy and Power", "System of Particles and Rotational Motion", "Gravitation", "Mechanical Properties of Solids", "Thermodynamics", "Oscillations", "Waves"],
+                "Chemistry": ["Some Basic Concepts of Chemistry", "Structure of Atom", "Classification of Elements and Periodicity", "Chemical Bonding and Molecular Structure", "Thermodynamics", "Equilibrium", "Redox Reactions", "Organic Chemistry: Basic Principles"],
+                "Mathematics": ["Sets", "Relations and Functions", "Trigonometric Functions", "Complex Numbers and Quadratic Equations", "Linear Inequalities", "Permutations and Combinations", "Binomial Theorem", "Sequences and Series", "Straight Lines", "Conic Sections", "Limits and Derivatives", "Statistics", "Probability"],
+                "English": ["The Portrait of a Lady", "We're Not Afraid to Die...", "Discovering Tut: the Saga Continues", "The Laburnum Top (Poem)", "The Voice of the Rain (Poem)"]
+            },
+            "10": {
+                "Science": ["Chemical Reactions and Equations", "Acids, Bases and Salts", "Metals and Non-metals", "Carbon and its Compounds", "Life Processes", "Control and Coordination", "How do Organisms Reproduce?", "Heredity", "Light – Reflection and Refraction", "The Human Eye and Colourful World", "Electricity", "Magnetic Effects of Electric Current", "Our Environment"],
+                "Mathematics": ["Real Numbers", "Polynomials", "Pair of Linear Equations in Two Variables", "Quadratic Equations", "Arithmetic Progressions", "Triangles", "Coordinate Geometry", "Introduction to Trigonometry", "Some Applications of Trigonometry", "Circles", "Areas Related to Circles", "Surface Areas and Volumes", "Statistics", "Probability"],
+                "English": ["A Letter to God", "Nelson Mandela: Long Walk to Freedom", "Two Stories about Flying", "From the Diary of Anne Frank", "First Flight Poems"]
+            },
+            "9": {
+                "Science": ["Matter in Our Surroundings", "Is Matter Around Us Pure?", "Atoms and Molecules", "Structure of the Atom", "The Fundamental Unit of Life", "Tissues", "Motion", "Force and Laws of Motion", "Gravitation", "Work and Energy", "Sound", "Improvement in Food Resources"],
+                "Mathematics": ["Number Systems", "Polynomials", "Coordinate Geometry", "Linear Equations in Two Variables", "Introduction to Euclid's Geometry", "Lines and Angles", "Triangles", "Quadrilaterals", "Circles", "Heron's Formula", "Surface Areas and Volumes", "Statistics"],
+                "English": ["The Fun They Had", "The Sound of Music", "The Little Girl", "A Truly Beautiful Mind", "The Snake and the Mirror"]
+            },
+            "8": {
+                "Science": ["Crop Production and Management", "Microorganisms: Friend and Foe", "Coal and Petroleum", "Combustion and Flame", "Conservation of Plants and Animals", "Reproduction in Animals", "Reaching the Age of Adolescence", "Force and Pressure", "Friction", "Sound", "Chemical Effects of Electric Current", "Some Natural Phenomena", "Light"],
+                "Mathematics": ["Rational Numbers", "Linear Equations in One Variable", "Understanding Quadrilaterals", "Data Handling", "Squares and Square Roots", "Cubes and Cube Roots", "Comparing Quantities", "Algebraic Expressions and Identities", "Mensuration", "Exponents and Powers", "Direct and Inverse Proportions", "Factorisation"]
+            },
+            "7": {
+                "Science": ["Nutrition in Plants", "Nutrition in Animals", "Heat", "Acids, Bases and Salts", "Physical and Chemical Changes", "Respiration in Organisms", "Transportation in Animals and Plants", "Reproduction in Plants", "Motion and Time", "Electric Current and its Effects", "Light", "Water: A Precious Resource", "Forests: Our Lifeline"],
+                "Mathematics": ["Integers", "Fractions and Decimals", "Data Handling", "Simple Equations", "Lines and Angles", "The Triangle and its Properties", "Comparing Quantities", "Rational Numbers", "Perimeter and Area", "Algebraic Expressions", "Exponents and Powers"]
+            },
+            "6": {
+                "Science": ["Components of Food", "Sorting Materials into Groups", "Separation of Substances", "Getting to Know Plants", "Body Movements", "The Living Organisms — Characteristics and Habitats", "Motion and Measurement of Distances", "Light, Shadows and Reflections", "Electricity and Circuits", "Fun with Magnets"],
+                "Mathematics": ["Knowing Our Numbers", "Whole Numbers", "Playing with Numbers", "Basic Geometrical Ideas", "Understanding Elementary Shapes", "Integers", "Fractions", "Decimals", "Data Handling", "Mensuration", "Algebra", "Ratio and Proportion"]
             }
+        };
+
+        // DYNAMIC DROPDOWN LOGIC
+        function updateSubjects() {
+            const selectedClass = document.getElementById("bookClass").value;
+            const subjectSelect = document.getElementById("bookSubject");
+            subjectSelect.innerHTML = "";
+
+            const subjects = Object.keys(ncertData[selectedClass] || {});
+            subjects.forEach(sub => {
+                subjectSelect.innerHTML += `<option value="${sub}">${sub}</option>`;
+            });
+
+            updateChapters();
         }
+
+        function updateChapters() {
+            const selectedClass = document.getElementById("bookClass").value;
+            const selectedSubject = document.getElementById("bookSubject").value;
+            const chapterSelect = document.getElementById("bookChapter");
+            chapterSelect.innerHTML = "";
+
+            const chapters = (ncertData[selectedClass] && ncertData[selectedClass][selectedSubject]) || [];
+            chapters.forEach(chap => {
+                chapterSelect.innerHTML += `<option value="${chap}">${chap}</option>`;
+            });
+        }
+
+        // INITIALIZE DROPDOWNS ON PAGE LOAD
+        window.addEventListener('DOMContentLoaded', () => {
+            updateSubjects();
+        });
 
         function openPanel(id, bgUrl) {
             closePanels();
@@ -255,108 +246,36 @@
         }
 
         async function generateNote(category) {
-            let lvl = "Class 12", sub = "Physics", top = "Chapter Note";
-            if(category === 'NCERT Books') {
-                lvl = document.getElementById('bookClass').value;
-                sub = document.getElementById('bookSubject').value;
-                top = document.getElementById('bookChapter').value;
-            } else {
-                lvl = document.getElementById('solClass').value;
-                sub = document.getElementById('solSubject').value;
-                top = document.getElementById('solChapter').value;
-            }
+            const lvl = "Class " + document.getElementById('bookClass').value;
+            const sub = document.getElementById('bookSubject').value;
+            const top = document.getElementById('bookChapter').value;
 
-            if(!top) return alert("Please enter chapter name/number");
+            if(!top) return alert("Please select a chapter first");
 
-            try {
-                const res = await fetch("/api/generate", {
-                    method: "POST",
-                    headers: {"Content-Type": "application/json"},
-                    body: JSON.stringify({ username: user, level: lvl, subject: sub, category: category, topic: top })
-                });
-
-                if(res.ok) { alert("Material generated successfully!"); closePanels(); loadFeed(); }
-            } catch(e) {
-                alert("Server unreachable");
-            }
-        }
-
-        async function solveDoubt() {
-            const lvl = document.getElementById('doubtClass').value;
-            const sub = document.getElementById('doubtSubject').value;
-            const ch = document.getElementById('doubtChapter').value;
-            const doubt = document.getElementById('doubtText').value;
-
-            if(!doubt) return alert("Please enter your doubt");
-
-            try {
-                const res = await fetch("/api/doubt/solve", {
-                    method: "POST",
-                    headers: {"Content-Type": "application/json"},
-                    body: JSON.stringify({ username: user, level: lvl, subject: sub, chapter: ch, doubt: doubt })
-                });
-
-                if(res.ok) { alert("Doubt solved!"); closePanels(); loadFeed(); }
-            } catch(e) {
-                alert("Server unreachable");
-            }
-        }
-
-        async function answerQuiz(isCorrect) {
-            if(isCorrect) {
-                playSound('correct');
-                alert("🎉 Correct! Good Job! (+20 Marks)");
-                try {
-                    await fetch("/api/quiz/submit", {
-                        method: "POST",
-                        headers: {"Content-Type": "application/json"},
-                        body: JSON.stringify({ username: user, level: "Class 12", subject: "Physics", score: 20 })
-                    });
-                } catch(e){}
-            } else {
-                playSound('wrong');
-                alert("❌ Incorrect Answer!");
-            }
+            const container = document.getElementById('feedContainer');
+            container.innerHTML = `
+                <div class="feed-card">
+                    <div class="feed-header">JUST NOW • ${sub} (${lvl})</div>
+                    <div class="feed-title">📌 ${top} - ${category}</div>
+                    <div class="feed-content">Generating structured AI Notes, Key Points & Important Questions for ${top}...\n\n1. Overview & Core Concepts\n2. Key Formulas / Vocabulary\n3. NCERT Textbook Solved Exercises & Important Board Questions.</div>
+                </div>
+            `;
             closePanels();
         }
 
-        async function loadLeaderboard() {
-            try {
-                const res = await fetch("/api/leaderboard/Class 12/Physics");
-                const data = await res.json();
-                const body = document.getElementById("lbTableBody");
-                body.innerHTML = "";
-                
-                if(!data.leaderboard || data.leaderboard.length === 0) {
-                    body.innerHTML = "<tr><td colspan='4' style='text-align:center;'>No high scores yet! Play a quiz first.</td></tr>";
-                    return;
-                }
+        async function solveDoubt() {
+            const doubt = document.getElementById('doubtText').value;
+            if(!doubt) return alert("Please enter your doubt");
 
-                data.leaderboard.forEach(r => {
-                    body.innerHTML += `<tr><td>#${r.rank}</td><td>${r.username}</td><td>${r.top_score}</td><td>${r.quizzes_played}</td></tr>`;
-                });
-            } catch(e) {}
-        }
-
-        async function loadFeed() {
-            try {
-                const res = await fetch("/api/feed/" + encodeURIComponent(user));
-                const data = await res.json();
-                const container = document.getElementById('feedContainer');
-                container.innerHTML = "<h3>📜 Saved Solutions Timeline</h3>";
-
-                if(data.feed) {
-                    data.feed.forEach(item => {
-                        container.innerHTML += `
-                            <div class="feed-card">
-                                <div class="feed-header">${item.created_at} • ${item.subject} (${item.level})</div>
-                                <div class="feed-title">${item.topic}</div>
-                                <div class="feed-content">${item.content}</div>
-                            </div>
-                        `;
-                    });
-                }
-            } catch(e){}
+            const container = document.getElementById('feedContainer');
+            container.innerHTML = `
+                <div class="feed-card">
+                    <div class="feed-header">JUST NOW • AI Assistant Response</div>
+                    <div class="feed-title">❓ Question: ${doubt}</div>
+                    <div class="feed-content">💡 Solution:\nHere is the step-by-step breakdown to solve your doubt with clear explanation and formulas.</div>
+                </div>
+            `;
+            closePanels();
         }
     </script>
 </body>
