@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RamNotes AI | NCERT & Academic Engine</title>
+    <title>RamNotes | NCERT & Academic Engine</title>
     <!-- Font Awesome & Google Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -11,11 +11,15 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
         body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; padding-bottom: 70px; -webkit-tap-highlight-color: transparent; }
         
-        /* EDUCATIONAL BACKGROUND OVERLAYS */
+        /* EDUCATIONAL BACKGROUND OVERLAYS - pointer-events:none fixes click blocking */
         .bg-overlay { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            z-index: -1; opacity: 0.12; background-size: cover; background-position: center; transition: background-image 0.5s ease-in-out; 
+            z-index: 0; opacity: 0.12; background-size: cover; background-position: center; 
+            transition: background-image 0.5s ease-in-out; pointer-events: none; 
         }
+
+        /* APP MAIN WRAPPER */
+        .app-wrapper { position: relative; z-index: 10; }
 
         /* HEADER BAR */
         .app-header { 
@@ -84,166 +88,168 @@
     <!-- DYNAMIC EDUCATIONAL BACKGROUND OVERLAY -->
     <div class="bg-overlay" id="bgOverlay" style="background-image: url('https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&w=1200&q=80');"></div>
 
-    <!-- HEADER BAR -->
-    <div class="app-header">
-        <div class="left">
-            <i class="fa-solid fa-graduation-cap" style="font-size: 22px; color: #818cf8;"></i>
-            <div class="title">RamNotes AI Engine</div>
-        </div>
-        <i class="fa-solid fa-power-off" onclick="logout()" style="cursor: pointer;" title="Logout"></i>
-    </div>
-
-    <!-- 1. AUTHENTICATION SCREEN -->
-    <div id="authScreen">
-        <div class="auth-container">
-            <div class="auth-logo"><i class="fa-solid fa-brain"></i> RamNotes AI</div>
-            
-            <div class="auth-tabs">
-                <div class="auth-tab active" id="tabSignIn" onclick="switchAuth('signin')">Sign In</div>
-                <div class="auth-tab" id="tabSignUp" onclick="switchAuth('signup')">Sign Up</div>
+    <div class="app-wrapper">
+        <!-- HEADER BAR -->
+        <div class="app-header">
+            <div class="left">
+                <i class="fa-solid fa-graduation-cap" style="font-size: 22px; color: #818cf8;"></i>
+                <div class="title">RamNotes</div>
             </div>
+            <i class="fa-solid fa-power-off" onclick="logout()" style="cursor: pointer;" title="Logout"></i>
+        </div>
 
-            <form onsubmit="handleLogin(event)">
-                <input type="text" id="fullName" class="form-control" placeholder="Full Name" style="display: none;">
-                <div class="phone-group">
-                    <select id="countryCode">
-                        <option value="+91">🇮🇳 +91</option>
-                        <option value="+1">🇺🇸 +1</option>
-                        <option value="+44">🇬🇧 +44</option>
-                        <option value="+971">🇦🇪 +971</option>
+        <!-- 1. AUTHENTICATION SCREEN -->
+        <div id="authScreen">
+            <div class="auth-container">
+                <div class="auth-logo"><i class="fa-solid fa-brain"></i> RamNotes</div>
+                
+                <div class="auth-tabs">
+                    <div class="auth-tab active" id="tabSignIn" onclick="switchAuth('signin')">Sign In</div>
+                    <div class="auth-tab" id="tabSignUp" onclick="switchAuth('signup')">Sign Up</div>
+                </div>
+
+                <form onsubmit="handleLogin(event)">
+                    <input type="text" id="fullName" class="form-control" placeholder="Full Name" style="display: none;">
+                    <div class="phone-group">
+                        <select id="countryCode">
+                            <option value="+91">🇮🇳 +91</option>
+                            <option value="+1">🇺🇸 +1</option>
+                            <option value="+44">🇬🇧 +44</option>
+                            <option value="+971">🇦🇪 +971</option>
+                        </select>
+                        <input type="text" id="userInput" class="form-control" placeholder="Mobile Number or Email" required style="margin-bottom:0;">
+                    </div>
+                    <input type="password" id="passInput" class="form-control" placeholder="Password" required>
+                    <button type="submit" class="btn-action" id="authBtn">Sign In</button>
+                </form>
+
+                <div style="margin: 15px 0; color: #64748b; font-size: 12px;">OR</div>
+
+                <div class="social-btns">
+                    <button type="button" class="social-btn" onclick="socialLogin('Google')"><i class="fa-brands fa-google" style="color:#ea4335;"></i> Google</button>
+                    <button type="button" class="social-btn" onclick="socialLogin('Facebook')"><i class="fa-brands fa-facebook" style="color:#1877f2;"></i> Facebook</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. MAIN APP DASHBOARD -->
+        <div id="appScreen" style="display: none;">
+            <div class="dashboard-container">
+                
+                <!-- GRID DASHBOARD -->
+                <div class="grid-layout">
+                    <div class="grid-card" onclick="openPanel('booksPanel', 'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=1200&q=80')">
+                        <i class="fa-solid fa-book-open"></i>
+                        <div class="card-title">NCERT Books<br>(English / Hindi)</div>
+                    </div>
+
+                    <div class="grid-card" onclick="openPanel('solutionsPanel', 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=1200&q=80')">
+                        <i class="fa-solid fa-lightbulb" style="color:#f59e0b;"></i>
+                        <div class="card-title">NCERT Solutions</div>
+                    </div>
+
+                    <div class="grid-card" onclick="openPanel('doubtPanel', 'https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=1200&q=80')">
+                        <i class="fa-solid fa-robot" style="color:#10b981;"></i>
+                        <div class="card-title">AI Doubt Section</div>
+                    </div>
+
+                    <div class="grid-card" onclick="openPanel('quizPanel', 'https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?auto=format&fit=crop&w=1200&q=80')">
+                        <i class="fa-solid fa-gamepad" style="color:#ef4444;"></i>
+                        <div class="card-title">Play Quiz (20 Marks)</div>
+                    </div>
+
+                    <div class="grid-card" onclick="openPanel('hub3dPanel', 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80')">
+                        <i class="fa-solid fa-cube" style="color:#06b6d4;"></i>
+                        <div class="card-title">3D Science & Earth</div>
+                    </div>
+
+                    <div class="grid-card" onclick="loadLeaderboard(); openPanel('leaderboardPanel', 'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1200&q=80')">
+                        <i class="fa-solid fa-trophy" style="color:#eab308;"></i>
+                        <div class="card-title">Live Leaderboard</div>
+                    </div>
+                </div>
+
+                <!-- PANEL 1: NCERT BOOKS / SOLUTIONS GENERATOR -->
+                <div class="panel" id="booksPanel">
+                    <h3>📚 NCERT Books & Chapters <i class="fa-solid fa-xmark" onclick="closePanels()" style="cursor:pointer;"></i></h3>
+                    <select id="bookClass" class="form-control">
+                        <option>Class 12</option><option>Class 11</option><option>Class 10</option><option>Class 9</option>
                     </select>
-                    <input type="text" id="userInput" class="form-control" placeholder="Mobile Number or Email" required style="margin-bottom:0;">
+                    <select id="bookSubject" class="form-control">
+                        <option>Physics</option><option>Chemistry</option><option>Biology</option><option>Mathematics</option>
+                    </select>
+                    <input type="text" id="bookChapter" class="form-control" placeholder="Enter Chapter Name / Number">
+                    <button class="btn-action" onclick="generateNote('NCERT Books')">Generate & Read Chapter</button>
                 </div>
-                <input type="password" id="passInput" class="form-control" placeholder="Password" required>
-                <button type="submit" class="btn-action" id="authBtn">Sign In</button>
-            </form>
 
-            <div style="margin: 15px 0; color: #64748b; font-size: 12px;">OR</div>
+                <!-- PANEL 2: NCERT SOLUTIONS -->
+                <div class="panel" id="solutionsPanel">
+                    <h3>💡 NCERT Solutions Engine <i class="fa-solid fa-xmark" onclick="closePanels()" style="cursor:pointer;"></i></h3>
+                    <select id="solClass" class="form-control">
+                        <option>Class 12</option><option>Class 11</option><option>Class 10</option><option>Class 9</option>
+                    </select>
+                    <select id="solSubject" class="form-control">
+                        <option>Physics</option><option>Chemistry</option><option>Biology</option><option>Mathematics</option>
+                    </select>
+                    <input type="text" id="solChapter" class="form-control" placeholder="Enter Chapter or Exercise No.">
+                    <button class="btn-action" onclick="generateNote('NCERT Solutions')">Get Chapter Answers</button>
+                </div>
 
-            <div class="social-btns">
-                <button class="social-btn" onclick="socialLogin('Google')"><i class="fa-brands fa-google" style="color:#ea4335;"></i> Google</button>
-                <button class="social-btn" onclick="socialLogin('Facebook')"><i class="fa-brands fa-facebook" style="color:#1877f2;"></i> Facebook</button>
+                <!-- PANEL 3: AI DOUBT SOLVER -->
+                <div class="panel" id="doubtPanel">
+                    <h3>🤖 AI Doubt Solver <i class="fa-solid fa-xmark" onclick="closePanels()" style="cursor:pointer;"></i></h3>
+                    <select id="doubtClass" class="form-control">
+                        <option>Class 12</option><option>Class 11</option><option>Class 10</option><option>Class 9</option>
+                    </select>
+                    <select id="doubtSubject" class="form-control">
+                        <option>Physics</option><option>Chemistry</option><option>Biology</option><option>Mathematics</option>
+                    </select>
+                    <input type="text" id="doubtChapter" class="form-control" placeholder="Chapter Name">
+                    <textarea id="doubtText" class="form-control" style="height:80px;" placeholder="Ask your doubt in detail..."></textarea>
+                    <button class="btn-action" onclick="solveDoubt()">Ask AI Assistant</button>
+                </div>
+
+                <!-- PANEL 4: GAMIFIED QUIZ PLAY (WITH SOUND EFFECTS) -->
+                <div class="panel" id="quizPanel">
+                    <h3>🎮 Quiz Engine (20 Marks) <i class="fa-solid fa-xmark" onclick="closePanels()" style="cursor:pointer;"></i></h3>
+                    <div id="quizBox">
+                        <p style="margin-bottom:10px; font-size:14px; color:#94a3b8;">Question 1 of 1: What is the unit of Electric Resistance?</p>
+                        <h4 style="margin-bottom:15px; color:#f8fafc;">Q. The SI unit of Electrical Resistance is:</h4>
+                        <button class="btn-action" style="background:#1e293b; text-align:left; margin-bottom:8px;" onclick="answerQuiz(true)">A) Ohm (Ω)</button>
+                        <button class="btn-action" style="background:#1e293b; text-align:left; margin-bottom:8px;" onclick="answerQuiz(false)">B) Ampere (A)</button>
+                        <button class="btn-action" style="background:#1e293b; text-align:left; margin-bottom:8px;" onclick="answerQuiz(false)">C) Volt (V)</button>
+                        <button class="btn-action" style="background:#1e293b; text-align:left; margin-bottom:8px;" onclick="answerQuiz(false)">D) Joule (J)</button>
+                    </div>
+                </div>
+
+                <!-- PANEL 5: 3D SCIENCE & EARTH MODULE -->
+                <div class="panel" id="hub3dPanel">
+                    <h3>🧊 3D Science & Globe Hub <i class="fa-solid fa-xmark" onclick="closePanels()" style="cursor:pointer;"></i></h3>
+                    <p style="font-size:13px; color:#94a3b8; margin-bottom:15px;">Interactive 3D Render Models & Visual Simulations</p>
+                    <div style="background:#0f172a; padding:20px; border-radius:10px; text-align:center; border:1px dashed #334155;">
+                        <i class="fa-solid fa-earth-americas" style="font-size:48px; color:#38bdf8; margin-bottom:10px;"></i>
+                        <h4>3D Earth & Molecular Structure Simulator</h4>
+                        <p style="font-size:12px; color:#64748b; margin-top:5px;">[ Coming Soon in APK Release ]</p>
+                    </div>
+                </div>
+
+                <!-- PANEL 6: LIVE LEADERBOARD -->
+                <div class="panel" id="leaderboardPanel">
+                    <h3>🏆 Class Leaderboard <i class="fa-solid fa-xmark" onclick="closePanels()" style="cursor:pointer;"></i></h3>
+                    <table class="lb-table">
+                        <thead>
+                            <tr><th>Rank</th><th>Student</th><th>Top Score</th><th>Quizzes</th></tr>
+                        </thead>
+                        <tbody id="lbTableBody">
+                            <tr><td colspan="4" style="text-align:center; color:#64748b;">Loading scores...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- FEED DISPLAY CONTAINER -->
+                <div id="feedContainer" style="margin-top: 20px;"></div>
+
             </div>
-        </div>
-    </div>
-
-    <!-- 2. MAIN APP DASHBOARD -->
-    <div id="appScreen" style="display: none;">
-        <div class="dashboard-container">
-            
-            <!-- GRID DASHBOARD -->
-            <div class="grid-layout">
-                <div class="grid-card" onclick="openPanel('booksPanel', 'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=1200&q=80')">
-                    <i class="fa-solid fa-book-open"></i>
-                    <div class="card-title">NCERT Books<br>(English / Hindi)</div>
-                </div>
-
-                <div class="grid-card" onclick="openPanel('solutionsPanel', 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=1200&q=80')">
-                    <i class="fa-solid fa-lightbulb" style="color:#f59e0b;"></i>
-                    <div class="card-title">NCERT Solutions</div>
-                </div>
-
-                <div class="grid-card" onclick="openPanel('doubtPanel', 'https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=1200&q=80')">
-                    <i class="fa-solid fa-robot" style="color:#10b981;"></i>
-                    <div class="card-title">AI Doubt Section</div>
-                </div>
-
-                <div class="grid-card" onclick="openPanel('quizPanel', 'https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?auto=format&fit=crop&w=1200&q=80')">
-                    <i class="fa-solid fa-gamepad" style="color:#ef4444;"></i>
-                    <div class="card-title">Play Quiz (20 Marks)</div>
-                </div>
-
-                <div class="grid-card" onclick="openPanel('hub3dPanel', 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80')">
-                    <i class="fa-solid fa-cube" style="color:#06b6d4;"></i>
-                    <div class="card-title">3D Science & Earth</div>
-                </div>
-
-                <div class="grid-card" onclick="loadLeaderboard(); openPanel('leaderboardPanel', 'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1200&q=80')">
-                    <i class="fa-solid fa-trophy" style="color:#eab308;"></i>
-                    <div class="card-title">Live Leaderboard</div>
-                </div>
-            </div>
-
-            <!-- PANEL 1: NCERT BOOKS / SOLUTIONS GENERATOR -->
-            <div class="panel" id="booksPanel">
-                <h3>📚 NCERT Books & Chapters <i class="fa-solid fa-xmark" onclick="closePanels()" style="cursor:pointer;"></i></h3>
-                <select id="bookClass" class="form-control">
-                    <option>Class 12</option><option>Class 11</option><option>Class 10</option><option>Class 9</option>
-                </select>
-                <select id="bookSubject" class="form-control">
-                    <option>Physics</option><option>Chemistry</option><option>Biology</option><option>Mathematics</option>
-                </select>
-                <input type="text" id="bookChapter" class="form-control" placeholder="Enter Chapter Name / Number">
-                <button class="btn-action" onclick="generateNote('NCERT Books')">Generate & Read Chapter</button>
-            </div>
-
-            <!-- PANEL 2: NCERT SOLUTIONS -->
-            <div class="panel" id="solutionsPanel">
-                <h3>💡 NCERT Solutions Engine <i class="fa-solid fa-xmark" onclick="closePanels()" style="cursor:pointer;"></i></h3>
-                <select id="solClass" class="form-control">
-                    <option>Class 12</option><option>Class 11</option><option>Class 10</option><option>Class 9</option>
-                </select>
-                <select id="solSubject" class="form-control">
-                    <option>Physics</option><option>Chemistry</option><option>Biology</option><option>Mathematics</option>
-                </select>
-                <input type="text" id="solChapter" class="form-control" placeholder="Enter Chapter or Exercise No.">
-                <button class="btn-action" onclick="generateNote('NCERT Solutions')">Get Chapter Answers</button>
-            </div>
-
-            <!-- PANEL 3: AI DOUBT SOLVER -->
-            <div class="panel" id="doubtPanel">
-                <h3>🤖 AI Doubt Solver <i class="fa-solid fa-xmark" onclick="closePanels()" style="cursor:pointer;"></i></h3>
-                <select id="doubtClass" class="form-control">
-                    <option>Class 12</option><option>Class 11</option><option>Class 10</option><option>Class 9</option>
-                </select>
-                <select id="doubtSubject" class="form-control">
-                    <option>Physics</option><option>Chemistry</option><option>Biology</option><option>Mathematics</option>
-                </select>
-                <input type="text" id="doubtChapter" class="form-control" placeholder="Chapter Name">
-                <textarea id="doubtText" class="form-control" style="height:80px;" placeholder="Ask your doubt in detail..."></textarea>
-                <button class="btn-action" onclick="solveDoubt()">Ask AI Assistant</button>
-            </div>
-
-            <!-- PANEL 4: GAMIFIED QUIZ PLAY (WITH SOUND EFFECTS) -->
-            <div class="panel" id="quizPanel">
-                <h3>🎮 Quiz Engine (20 Marks) <i class="fa-solid fa-xmark" onclick="closePanels()" style="cursor:pointer;"></i></h3>
-                <div id="quizBox">
-                    <p style="margin-bottom:10px; font-size:14px; color:#94a3b8;">Question 1 of 1: What is the unit of Electric Resistance?</p>
-                    <h4 style="margin-bottom:15px; color:#f8fafc;">Q. The SI unit of Electrical Resistance is:</h4>
-                    <button class="btn-action" style="background:#1e293b; text-align:left; margin-bottom:8px;" onclick="answerQuiz(true)">A) Ohm (Ω)</button>
-                    <button class="btn-action" style="background:#1e293b; text-align:left; margin-bottom:8px;" onclick="answerQuiz(false)">B) Ampere (A)</button>
-                    <button class="btn-action" style="background:#1e293b; text-align:left; margin-bottom:8px;" onclick="answerQuiz(false)">C) Volt (V)</button>
-                    <button class="btn-action" style="background:#1e293b; text-align:left; margin-bottom:8px;" onclick="answerQuiz(false)">D) Joule (J)</button>
-                </div>
-            </div>
-
-            <!-- PANEL 5: 3D SCIENCE & EARTH MODULE -->
-            <div class="panel" id="hub3dPanel">
-                <h3>🧊 3D Science & Globe Hub <i class="fa-solid fa-xmark" onclick="closePanels()" style="cursor:pointer;"></i></h3>
-                <p style="font-size:13px; color:#94a3b8; margin-bottom:15px;">Interactive 3D Render Models & Visual Simulations</p>
-                <div style="background:#0f172a; padding:20px; border-radius:10px; text-align:center; border:1px dashed #334155;">
-                    <i class="fa-solid fa-earth-americas" style="font-size:48px; color:#38bdf8; margin-bottom:10px;"></i>
-                    <h4>3D Earth & Molecular Structure Simulator</h4>
-                    <p style="font-size:12px; color:#64748b; margin-top:5px;">[ Coming Soon in APK Release ]</p>
-                </div>
-            </div>
-
-            <!-- PANEL 6: LIVE LEADERBOARD -->
-            <div class="panel" id="leaderboardPanel">
-                <h3>🏆 Class Leaderboard <i class="fa-solid fa-xmark" onclick="closePanels()" style="cursor:pointer;"></i></h3>
-                <table class="lb-table">
-                    <thead>
-                        <tr><th>Rank</th><th>Student</th><th>Top Score</th><th>Quizzes</th></tr>
-                    </thead>
-                    <tbody id="lbTableBody">
-                        <tr><td colspan="4" style="text-align:center; color:#64748b;">Loading scores...</td></tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- FEED DISPLAY CONTAINER -->
-            <div id="feedContainer" style="margin-top: 20px;"></div>
-
         </div>
     </div>
 
@@ -323,28 +329,3 @@
                 if(res.ok) {
                     localStorage.setItem("ramnotes_user", user);
                     showApp();
-                } else {
-                    alert("Login failed.");
-                }
-            } catch(err) {
-                alert("Network error.");
-            }
-        }
-
-        function socialLogin(provider) {
-            user = provider + "_User_" + Math.floor(Math.random() * 1000);
-            localStorage.setItem("ramnotes_user", user);
-            showApp();
-        }
-
-        function showApp() {
-            document.getElementById('authScreen').style.display = 'none';
-            document.getElementById('appScreen').style.display = 'block';
-            loadFeed();
-        }
-
-        function logout() {
-            localStorage.removeItem("ramnotes_user");
-            user = "";
-            document.getElementById('appScreen').style.display = 'none';
-            docume
