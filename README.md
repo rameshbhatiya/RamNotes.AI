@@ -3,7 +3,7 @@
 
 # 𝓡𝓪𝓶𝓝𝓸𝓽𝓮𝓼 𝓐𝓘
 
-### 🚀 **[ Click Here for Live Demo ](https://tes-ai.onrender.com)**
+### 🚀 **[ Click Here for Live Demo ](https://ramnotes-ai.onrender.com)**
 
 ---
 
