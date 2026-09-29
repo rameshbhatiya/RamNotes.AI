@@ -16,9 +16,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Gemini API setup (Render environment variable me GEMINI_API_KEY set karein)
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "YOUR_GEMINI_API_KEY_HERE")
-genai.configure(api_key=GEMINI_API_KEY)
+# Gemini API setup (Environment Variable se secure call)
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
+if GEMINI_API_KEY:
+    genai.configure(api_key=GEMINI_API_KEY)
+
 model = genai.GenerativeModel('gemini-pro')
 
 class RequestModel(BaseModel):
@@ -33,6 +35,9 @@ NCERT_PDF_BASE = "https://ncert.nic.in/textbook.php"
 @app.post("/api/generate")
 async def generate_content(req: RequestModel):
     try:
+        if not GEMINI_API_KEY:
+            raise HTTPException(status_code=500, detail="GEMINI_API_KEY is not set in environment variables.")
+
         # Quiz Generation with Daily Seed Logic
         if "quiz" in req.prompt.lower():
             today_seed = req.prompt + str(os.getenv("SEED_DATE", "2026-09-29"))
