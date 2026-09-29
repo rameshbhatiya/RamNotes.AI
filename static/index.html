@@ -3,277 +3,340 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RamNotes AI | NCERT Books & Solutions</title>
-    <!-- Font Awesome Icons & Google Fonts -->
+    <title>RamNotes AI | NCERT & Academic Engine</title>
+    <!-- Font Awesome & Google Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
-        body { background-color: #f3f4f6; color: #1f2937; -webkit-tap-highlight-color: transparent; }
+        body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; padding-bottom: 70px; -webkit-tap-highlight-color: transparent; }
+        
+        /* EDUCATIONAL BACKGROUND OVERLAYS */
+        .bg-overlay { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            z-index: -1; opacity: 0.12; background-size: cover; background-position: center; transition: background-image 0.5s ease-in-out; 
+        }
+
+        /* HEADER BAR */
+        .app-header { 
+            background: linear-gradient(90deg, #1e1b4b, #312e81); color: white; padding: 16px 20px; 
+            display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 15px rgba(0,0,0,0.3); 
+            position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #4338ca; 
+        }
+        .app-header .left { display: flex; align-items: center; gap: 15px; }
+        .app-header .title { font-size: 18px; font-weight: 700; letter-spacing: 0.5px; }
         
         /* AUTHENTICATION SCREEN */
-        .auth-container { max-width: 420px; margin: 40px auto; padding: 25px; background: white; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); text-align: center; }
-        .auth-logo { font-size: 26px; font-weight: 700; color: #4f46e5; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .auth-tabs { display: flex; border-bottom: 2px solid #e5e7eb; margin-bottom: 20px; }
-        .auth-tab { flex: 1; padding: 12px; font-weight: 600; cursor: pointer; color: #6b7280; border-bottom: 3px solid transparent; }
-        .auth-tab.active { color: #4f46e5; border-color: #4f46e5; }
+        .auth-container { max-width: 420px; margin: 40px auto; padding: 25px; background: rgba(30, 41, 59, 0.95); border-radius: 20px; border: 1px solid #334155; text-align: center; }
+        .auth-logo { font-size: 26px; font-weight: 700; color: #6366f1; margin-bottom: 20px; }
+        .auth-tabs { display: flex; border-bottom: 2px solid #334155; margin-bottom: 20px; }
+        .auth-tab { flex: 1; padding: 12px; font-weight: 600; cursor: pointer; color: #94a3b8; border-bottom: 3px solid transparent; }
+        .auth-tab.active { color: #6366f1; border-color: #6366f1; }
         
-        .form-group { margin-bottom: 15px; text-align: left; }
-        .phone-input-group { display: flex; gap: 8px; }
-        .phone-input-group select { width: 110px; padding: 12px; border: 1px solid #d1d5db; border-radius: 10px; background: #f9fafb; font-size: 14px; }
-        .form-control { width: 100%; padding: 12px 15px; border: 1px solid #d1d5db; border-radius: 10px; background: #f9fafb; font-size: 14px; outline: none; }
-        .form-control:focus { border-color: #4f46e5; background: #fff; }
+        .form-control { width: 100%; padding: 12px 15px; border: 1px solid #334155; border-radius: 10px; background: #0f172a; color: white; margin-bottom: 15px; outline: none; }
+        .phone-group { display: flex; gap: 8px; margin-bottom: 15px; }
+        .phone-group select { width: 110px; padding: 12px; border: 1px solid #334155; border-radius: 10px; background: #0f172a; color: white; }
         
-        .btn-primary { width: 100%; padding: 13px; border: none; border-radius: 10px; background: #4f46e5; color: white; font-weight: 600; font-size: 15px; cursor: pointer; margin-top: 10px; }
-        .btn-primary:hover { background: #4338ca; }
-        
-        .social-divider { margin: 20px 0; position: relative; text-align: center; }
-        .social-divider::before { content: ""; position: absolute; top: 50%; left: 0; width: 100%; height: 1px; background: #e5e7eb; z-index: 1; }
-        .social-divider span { position: relative; z-index: 2; background: white; padding: 0 12px; color: #9ca3af; font-size: 12px; }
-        
-        .social-btns { display: flex; gap: 12px; }
-        .social-btn { flex: 1; padding: 11px; border: 1px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 500; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .social-btn:hover { background: #f9fafb; }
+        .btn-action { width: 100%; padding: 12px; border: none; border-radius: 10px; background: linear-gradient(90deg, #6366f1, #4f46e5); color: white; font-weight: 600; cursor: pointer; margin-top: 5px; }
+        .social-btns { display: flex; gap: 10px; margin-top: 15px; }
+        .social-btn { flex: 1; padding: 10px; border: 1px solid #334155; border-radius: 10px; background: #1e293b; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
 
-        /* APP HEADER BAR (Matching Screenshot) */
-        .app-header { background-color: #536dfe; color: white; padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 8px rgba(0,0,0,0.15); position: sticky; top: 0; z-index: 100; }
-        .app-header .left { display: flex; align-items: center; gap: 18px; }
-        .app-header .title { font-size: 18px; font-weight: 600; }
-        .app-header i { font-size: 20px; cursor: pointer; }
-
-        /* APP DASHBOARD GRID (Matching Screenshot) */
-        .dashboard-container { max-width: 600px; margin: 20px auto; padding: 0 15px; }
-        .grid-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        /* DASHBOARD GRID */
+        .dashboard-container { max-width: 700px; margin: 20px auto; padding: 0 15px; }
+        .grid-layout { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
         
-        .grid-card { background: white; border-radius: 12px; padding: 20px 15px; text-align: center; box-shadow: 0 3px 10px rgba(0,0,0,0.05); cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; border: 1px solid #f0f0f0; }
-        .grid-card:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0,0,0,0.1); }
-        .grid-card img, .grid-card i { font-size: 38px; margin-bottom: 12px; color: #536dfe; }
-        .grid-card .card-title { font-size: 14px; font-weight: 600; color: #374151; line-height: 1.3; }
+        .grid-card { background: rgba(30, 41, 59, 0.85); backdrop-filter: blur(8px); border-radius: 16px; padding: 22px 15px; text-align: center; border: 1px solid #334155; cursor: pointer; transition: transform 0.2s, border-color 0.2s; }
+        .grid-card:hover { transform: translateY(-4px); border-color: #6366f1; }
+        .grid-card i { font-size: 36px; margin-bottom: 10px; color: #818cf8; }
+        .grid-card .card-title { font-size: 14px; font-weight: 600; color: #f1f5f9; }
 
-        /* GENERATOR MODAL/PANEL */
-        .generator-panel { background: white; border-radius: 16px; padding: 20px; margin-top: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); display: none; }
-        .feed-card { background: white; border-radius: 12px; padding: 20px; margin-top: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
-        .feed-header { font-size: 12px; color: #6b7280; margin-bottom: 8px; font-weight: 500; }
-        .feed-title { font-size: 16px; font-weight: 600; color: #111827; margin-bottom: 10px; }
-        .feed-content { background: #f9fafb; padding: 15px; border-radius: 8px; font-size: 14px; line-height: 1.6; white-space: pre-wrap; border: 1px solid #e5e7eb; }
+        /* MODAL PANELS */
+        .panel { background: rgba(30, 41, 59, 0.95); border: 1px solid #334155; border-radius: 16px; padding: 20px; margin-top: 20px; display: none; }
+        .panel h3 { margin-bottom: 15px; color: #818cf8; display: flex; justify-content: space-between; align-items: center; }
+
+        /* FEED CARDS */
+        .feed-card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 18px; margin-top: 15px; }
+        .feed-header { font-size: 12px; color: #94a3b8; margin-bottom: 6px; }
+        .feed-title { font-size: 16px; font-weight: 600; color: #f8fafc; margin-bottom: 10px; }
+        .feed-content { background: #0f172a; padding: 14px; border-radius: 8px; font-size: 14px; line-height: 1.6; white-space: pre-wrap; font-family: monospace; border: 1px solid #1e293b; }
+
+        /* LEADERBOARD TABLE */
+        .lb-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .lb-table th, .lb-table td { padding: 10px; text-align: left; border-bottom: 1px solid #334155; font-size: 14px; }
+        .lb-table th { color: #818cf8; }
+
+        /* ANIMATED BLUE DEVELOPER FOOTER */
+        .dev-footer { 
+            position: fixed; bottom: 0; left: 0; width: 100%; background: #090d16; padding: 12px; text-align: center; border-top: 1px solid #1e293b; z-index: 1000; 
+        }
+        .dev-text {
+            font-size: 14px; font-weight: 700;
+            background: linear-gradient(90deg, #3b82f6, #60a5fa, #93c5fd, #2563eb, #3b82f6);
+            background-size: 200% auto;
+            color: transparent; -webkit-background-clip: text; background-clip: text;
+            animation: gradientMove 3s linear infinite;
+        }
+        @keyframes gradientMove { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
     </style>
 </head>
 <body>
 
-    <!-- 1. LOGIN / SIGNUP SCREEN -->
+    <!-- DYNAMIC EDUCATIONAL BACKGROUND OVERLAY -->
+    <div class="bg-overlay" id="bgOverlay" style="background-image: url('https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&w=1200&q=80');"></div>
+
+    <!-- HEADER BAR -->
+    <div class="app-header">
+        <div class="left">
+            <i class="fa-solid fa-graduation-cap" style="font-size: 22px; color: #818cf8;"></i>
+            <div class="title">RamNotes AI Engine</div>
+        </div>
+        <i class="fa-regular fa-bell" style="cursor: pointer;"></i>
+    </div>
+
+    <!-- 1. AUTHENTICATION SCREEN -->
     <div id="authScreen">
         <div class="auth-container">
-            <div class="auth-logo"><i class="fa-solid fa-graduation-cap"></i> RamNotes AI</div>
+            <div class="auth-logo"><i class="fa-solid fa-brain"></i> RamNotes AI</div>
             
             <div class="auth-tabs">
-                <div class="auth-tab active" onclick="switchTab('signin')">Sign In</div>
-                <div class="auth-tab" onclick="switchTab('signup')">Sign Up</div>
+                <div class="auth-tab active" onclick="switchAuth('signin')">Sign In</div>
+                <div class="auth-tab" onclick="switchAuth('signup')">Sign Up</div>
             </div>
 
-            <form id="authForm" onsubmit="handleAuth(event)">
-                <div class="form-group" id="nameGroup" style="display: none;">
-                    <input type="text" id="fullname" class="form-control" placeholder="Full Name">
+            <form onsubmit="handleLogin(event)">
+                <input type="text" id="fullName" class="form-control" placeholder="Full Name" style="display: none;">
+                <div class="phone-group">
+                    <select id="countryCode">
+                        <option value="+91">🇮🇳 +91</option>
+                        <option value="+1">🇺🇸 +1</option>
+                        <option value="+44">🇬🇧 +44</option>
+                        <option value="+971">🇦🇪 +971</option>
+                    </select>
+                    <input type="text" id="userInput" class="form-control" placeholder="Mobile Number or Email" required style="margin-bottom:0;">
                 </div>
-
-                <div class="form-group">
-                    <div class="phone-input-group">
-                        <select id="countryCode">
-                            <option value="+91">🇮🇳 +91</option>
-                            <option value="+1">🇺🇸 +1</option>
-                            <option value="+44">🇬🇧 +44</option>
-                            <option value="+971">🇦🇪 +971</option>
-                            <option value="+61">🇦🇺 +61</option>
-                            <option value="+1">🇨🇦 +1</option>
-                        </select>
-                        <input type="tel" id="identifier" class="form-control" placeholder="Mobile Number or Email" required>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <input type="password" id="password" class="form-control" placeholder="Password" required>
-                </div>
-
-                <button type="submit" class="btn-primary" id="authBtn">Sign In</button>
+                <input type="password" id="passInput" class="form-control" placeholder="Password" required>
+                <button type="submit" class="btn-action" id="authBtn">Sign In</button>
             </form>
 
-            <div class="social-divider"><span>OR</span></div>
+            <div style="margin: 15px 0; color: #64748b; font-size: 12px;">OR</div>
 
             <div class="social-btns">
-                <button class="social-btn" onclick="socialLogin('Google')"><i class="fa-brands fa-google" style="color: #ea4335;"></i> Google</button>
-                <button class="social-btn" onclick="socialLogin('Facebook')"><i class="fa-brands fa-facebook" style="color: #1877f2;"></i> Facebook</button>
+                <button class="social-btn" onclick="socialLogin('Google')"><i class="fa-brands fa-google" style="color:#ea4335;"></i> Google</button>
+                <button class="social-btn" onclick="socialLogin('Facebook')"><i class="fa-brands fa-facebook" style="color:#1877f2;"></i> Facebook</button>
             </div>
         </div>
     </div>
 
-    <!-- 2. MAIN APP INTERFACE (HIDDEN UNTIL LOGIN) -->
+    <!-- 2. MAIN APP DASHBOARD -->
     <div id="appScreen" style="display: none;">
-        <!-- APP TOP BAR (Matching Screenshot) -->
-        <div class="app-header">
-            <div class="left">
-                <i class="fa-solid fa-bars"></i>
-                <div class="title">Ncert Books & Solutions</div>
-            </div>
-            <i class="fa-regular fa-bell"></i>
-        </div>
-
         <div class="dashboard-container">
-            <!-- APP FEATURE GRID (Matching Screenshot) -->
+            
+            <!-- GRID DASHBOARD (MATCHING YOUR BLUEPRINT) -->
             <div class="grid-layout">
-                <div class="grid-card" onclick="openFeature('NCERT Books (English Medium)')">
-                    <i class="fa-solid fa-book-bookmark" style="color: #f59e0b;"></i>
-                    <div class="card-title">NCERT Books<br>(English Medium)</div>
+                <div class="grid-card" onclick="openPanel('booksPanel', 'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=1200&q=80')">
+                    <i class="fa-solid fa-book-open"></i>
+                    <div class="card-title">NCERT Books<br>(English / Hindi)</div>
                 </div>
 
-                <div class="grid-card" onclick="openFeature('NCERT Books (Hindi Medium)')">
-                    <i class="fa-solid fa-book-open-reader" style="color: #ef4444;"></i>
-                    <div class="card-title">NCERT किताबें<br>(हिंदी माध्यम)</div>
-                </div>
-
-                <div class="grid-card" onclick="openFeature('NCERT Solutions')">
-                    <i class="fa-solid fa-lightbulb" style="color: #10b981;"></i>
+                <div class="grid-card" onclick="openPanel('solutionsPanel', 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=1200&q=80')">
+                    <i class="fa-solid fa-lightbulb" style="color:#f59e0b;"></i>
                     <div class="card-title">NCERT Solutions</div>
                 </div>
 
-                <div class="grid-card" onclick="openFeature('NCERT Notes')">
-                    <i class="fa-solid fa-clipboard-list" style="color: #3b82f6;"></i>
-                    <div class="card-title">NCERT Notes</div>
+                <div class="grid-card" onclick="openPanel('doubtPanel', 'https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=1200&q=80')">
+                    <i class="fa-solid fa-robot" style="color:#10b981;"></i>
+                    <div class="card-title">AI Doubt Section</div>
                 </div>
 
-                <div class="grid-card" onclick="openFeature('NCERT Videos')">
-                    <i class="fa-solid fa-circle-play" style="color: #dc2626;"></i>
-                    <div class="card-title">NCERT Videos</div>
+                <div class="grid-card" onclick="openPanel('quizPanel', 'https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?auto=format&fit=crop&w=1200&q=80')">
+                    <i class="fa-solid fa-gamepad" style="color:#ef4444;"></i>
+                    <div class="card-title">Play Quiz (20 Marks)</div>
                 </div>
 
-                <div class="grid-card" onclick="openFeature('CBSE Papers')">
-                    <i class="fa-solid fa-file-pen" style="color: #8b5cf6;"></i>
-                    <div class="card-title">CBSE Papers</div>
+                <div class="grid-card" onclick="openPanel('hub3dPanel', 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80')">
+                    <i class="fa-solid fa-cube" style="color:#06b6d4;"></i>
+                    <div class="card-title">3D Science & Earth</div>
+                </div>
+
+                <div class="grid-card" onclick="loadLeaderboard(); openPanel('leaderboardPanel', 'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1200&q=80')">
+                    <i class="fa-solid fa-trophy" style="color:#eab308;"></i>
+                    <div class="card-title">Live Leaderboard</div>
                 </div>
             </div>
 
-            <!-- AI GENERATOR PANEL -->
-            <div class="generator-panel" id="generatorPanel">
-                <h3 id="featureHeading" style="margin-bottom: 12px; font-size: 16px; color: #536dfe;">🚀 Generate Material</h3>
-                <div class="form-group">
-                    <select id="levelSelect" class="form-control">
-                        <option>Class 12</option>
-                        <option>Class 11</option>
-                        <option>Class 10</option>
-                        <option>Class 9</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <select id="subjectSelect" class="form-control">
-                        <option>Biology</option>
-                        <option>Physics</option>
-                        <option>Chemistry</option>
-                        <option>Mathematics</option>
-                        <option>Computer Applications</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <input type="text" id="topicInput" class="form-control" placeholder="Enter Chapter / Topic (e.g. Organic Chemistry)">
-                </div>
-                <button class="btn-primary" onclick="generateContent()" style="background: #536dfe;">Generate & Save</button>
+            <!-- PANEL 1: NCERT BOOKS / SOLUTIONS GENERATOR -->
+            <div class="panel" id="booksPanel">
+                <h3>📚 NCERT Books & Chapters <i class="fa-solid fa-xmark" onclick="closePanels()" style="cursor:pointer;"></i></h3>
+                <select id="bookClass" class="form-control">
+                    <option>Class 12</option><option>Class 11</option><option>Class 10</option><option>Class 9</option>
+                </select>
+                <select id="bookSubject" class="form-control">
+                    <option>Physics</option><option>Chemistry</option><option>Biology</option><option>Mathematics</option>
+                </select>
+                <input type="text" id="bookChapter" class="form-control" placeholder="Enter Chapter Name / Number">
+                <button class="btn-action" onclick="generateNote('NCERT Books')">Generate & Read Chapter</button>
             </div>
 
-            <!-- SAVED TIMELINE FEED -->
-            <div id="feedList"></div>
+            <!-- PANEL 2: NCERT SOLUTIONS -->
+            <div class="panel" id="solutionsPanel">
+                <h3>💡 NCERT Solutions Engine <i class="fa-solid fa-xmark" onclick="closePanels()" style="cursor:pointer;"></i></h3>
+                <select id="solClass" class="form-control">
+                    <option>Class 12</option><option>Class 11</option><option>Class 10</option><option>Class 9</option>
+                </select>
+                <select id="solSubject" class="form-control">
+                    <option>Physics</option><option>Chemistry</option><option>Biology</option><option>Mathematics</option>
+                </select>
+                <input type="text" id="solChapter" class="form-control" placeholder="Enter Chapter or Exercise No.">
+                <button class="btn-action" onclick="generateNote('NCERT Solutions')">Get Chapter Answers</button>
+            </div>
+
+            <!-- PANEL 3: AI DOUBT SOLVER -->
+            <div class="panel" id="doubtPanel">
+                <h3>🤖 AI Doubt Solver <i class="fa-solid fa-xmark" onclick="closePanels()" style="cursor:pointer;"></i></h3>
+                <select id="doubtClass" class="form-control">
+                    <option>Class 12</option><option>Class 11</option><option>Class 10</option><option>Class 9</option>
+                </select>
+                <select id="doubtSubject" class="form-control">
+                    <option>Physics</option><option>Chemistry</option><option>Biology</option><option>Mathematics</option>
+                </select>
+                <input type="text" id="doubtChapter" class="form-control" placeholder="Chapter Name">
+                <textarea id="doubtText" class="form-control" style="height:80px;" placeholder="Ask your doubt in detail..."></textarea>
+                <button class="btn-action" onclick="solveDoubt()">Ask AI Assistant</button>
+            </div>
+
+            <!-- PANEL 4: GAMIFIED QUIZ PLAY (WITH SOUND EFFECTS) -->
+            <div class="panel" id="quizPanel">
+                <h3>🎮 Quiz Engine (20 Marks) <i class="fa-solid fa-xmark" onclick="closePanels()" style="cursor:pointer;"></i></h3>
+                <div id="quizBox">
+                    <p style="margin-bottom:10px; font-size:14px; color:#94a3b8;">Question 1 of 1: What is the unit of Electric Resistance?</p>
+                    <h4 style="margin-bottom:15px; color:#f8fafc;">Q. The SI unit of Electrical Resistance is:</h4>
+                    <button class="btn-action" style="background:#1e293b; text-align:left; margin-bottom:8px;" onclick="answerQuiz(true)">A) Ohm (Ω)</button>
+                    <button class="btn-action" style="background:#1e293b; text-align:left; margin-bottom:8px;" onclick="answerQuiz(false)">B) Ampere (A)</button>
+                    <button class="btn-action" style="background:#1e293b; text-align:left; margin-bottom:8px;" onclick="answerQuiz(false)">C) Volt (V)</button>
+                    <button class="btn-action" style="background:#1e293b; text-align:left; margin-bottom:8px;" onclick="answerQuiz(false)">D) Joule (J)</button>
+                </div>
+            </div>
+
+            <!-- PANEL 5: 3D SCIENCE & EARTH MODULE -->
+            <div class="panel" id="hub3dPanel">
+                <h3>🧊 3D Science & Globe Hub <i class="fa-solid fa-xmark" onclick="closePanels()" style="cursor:pointer;"></i></h3>
+                <p style="font-size:13px; color:#94a3b8; margin-bottom:15px;">Interactive 3D Render Models & Visual Simulations</p>
+                <div style="background:#0f172a; padding:20px; border-radius:10px; text-align:center; border:1px dashed #334155;">
+                    <i class="fa-solid fa-earth-americas" style="font-size:48px; color:#38bdf8; margin-bottom:10px;"></i>
+                    <h4>3D Earth & Molecular Structure Simulator</h4>
+                    <p style="font-size:12px; color:#64748b; margin-top:5px;">[ Coming Soon in APK Release ]</p>
+                </div>
+            </div>
+
+            <!-- PANEL 6: LIVE LEADERBOARD -->
+            <div class="panel" id="leaderboardPanel">
+                <h3>🏆 Class Leaderboard <i class="fa-solid fa-xmark" onclick="closePanels()" style="cursor:pointer;"></i></h3>
+                <table class="lb-table">
+                    <thead>
+                        <tr><th>Rank</th><th>Student</th><th>Top Score</th><th>Quizzes</th></tr>
+                    </thead>
+                    <tbody id="lbTableBody">
+                        <tr><td colspan="4" style="text-align:center; color:#64748b;">Loading scores...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- FEED DISPLAY CONTAINER -->
+            <div id="feedContainer" style="margin-top: 20px;"></div>
+
         </div>
     </div>
 
-    <script>
-        let currentUser = "";
-        let currentMode = "signin";
+    <!-- ANIMATED BLUE DEVELOPER FOOTER -->
+    <div class="dev-footer">
+        <span class="dev-text">Developed with ❤️ by Ramesh Kumawat</span>
+    </div>
 
-        function switchTab(mode) {
-            currentMode = mode;
-            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-            if(mode === 'signin') {
-                event.target.classList.add('active');
-                document.getElementById('nameGroup').style.display = 'none';
-                document.getElementById('authBtn').innerText = 'Sign In';
+    <!-- AUDIO SYNTHESIZER FOR SOUND EFFECTS -->
+    <script>
+        let user = "";
+
+        // Web Audio Synthesizer for Quiz Sounds
+        function playSound(type) {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+
+            if(type === 'correct') {
+                // Happy high chime ("Good job!")
+                osc.frequency.setValueAtTime(587.33, ctx.currentTime);
+                osc.frequency.setValueAtTime(880, ctx.currentTime + 0.1);
+                gain.gain.setValueAtTime(0.3, ctx.currentTime);
+                osc.start(); osc.stop(ctx.currentTime + 0.3);
             } else {
-                event.target.classList.add('active');
-                document.getElementById('nameGroup').style.display = 'block';
-                document.getElementById('authBtn').innerText = 'Sign Up';
+                // Low buzz ("Kya kar raha hai bhai / Oh no!")
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(150, ctx.currentTime);
+                osc.frequency.setValueAtTime(100, ctx.currentTime + 0.15);
+                gain.gain.setValueAtTime(0.3, ctx.currentTime);
+                osc.start(); osc.stop(ctx.currentTime + 0.35);
             }
         }
 
-        function handleAuth(e) {
+        function switchAuth(mode) {
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            if(mode === 'signup') {
+                event.target.classList.add('active');
+                document.getElementById('fullName').style.display = 'block';
+                document.getElementById('authBtn').innerText = 'Sign Up';
+            } else {
+                event.target.classList.add('active');
+                document.getElementById('fullName').style.display = 'none';
+                document.getElementById('authBtn').innerText = 'Sign In';
+            }
+        }
+
+        function handleLogin(e) {
             e.preventDefault();
             const code = document.getElementById('countryCode').value;
-            const input = document.getElementById('identifier').value;
-            currentUser = code + " " + input;
-            
+            const input = document.getElementById('userInput').value.trim();
+            user = code + " " + input;
+
+            fetch('/api/auth/login', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ username: user, full_name: document.getElementById('fullName').value })
+            });
+
             document.getElementById('authScreen').style.display = 'none';
             document.getElementById('appScreen').style.display = 'block';
             loadFeed();
         }
 
         function socialLogin(provider) {
-            currentUser = provider + "_User";
+            user = provider + "_User_" + Math.floor(Math.random() * 1000);
             document.getElementById('authScreen').style.display = 'none';
             document.getElementById('appScreen').style.display = 'block';
             loadFeed();
         }
 
-        function openFeature(featureName) {
-            document.getElementById('generatorPanel').style.display = 'block';
-            document.getElementById('featureHeading').innerText = "🚀 " + featureName;
-            window.scrollTo({ top: 300, behavior: 'smooth' });
+        function openPanel(id, bgUrl) {
+            closePanels();
+            document.getElementById(id).style.display = 'block';
+            if(bgUrl) document.getElementById('bgOverlay').style.backgroundImage = `url('${bgUrl}')`;
         }
 
-        async function generateContent() {
-            const level = document.getElementById('levelSelect').value;
-            const subject = document.getElementById('subjectSelect').value;
-            const topic = document.getElementById('topicInput').value;
+        function closePanels() {
+            document.querySelectorAll('.panel').forEach(p => p.style.display = 'none');
+        }
 
-            if(!topic) return alert("Please enter a topic.");
-
-            const res = await fetch("/api/generate", {
-                method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({
-                    username: currentUser,
-                    level: level,
-                    subject: subject,
-                    category: "Study Material",
-                    topic: topic,
-                    api_key: ""
-                })
-            });
-
-            const data = await res.json();
-            if(res.ok) {
-                alert("Generated successfully!");
-                document.getElementById('topicInput').value = "";
-                loadFeed();
+        async function generateNote(category) {
+            let lvl = "Class 12", sub = "Physics", top = "Chapter Note";
+            if(category === 'NCERT Books') {
+                lvl = document.getElementById('bookClass').value;
+                sub = document.getElementById('bookSubject').value;
+                top = document.getElementById('bookChapter').value;
             } else {
-                alert(data.detail || "Error generating content");
-            }
-        }
-
-        async function loadFeed() {
-            const res = await fetch("/api/feed/" + encodeURIComponent(currentUser));
-            const data = await res.json();
-            const container = document.getElementById('feedList');
-            container.innerHTML = "<h3 style='margin: 20px 0 10px; font-size: 16px; color: #374151;'>📜 Your Study Bank</h3>";
-
-            if(!data.feed || data.feed.length === 0) {
-                container.innerHTML += "<p style='color:#9ca3af; font-size:13px;'>No generated notes yet. Tap any icon above to create!</p>";
-                return;
+                lvl = document.getElementById('solClass').value;
+                sub = document.getElementById('solSubject').value;
+                top = document.getElementById('solChapter').value;
             }
 
-            data.feed.forEach(item => {
-                container.innerHTML += `
-                    <div class="feed-card">
-                        <div class="feed-header">${item.created_at} • ${item.subject} (${item.level})</div>
-                        <div class="feed-title">${item.topic}</div>
-                        <div class="feed-content">${item.content}</div>
-                    </div>
-                `;
-            });
-        }
-    </script>
-</body>
-</html>
+            if(!top) return alert("Pl
