@@ -338,4 +338,117 @@
                     headers: {'Content-Type': 'application/json'},
                     body: createPayload("General", "General", "Doubt", query)
                 });
-                const data = await res.jso
+                const data = await res.jso                const data = await res.json();
+                resDiv.querySelector('.content-body').innerText = parseAIText(data);
+            } catch(e) {
+                resDiv.querySelector('.content-body').innerText = "API Error.";
+            }
+        }
+
+        // ================= DYNAMIC 20 MCQs AI QUIZ ENGINE =================
+        let generatedQuestions = [];
+        let currentQuizIndex = 0;
+        let quizScore = 0;
+
+        async function generateDynamicQuiz() {
+            const cls = document.getElementById('quizClass').value;
+            const sub = document.getElementById('quizSubject').value;
+            const chap = document.getElementById('quizChapter').value;
+
+            const activeArea = document.getElementById('activeQuizArea');
+            const questionCard = document.getElementById('quizQuestionCard');
+            
+            activeArea.style.display = 'block';
+            questionCard.innerHTML = `<div class="loader-spinner">⏳ AI is creating a unique 20-Question Quiz for <b>${chap}</b>... Please wait 5-10 seconds...</div>`;
+
+            const promptStr = `Generate 20 multiple choice questions (MCQs) for Class ${cls}, Subject: ${sub}, Chapter: ${chap}. Response MUST be a valid JSON array only, without markdown text. Format: [{"q": "Question string", "options": ["A", "B", "C", "D"], "answer": 0}]. (answer is index 0-3).`;
+
+            try {
+                const res = await fetch('/api/generate', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: createPayload(cls, sub, chap, promptStr)
+                });
+                const data = await res.json();
+                let rawText = parseAIText(data);
+                
+                // Extract JSON Array from AI Response
+                const jsonStart = rawText.indexOf('[');
+                const jsonEnd = rawText.lastIndexOf(']') + 1;
+                
+                if (jsonStart !== -1 && jsonEnd !== -1) {
+                    rawText = rawText.substring(jsonStart, jsonEnd);
+                }
+
+                generatedQuestions = JSON.parse(rawText);
+                currentQuizIndex = 0;
+                quizScore = 0;
+                renderQuizQuestion();
+
+            } catch(e) {
+                questionCard.innerHTML = `<div style="color:#ef4444; padding:15px; text-align:center;">Failed to generate AI Quiz. Please click "Start Dynamic AI Quiz" again.</div>`;
+            }
+        }
+
+        function renderQuizQuestion() {
+            const card = document.getElementById('quizQuestionCard');
+            
+            if(currentQuizIndex >= generatedQuestions.length) {
+                card.innerHTML = `
+                    <div style="text-align:center; padding: 20px;">
+                        <h2 style="color:#10b981; margin-bottom:10px;">🎉 Quiz Completed!</h2>
+                        <h3 style="color:#f8fafc; margin-bottom:15px;">Your Final Score: ${quizScore} / ${generatedQuestions.length}</h3>
+                        <p style="color:#94a3b8; font-size:13px; margin-bottom:20px;">${quizScore >= 12 ? 'Great job!' : 'Needs improvement. Practice again!'}</p>
+                        <button class="btn-submit" onclick="generateDynamicQuiz()">Try New Unique Quiz</button>
+                    </div>
+                `;
+                return;
+            }
+
+            const currentQ = generatedQuestions[currentQuizIndex];
+            document.getElementById('quizQuestionCount').innerText = `Question ${currentQuizIndex + 1} / ${generatedQuestions.length}`;
+            document.getElementById('quizScore').innerText = `Score: ${quizScore} / ${generatedQuestions.length}`;
+            document.getElementById('quizProgress').style.width = `${((currentQuizIndex + 1) / generatedQuestions.length) * 100}%`;
+
+            card.innerHTML = `
+                <div class="question-title">${currentQuizIndex + 1}. ${currentQ.q}</div>
+                <div id="optionsContainer"></div>
+            `;
+
+            const optsDiv = document.getElementById('optionsContainer');
+            currentQ.options.forEach((optText, index) => {
+                optsDiv.innerHTML += `
+                    <button class="option-btn" onclick="checkAnswer(this, ${index}, ${currentQ.answer})">
+                        <span>${String.fromCharCode(65 + index)}) ${optText}</span>
+                        <i class="fa-regular fa-circle"></i>
+                    </button>
+                `;
+            });
+        }
+
+        function checkAnswer(btn, selectedIndex, correctIndex) {
+            const allBtns = document.querySelectorAll('.option-btn');
+            allBtns.forEach(b => b.onclick = null);
+
+            if(selectedIndex === correctIndex) {
+                btn.classList.add('correct');
+                btn.querySelector('i').className = 'fa-solid fa-circle-check';
+                quizScore++;
+                document.getElementById('quizScore').innerText = `Score: ${quizScore} / ${generatedQuestions.length}`;
+            } else {
+                btn.classList.add('wrong');
+                btn.querySelector('i').className = 'fa-solid fa-circle-xmark';
+                allBtns[correctIndex].classList.add('correct');
+                allBtns[correctIndex].querySelector('i').className = 'fa-solid fa-circle-check';
+            }
+
+            setTimeout(() => {
+                currentQuizIndex++;
+                renderQuizQuestion();
+            }, 1100);
+        }
+
+        window.onload = initDropdowns;
+    </script>
+</body>
+</html>
