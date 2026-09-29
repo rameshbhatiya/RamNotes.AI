@@ -90,7 +90,7 @@
             <i class="fa-solid fa-graduation-cap" style="font-size: 22px; color: #818cf8;"></i>
             <div class="title">RamNotes AI Engine</div>
         </div>
-        <i class="fa-regular fa-bell" style="cursor: pointer;"></i>
+        <i class="fa-solid fa-power-off" onclick="logout()" style="cursor: pointer;" title="Logout"></i>
     </div>
 
     <!-- 1. AUTHENTICATION SCREEN -->
@@ -99,8 +99,8 @@
             <div class="auth-logo"><i class="fa-solid fa-brain"></i> RamNotes AI</div>
             
             <div class="auth-tabs">
-                <div class="auth-tab active" onclick="switchAuth('signin')">Sign In</div>
-                <div class="auth-tab" onclick="switchAuth('signup')">Sign Up</div>
+                <div class="auth-tab active" id="tabSignIn" onclick="switchAuth('signin')">Sign In</div>
+                <div class="auth-tab" id="tabSignUp" onclick="switchAuth('signup')">Sign Up</div>
             </div>
 
             <form onsubmit="handleLogin(event)">
@@ -131,7 +131,7 @@
     <div id="appScreen" style="display: none;">
         <div class="dashboard-container">
             
-            <!-- GRID DASHBOARD (MATCHING YOUR BLUEPRINT) -->
+            <!-- GRID DASHBOARD -->
             <div class="grid-layout">
                 <div class="grid-card" onclick="openPanel('booksPanel', 'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=1200&q=80')">
                     <i class="fa-solid fa-book-open"></i>
@@ -252,26 +252,35 @@
         <span class="dev-text">Developed with ❤️ by Ramesh Kumawat</span>
     </div>
 
-    <!-- AUDIO SYNTHESIZER FOR SOUND EFFECTS -->
+    <!-- SCRIPT ENGINE -->
     <script>
         let user = "";
 
-        // Web Audio Synthesizer for Quiz Sounds
+        // Auto restore user session on load
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedUser = localStorage.getItem("ramnotes_user");
+            if (savedUser) {
+                user = savedUser;
+                showApp();
+            }
+        });
+
+        // Sound synthesizer
         function playSound(type) {
-            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const AudioCtx = window.AudioContext || window.webkitAudioContext;
+            if(!AudioCtx) return;
+            const ctx = new AudioCtx();
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
             osc.connect(gain);
             gain.connect(ctx.destination);
 
             if(type === 'correct') {
-                // Happy high chime ("Good job!")
                 osc.frequency.setValueAtTime(587.33, ctx.currentTime);
                 osc.frequency.setValueAtTime(880, ctx.currentTime + 0.1);
                 gain.gain.setValueAtTime(0.3, ctx.currentTime);
                 osc.start(); osc.stop(ctx.currentTime + 0.3);
             } else {
-                // Low buzz ("Kya kar raha hai bhai / Oh no!")
                 osc.type = 'sawtooth';
                 osc.frequency.setValueAtTime(150, ctx.currentTime);
                 osc.frequency.setValueAtTime(100, ctx.currentTime + 0.15);
@@ -281,62 +290,61 @@
         }
 
         function switchAuth(mode) {
-            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
             if(mode === 'signup') {
-                event.target.classList.add('active');
+                document.getElementById('tabSignUp').classList.add('active');
+                document.getElementById('tabSignIn').classList.remove('active');
                 document.getElementById('fullName').style.display = 'block';
                 document.getElementById('authBtn').innerText = 'Sign Up';
             } else {
-                event.target.classList.add('active');
+                document.getElementById('tabSignIn').classList.add('active');
+                document.getElementById('tabSignUp').classList.remove('active');
                 document.getElementById('fullName').style.display = 'none';
                 document.getElementById('authBtn').innerText = 'Sign In';
             }
         }
 
-        function handleLogin(e) {
+        async function handleLogin(e) {
             e.preventDefault();
             const code = document.getElementById('countryCode').value;
             const input = document.getElementById('userInput').value.trim();
+            const fullName = document.getElementById('fullName').value.trim();
+
+            if(!input) return alert("Please enter mobile number or email");
+
             user = code + " " + input;
 
-            fetch('/api/auth/login', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ username: user, full_name: document.getElementById('fullName').value })
-            });
+            try {
+                const res = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ username: user, full_name: fullName, auth_provider: 'phone_email' })
+                });
 
-            document.getElementById('authScreen').style.display = 'none';
-            document.getElementById('appScreen').style.display = 'block';
-            loadFeed();
+                if(res.ok) {
+                    localStorage.setItem("ramnotes_user", user);
+                    showApp();
+                } else {
+                    alert("Login failed.");
+                }
+            } catch(err) {
+                alert("Network error.");
+            }
         }
 
         function socialLogin(provider) {
             user = provider + "_User_" + Math.floor(Math.random() * 1000);
+            localStorage.setItem("ramnotes_user", user);
+            showApp();
+        }
+
+        function showApp() {
             document.getElementById('authScreen').style.display = 'none';
             document.getElementById('appScreen').style.display = 'block';
             loadFeed();
         }
 
-        function openPanel(id, bgUrl) {
-            closePanels();
-            document.getElementById(id).style.display = 'block';
-            if(bgUrl) document.getElementById('bgOverlay').style.backgroundImage = `url('${bgUrl}')`;
-        }
-
-        function closePanels() {
-            document.querySelectorAll('.panel').forEach(p => p.style.display = 'none');
-        }
-
-        async function generateNote(category) {
-            let lvl = "Class 12", sub = "Physics", top = "Chapter Note";
-            if(category === 'NCERT Books') {
-                lvl = document.getElementById('bookClass').value;
-                sub = document.getElementById('bookSubject').value;
-                top = document.getElementById('bookChapter').value;
-            } else {
-                lvl = document.getElementById('solClass').value;
-                sub = document.getElementById('solSubject').value;
-                top = document.getElementById('solChapter').value;
-            }
-
-            if(!top) return alert("Pl
+        function logout() {
+            localStorage.removeItem("ramnotes_user");
+            user = "";
+            document.getElementById('appScreen').style.display = 'none';
+            docume
