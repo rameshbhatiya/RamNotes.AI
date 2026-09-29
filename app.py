@@ -3,6 +3,8 @@ import random
 import json
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import HTMLResponse, FileResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 import google.generativeai as genai
 
@@ -16,12 +18,19 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Gemini API setup (Environment Variable se secure call)
+# Gemini API Setup
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
 if GEMINI_API_KEY:
     genai.configure(api_key=GEMINI_API_KEY)
 
 model = genai.GenerativeModel('gemini-pro')
+
+# Root URL (/) par index.html load karega
+@app.get("/", response_class=HTMLResponse)
+async def serve_home():
+    if os.path.exists("index.html"):
+        return FileResponse("index.html")
+    return "<h1>RamNotes AI Server is Running!</h1><p>index.html file not found in root directory.</p>"
 
 class RequestModel(BaseModel):
     level: str
@@ -29,21 +38,18 @@ class RequestModel(BaseModel):
     chapter: str
     prompt: str = ""
 
-# Official NCERT Direct Links Mapper
 NCERT_PDF_BASE = "https://ncert.nic.in/textbook.php"
 
 @app.post("/api/generate")
 async def generate_content(req: RequestModel):
     try:
         if not GEMINI_API_KEY:
-            raise HTTPException(status_code=500, detail="GEMINI_API_KEY is not set in environment variables.")
+            raise HTTPException(status_code=500, detail="GEMINI_API_KEY environment variable missing.")
 
-        # Quiz Generation with Daily Seed Logic
         if "quiz" in req.prompt.lower():
-            today_seed = req.prompt + str(os.getenv("SEED_DATE", "2026-09-29"))
             prompt_text = f"""
             Generate 20 multiple-choice questions (MCQs) for {req.level}, Subject: {req.subject}, Chapter: {req.chapter}.
-            Return STRICTLY a JSON array of 20 objects. No markdown, no explanations outside JSON.
+            Return STRICTLY a JSON array of 20 objects. No markdown outside JSON.
             Structure:
             [
               {{
@@ -56,7 +62,6 @@ async def generate_content(req: RequestModel):
             response = model.generate_content(prompt_text)
             return {"result": response.text}
 
-        # AI Doubt / Solutions
         response = model.generate_content(req.prompt)
         return {"result": response.text}
 
@@ -65,6 +70,5 @@ async def generate_content(req: RequestModel):
 
 @app.get("/api/pdf-link")
 async def get_pdf_link(cls: str, subject: str):
-    # Generates online NCERT portal redirect
     return {"pdf_url": f"{NCERT_PDF_BASE}?{cls}/{subject}"}
     
