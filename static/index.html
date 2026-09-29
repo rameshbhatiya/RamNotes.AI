@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RamNotes AI | Pro Engine</title>
+    <title>RamNotes AI | Dynamic Engine</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -39,19 +39,19 @@
         /* ATTRACTIVE QUIZ STYLES */
         .quiz-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; background: #0f172a; padding: 12px 16px; border-radius: 10px; border: 1px solid #334155; }
         .quiz-progress-bar { width: 100%; height: 8px; background: #0f172a; border-radius: 10px; overflow: hidden; margin-bottom: 15px; border: 1px solid #334155; }
-        .quiz-progress-fill { height: 100%; width: 5%; background: linear-gradient(90deg, #6366f1, #10b981); transition: width 0.3s ease; }
+        .quiz-progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #6366f1, #10b981); transition: width 0.3s ease; }
         .question-title { font-size: 16px; font-weight: 600; color: #f8fafc; margin-bottom: 15px; line-height: 1.5; }
         
         .option-btn { width: 100%; padding: 14px; margin-bottom: 10px; border-radius: 10px; background: #0f172a; color: #f8fafc; border: 1px solid #334155; text-align: left; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; display: flex; justify-content: space-between; align-items: center; }
         .option-btn:hover { border-color: #6366f1; background: #1e293b; }
         
-        /* Interactive feedback colors */
         .option-btn.correct { background: #064e3b !important; border-color: #10b981 !important; color: #a7f3d0 !important; animation: pop 0.2s ease; }
         .option-btn.wrong { background: #7f1d1d !important; border-color: #ef4444 !important; color: #fecaca !important; animation: shake 0.3s ease; }
 
         @keyframes pop { 0% { transform: scale(0.98); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
         @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
 
+        .loader-spinner { text-align: center; padding: 30px 10px; color: #818cf8; font-size: 15px; }
         .dev-footer { position: fixed; bottom: 0; left: 0; width: 100%; background: #090d16; padding: 10px; text-align: center; border-top: 1px solid #1e293b; font-size: 13px; color: #60a5fa; font-weight: 600; }
     </style>
 </head>
@@ -64,7 +64,7 @@
 
     <div class="main-container">
 
-        <!-- HOME DASHBOARD -->
+        <!-- DASHBOARD -->
         <div id="homePage" class="page-view active">
             <h3 style="margin-bottom: 15px; color:#818cf8;">Select Module</h3>
             <div class="dashboard-grid">
@@ -82,7 +82,7 @@
                 </div>
                 <div class="card-menu" onclick="showPage('quizPage')">
                     <i class="fa-solid fa-gamepad" style="color: #ef4444;"></i>
-                    <h4>20 Marks Quiz Test</h4>
+                    <h4>Dynamic AI Quiz</h4>
                 </div>
             </div>
         </div>
@@ -142,22 +142,41 @@
             <div id="doubtResult"></div>
         </div>
 
-        <!-- 20 MARKS DYNAMIC QUIZ PAGE -->
+        <!-- CLASS/SUBJECT WISE AI QUIZ PAGE -->
         <div id="quizPage" class="page-view">
-            <h3 style="color:#ef4444; margin-bottom: 10px;">🎮 Chapter Quiz (20 Marks Test)</h3>
+            <h3 style="color:#ef4444; margin-bottom: 10px;">🎮 AI Generated Quiz (20 Marks)</h3>
             
-            <div class="quiz-progress-bar">
-                <div class="quiz-progress-fill" id="quizProgress"></div>
+            <div class="form-card" id="quizSelectCard">
+                <div class="form-group">
+                    <label>Step 1: Select Class</label>
+                    <select id="quizClass" class="form-control" onchange="loadSubjects('quizClass', 'quizSubject', 'quizChapter')"></select>
+                </div>
+                <div class="form-group">
+                    <label>Step 2: Select Subject</label>
+                    <select id="quizSubject" class="form-control" onchange="loadChapters('quizClass', 'quizSubject', 'quizChapter')"></select>
+                </div>
+                <div class="form-group">
+                    <label>Step 3: Select Chapter</label>
+                    <select id="quizChapter" class="form-control"></select>
+                </div>
+                <button class="btn-submit" style="background: linear-gradient(90deg, #ef4444, #dc2626);" onclick="generateDynamicQuiz()">Start Dynamic AI Quiz</button>
             </div>
 
-            <div class="quiz-header">
-                <span id="quizQuestionCount" style="font-size: 13px; font-weight: 600; color: #818cf8;">Question 1 / 20</span>
-                <span id="quizScore" style="font-size: 13px; font-weight: 700; color: #10b981;">Score: 0 / 20</span>
-            </div>
+            <!-- ACTIVE QUIZ CONTAINER -->
+            <div id="activeQuizArea" style="display: none; margin-top: 15px;">
+                <div class="quiz-progress-bar">
+                    <div class="quiz-progress-fill" id="quizProgress"></div>
+                </div>
 
-            <div class="form-card" id="quizCard">
-                <div class="question-title" id="questionText">Loading Question...</div>
-                <div id="optionsContainer"></div>
+                <div class="quiz-header">
+                    <span id="quizQuestionCount" style="font-size: 13px; font-weight: 600; color: #818cf8;">Question 1 / 20</span>
+                    <span id="quizScore" style="font-size: 13px; font-weight: 700; color: #10b981;">Score: 0 / 20</span>
+                </div>
+
+                <div class="form-card" id="quizQuestionCard">
+                    <div class="question-title" id="questionText">Loading...</div>
+                    <div id="optionsContainer"></div>
+                </div>
             </div>
         </div>
 
@@ -165,7 +184,7 @@
 
     <div class="dev-footer">Developed with ❤️ by Ramesh Kumawat</div>
 
-        <script>
+    <script>
         const ncertDatabase = {
             "12": {
                 "English (Vistas)": ["The Third Level", "The Tiger King", "Journey to the end of the Earth", "The Enemy", "On the face of It", "Memories of Childhood"],
@@ -217,11 +236,10 @@
             document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
             window.scrollTo(0,0);
-            if(pageId === 'quizPage' && currentQuizIndex === 0) loadQuizQuestion();
         }
 
         function initDropdowns() {
-            ['bookClass', 'solClass'].forEach(classId => {
+            ['bookClass', 'solClass', 'quizClass'].forEach(classId => {
                 const select = document.getElementById(classId);
                 select.innerHTML = '';
                 for(let cls in ncertDatabase) {
@@ -230,6 +248,7 @@
             });
             loadSubjects('bookClass', 'bookSubject', 'bookChapter');
             loadSubjects('solClass', 'solSubject', 'solChapter');
+            loadSubjects('quizClass', 'quizSubject', 'quizChapter');
         }
 
         function loadSubjects(classId, subjectId, chapterId) {
@@ -250,23 +269,26 @@
             chapters.forEach(chap => chapSelect.innerHTML += `<option value="${chap}">${chap}</option>`);
         }
 
-        // UNIVERSAL AI RESPONSE PARSER (Fixes API Text missing error)
-        function extractAIText(data) {
+        // Helper function for API Payload matching FastAPI requirements (Fixes 422 Unprocessable Entity)
+        function createPayload(cls, sub, chap, promptText) {
+            return JSON.stringify({
+                level: `Class ${cls}`,
+                subject: sub,
+                chapter: chap,
+                body: promptText,
+                prompt: promptText
+            });
+        }
+
+        function parseAIText(data) {
             if (typeof data === 'string') return data;
             if (data.text) return data.text;
             if (data.result) return data.result;
             if (data.response) return data.response;
-            if (data.message) return data.message;
-            if (data.choices && data.choices[0]) {
-                return data.choices[0].text || data.choices[0].message?.content;
-            }
-            if (data.candidates && data.candidates[0]) {
-                return data.candidates[0].content?.parts?.[0]?.text;
-            }
-            return JSON.stringify(data, null, 2);
+            if (data.choices && data.choices[0]) return data.choices[0].text || data.choices[0].message?.content;
+            return JSON.stringify(data);
         }
 
-        // API CALL FOR NOTES & SOLUTIONS
         async function fetchAIContent(mode) {
             const isNotes = mode === 'notes';
             const cls = document.getElementById(isNotes ? 'bookClass' : 'solClass').value;
@@ -277,38 +299,36 @@
             resDiv.innerHTML = `
                 <div class="content-card">
                     <h4>📌 Class ${cls} - ${sub}: ${chap}</h4>
-                    <div class="content-body">⏳ Connecting to AI... Please wait...</div>
+                    <div class="content-body">⏳ Connecting to AI... Generating Content...</div>
                 </div>
             `;
 
-            const promptQuery = isNotes 
+            const promptStr = isNotes 
                 ? `Provide complete NCERT textbook notes, main summary, key formulas, and 5 important questions with answers for Class ${cls}, Subject: ${sub}, Chapter: ${chap}.`
-                : `Provide step-by-step NCERT Textbook Exercise Solutions and exact Answer Key for Class ${cls}, Subject: ${sub}, Chapter: ${chap}.`;
+                : `Provide step-by-step NCERT Solutions and Answer Key for Class ${cls}, Subject: ${sub}, Chapter: ${chap}.`;
 
             try {
                 const res = await fetch('/api/generate', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ prompt: promptQuery })
+                    body: createPayload(cls, sub, chap, promptStr)
                 });
                 const data = await res.json();
-                const outputText = extractAIText(data);
-                resDiv.querySelector('.content-body').innerText = outputText;
+                resDiv.querySelector('.content-body').innerText = parseAIText(data);
             } catch(e) {
-                resDiv.querySelector('.content-body').innerText = "Error fetching response from backend. Verify /api/generate endpoint.";
+                resDiv.querySelector('.content-body').innerText = "Unable to fetch response from API.";
             }
         }
 
-        // AI DOUBT SOLVER
         async function solveAIDoubt() {
             const query = document.getElementById('doubtInput').value.trim();
-            if(!query) return alert('Please write a question first.');
+            if(!query) return alert('Please enter your question.');
 
             const resDiv = document.getElementById('doubtResult');
             resDiv.innerHTML = `
                 <div class="content-card">
                     <h4>🤖 Question: ${query}</h4>
-                    <div class="content-body">⏳ AI is working on your solution...</div>
+                    <div class="content-body">⏳ Thinking...</div>
                 </div>
             `;
 
@@ -316,104 +336,6 @@
                 const res = await fetch('/api/generate', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ prompt: `Act as an expert teacher. Solve this doubt step-by-step: ${query}` })
+                    body: createPayload("General", "General", "Doubt", query)
                 });
-                const data = await res.json();
-                resDiv.querySelector('.content-body').innerText = extractAIText(data);
-            } catch(e) {
-                resDiv.querySelector('.content-body').innerText = "Could not reach AI server.";
-            }
-        }
-
-        // ================= 20 MARKS DYNAMIC QUIZ ENGINE =================
-        const sampleQuizBank = [
-            { q: "1. Who is the author of 'The Third Level'?", options: ["Jack Finney", "Kalki", "Tishani Doshi", "Pearl S. Buck"], answer: 0 },
-            { q: "2. The SI unit of Electric Resistance is:", options: ["Volt", "Ampere", "Ohm", "Watt"], answer: 2 },
-            { q: "3. What is the fundamental structural unit of life?", options: ["Tissue", "Cell", "Organ", "Gene"], answer: 1 },
-            { q: "4. Which gas is essential for photosynthesis?", options: ["Oxygen", "Nitrogen", "Carbon Dioxide", "Hydrogen"], answer: 2 },
-            { q: "5. Chemical formula of Common Salt is:", options: ["KCl", "NaCl", "NaOH", "HCl"], answer: 1 },
-            { q: "6. Electric Current is measured using:", options: ["Voltmeter", "Ammeter", "Galvanometer", "Thermometer"], answer: 1 },
-            { q: "7. Which organelle is called the powerhouse of the cell?", options: ["Ribosome", "Nucleus", "Mitochondria", "Golgi Body"], answer: 2 },
-            { q: "8. Total number of chapters in NCERT Class 12 Vistas is generally:", options: ["6", "8", "10", "12"], answer: 0 },
-            { q: "9. Value of Acceleration due to gravity (g) on Earth is approx:", options: ["9.8 m/s²", "10.8 m/s²", "8.9 m/s²", "9.8 km/s"], answer: 0 },
-            { q: "10. Which acid is present in lemon?", options: ["Lactic Acid", "Citric Acid", "Acetic Acid", "Tartaric Acid"], answer: 1 },
-            { q: "11. Formula for Newton's 2nd Law of Motion is:", options: ["F = mv", "F = ma", "E = mc²", "P = IV"], answer: 1 },
-            { q: "12. What is the pH value of pure water?", options: ["5", "7", "9", "12"], answer: 1 },
-            { q: "13. Process of water movement through plant roots is driven by:", options: ["Transpiration", "Respiration", "Digestion", "Fermentation"], answer: 0 },
-            { q: "14. Speed of light in vacuum is approx:", options: ["3 x 10^8 m/s", "3 x 10^6 m/s", "300 m/s", "1500 m/s"], answer: 0 },
-            { q: "15. Which planet is known as the Red Planet?", options: ["Venus", "Mars", "Jupiter", "Saturn"], answer: 1 },
-            { q: "16. Human heart has how many chambers?", options: ["2", "3", "4", "5"], answer: 2 },
-            { q: "17. SI unit of Work and Energy is:", options: ["Watt", "Newton", "Joule", "Pascal"], answer: 2 },
-            { q: "18. Who discovered Cell in 1665?", options: ["Robert Hooke", "Louis Pasteur", "Charles Darwin", "Gregor Mendel"], answer: 0 },
-            { q: "19. Which mirror is used by dentists to see enlarged images?", options: ["Convex Mirror", "Concave Mirror", "Plane Mirror", "Cylindrical Mirror"], answer: 1 },
-            { q: "20. What is the primary source of energy for Earth?", options: ["Moon", "Wind", "Sun", "Geothermal"], answer: 2 }
-        ];
-
-        let currentQuizIndex = 0;
-        let quizScore = 0;
-
-        function loadQuizQuestion() {
-            if(currentQuizIndex >= sampleQuizBank.length) {
-                document.getElementById('quizCard').innerHTML = `
-                    <div style="text-align:center; padding: 20px;">
-                        <h2 style="color:#10b981; margin-bottom:10px;">🎉 Quiz Completed!</h2>
-                        <h3 style="color:#f8fafc; margin-bottom:15px;">Your Final Score: ${quizScore} / 20</h3>
-                        <p style="color:#94a3b8; font-size:13px; margin-bottom:20px;">${quizScore >= 15 ? 'Excellent Performance! Keep it up!' : 'Good attempt! Review notes to improve.'}</p>
-                        <button class="btn-submit" onclick="restartQuiz()">Restart Quiz</button>
-                    </div>
-                `;
-                return;
-            }
-
-            const currentQ = sampleQuizBank[currentQuizIndex];
-            document.getElementById('quizQuestionCount').innerText = `Question ${currentQuizIndex + 1} / 20`;
-            document.getElementById('quizScore').innerText = `Score: ${quizScore} / 20`;
-            document.getElementById('quizProgress').style.width = `${((currentQuizIndex + 1) / 20) * 100}%`;
-            document.getElementById('questionText').innerText = currentQ.q;
-
-            const optsDiv = document.getElementById('optionsContainer');
-            optsDiv.innerHTML = '';
-
-            currentQ.options.forEach((optText, index) => {
-                optsDiv.innerHTML += `
-                    <button class="option-btn" onclick="checkAnswer(this, ${index}, ${currentQ.answer})">
-                        <span>${String.fromCharCode(65 + index)}) ${optText}</span>
-                        <i class="fa-regular fa-circle"></i>
-                    </button>
-                `;
-            });
-        }
-
-        function checkAnswer(btn, selectedIndex, correctIndex) {
-            const allBtns = document.querySelectorAll('.option-btn');
-            allBtns.forEach(b => b.onclick = null); // Disable further clicks
-
-            if(selectedIndex === correctIndex) {
-                btn.classList.add('correct');
-                btn.querySelector('i').className = 'fa-solid fa-circle-check';
-                quizScore++;
-                document.getElementById('quizScore').innerText = `Score: ${quizScore} / 20`;
-            } else {
-                btn.classList.add('wrong');
-                btn.querySelector('i').className = 'fa-solid fa-circle-xmark';
-                // Highlight correct answer in green
-                allBtns[correctIndex].classList.add('correct');
-                allBtns[correctIndex].querySelector('i').className = 'fa-solid fa-circle-check';
-            }
-
-            setTimeout(() => {
-                currentQuizIndex++;
-                loadQuizQuestion();
-            }, 1200);
-        }
-
-        function restartQuiz() {
-            currentQuizIndex = 0;
-            quizScore = 0;
-            loadQuizQuestion();
-        }
-
-        window.onload = initDropdowns;
-    </script>
-</body>
-</html>
+                const data = await res.jso
