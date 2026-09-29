@@ -1,10 +1,7 @@
 import os
-import random
-import json
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, FileResponse
-from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 import google.generativeai as genai
 
@@ -25,12 +22,14 @@ if GEMINI_API_KEY:
 
 model = genai.GenerativeModel('gemini-pro')
 
-# Root URL (/) par index.html load karega
 @app.get("/", response_class=HTMLResponse)
 async def serve_home():
-    if os.path.exists("index.html"):
-        return FileResponse("index.html")
-    return "<h1>RamNotes AI Server is Running!</h1><p>index.html file not found in root directory.</p>"
+    # Menyemak fail index.html di root atau folder berkaitan
+    possible_paths = ["index.html", "templates/index.html", "static/index.html"]
+    for path in possible_paths:
+        if os.path.exists(path):
+            return FileResponse(path)
+    return "<h1>RamNotes AI Server is Running!</h1><p>Sila pastikan index.html di-commit ke folder utama GitHub anda.</p>"
 
 class RequestModel(BaseModel):
     level: str
@@ -44,7 +43,7 @@ NCERT_PDF_BASE = "https://ncert.nic.in/textbook.php"
 async def generate_content(req: RequestModel):
     try:
         if not GEMINI_API_KEY:
-            raise HTTPException(status_code=500, detail="GEMINI_API_KEY environment variable missing.")
+            raise HTTPException(status_code=500, detail="GEMINI_API_KEY missing.")
 
         if "quiz" in req.prompt.lower():
             prompt_text = f"""
