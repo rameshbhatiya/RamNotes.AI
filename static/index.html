@@ -3,41 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RamNotes | Multi-Page NCERT Engine</title>
+    <title>RamNotes | Real AI NCERT Portal</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
         body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; padding-bottom: 70px; }
 
-        /* HEADER & NAVBAR */
         .app-header { background: #1e1b4b; color: white; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #4338ca; position: sticky; top: 0; z-index: 100; }
         .app-header .title { font-size: 18px; font-weight: 700; cursor: pointer; }
         
         .nav-back-btn { background: #334155; color: white; border: none; padding: 6px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; display: flex; align-items: center; gap: 6px; }
 
-        /* CONTAINER & PAGE VIEWS */
         .main-container { max-width: 800px; margin: 20px auto; padding: 0 15px; }
         .page-view { display: none; }
         .page-view.active { display: block; animation: fadeIn 0.3s ease-in-out; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* DASHBOARD GRID CARDS */
         .dashboard-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 10px; }
         .card-menu { background: #1e293b; border-radius: 16px; padding: 24px 15px; text-align: center; border: 1px solid #334155; cursor: pointer; transition: all 0.2s; }
         .card-menu:hover { border-color: #6366f1; transform: translateY(-3px); }
         .card-menu i { font-size: 38px; margin-bottom: 12px; }
         .card-menu h4 { font-size: 15px; color: #f1f5f9; }
 
-        /* FORM CONTROLS */
         .form-card { background: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 20px; margin-top: 15px; }
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; font-size: 12px; color: #94a3b8; margin-bottom: 6px; }
         .form-control { width: 100%; padding: 12px 14px; border: 1px solid #334155; border-radius: 10px; background: #0f172a; color: white; outline: none; font-size: 14px; }
         .btn-submit { width: 100%; padding: 13px; border: none; border-radius: 10px; background: linear-gradient(90deg, #6366f1, #4f46e5); color: white; font-weight: 600; cursor: pointer; }
 
-        /* CONTENT DISPLAY AREA */
         .content-card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 20px; margin-top: 20px; }
         .content-body { background: #0f172a; padding: 16px; border-radius: 8px; font-size: 14px; line-height: 1.7; color: #e2e8f0; white-space: pre-wrap; margin-top: 12px; border: 1px solid #334155; }
 
@@ -47,13 +42,13 @@
 <body>
 
     <div class="app-header">
-        <div class="title" onclick="showPage('homePage')"><i class="fa-solid fa-graduation-cap"></i> RamNotes</div>
-        <button class="nav-back-btn" onclick="showPage('homePage')"><i class="fa-solid fa-house"></i> Home</button>
+        <div class="title" onclick="showPage('homePage')"><i class="fa-solid fa-graduation-cap"></i> RamNotes AI</div>
+        <button class="nav-back-btn" onclick="showPage('homePage')"><i class="fa-solid fa-house"></i> Main Dashboard</button>
     </div>
 
     <div class="main-container">
 
-        <!-- ================= PAGE 1: HOME DASHBOARD ================= -->
+        <!-- ================= PAGE 1: HOME ================= -->
         <div id="homePage" class="page-view active">
             <h3 style="margin-bottom: 15px; color:#818cf8;">Select Module</h3>
             <div class="dashboard-grid">
@@ -74,12 +69,12 @@
 
                 <div class="card-menu" onclick="showPage('quizPage')">
                     <i class="fa-solid fa-gamepad" style="color: #ef4444;"></i>
-                    <h4>Chapter Quiz</h4>
+                    <h4>Practice Quiz</h4>
                 </div>
             </div>
         </div>
 
-        <!-- ================= PAGE 2: NCERT BOOKS & NOTES ================= -->
+        <!-- ================= PAGE 2: BOOKS & NOTES ================= -->
         <div id="booksPage" class="page-view">
             <h3 style="color:#818cf8;">📚 NCERT Books & Chapter Notes</h3>
             <div class="form-card">
@@ -92,17 +87,17 @@
                     <select id="bookSubject" class="form-control" onchange="loadChapters('bookClass', 'bookSubject', 'bookChapter')"></select>
                 </div>
                 <div class="form-group">
-                    <label>Step 3: Select Chapter</label>
+                    <label>Step 3: Select Chapter Topic</label>
                     <select id="bookChapter" class="form-control"></select>
                 </div>
-                <button class="btn-submit" onclick="fetchContent('NCERT Notes')">Generate Detailed Chapter Notes</button>
+                <button class="btn-submit" onclick="fetchAIContent('notes')">Get Complete Notes from AI</button>
             </div>
             <div id="bookResult"></div>
         </div>
 
         <!-- ================= PAGE 3: SOLUTIONS & ANSWER KEY ================= -->
         <div id="solutionsPage" class="page-view">
-            <h3 style="color:#f59e0b;">💡 NCERT Solved Exercises & Answer Key</h3>
+            <h3 style="color:#f59e0b;">💡 NCERT Textbook Answers & Solutions</h3>
             <div class="form-card">
                 <div class="form-group">
                     <label>Step 1: Select Class</label>
@@ -116,31 +111,31 @@
                     <label>Step 3: Select Chapter Topic</label>
                     <select id="solChapter" class="form-control"></select>
                 </div>
-                <button class="btn-submit" style="background: linear-gradient(90deg, #f59e0b, #d97706);" onclick="fetchSolutions()">Get Official Chapter Answer Key</button>
+                <button class="btn-submit" style="background: linear-gradient(90deg, #f59e0b, #d97706);" onclick="fetchAIContent('solution')">Get Step-by-Step Answer Key</button>
             </div>
             <div id="solutionResult"></div>
         </div>
 
         <!-- ================= PAGE 4: AI DOUBT SOLVER ================= -->
         <div id="doubtPage" class="page-view">
-            <h3 style="color:#10b981;">🤖 Ask Any Academic Doubt</h3>
+            <h3 style="color:#10b981;">🤖 Live AI Doubt Solver</h3>
             <div class="form-card">
                 <div class="form-group">
-                    <label>Type your question / doubt in detail:</label>
-                    <textarea id="doubtInput" class="form-control" style="height: 100px;" placeholder="Example: Explain the difference between First Level and Third Level in Jack Finney's story..."></textarea>
+                    <label>Enter your Question / Question Text in Detail:</label>
+                    <textarea id="doubtInput" class="form-control" style="height: 110px;" placeholder="Write your exact homework or exam question here..."></textarea>
                 </div>
-                <button class="btn-submit" style="background: linear-gradient(90deg, #10b981, #059669);" onclick="solveDoubt()">Ask AI Solver</button>
+                <button class="btn-submit" style="background: linear-gradient(90deg, #10b981, #059669);" onclick="solveAIDoubt()">Solve Doubt via AI</button>
             </div>
             <div id="doubtResult"></div>
         </div>
 
-        <!-- ================= PAGE 5: QUIZ PAGE ================= -->
+        <!-- ================= PAGE 5: QUIZ ================= -->
         <div id="quizPage" class="page-view">
-            <h3 style="color:#ef4444;">🎮 Chapter Quiz Test</h3>
+            <h3 style="color:#ef4444;">🎮 Chapter Quiz</h3>
             <div class="form-card">
-                <p style="color:#94a3b8; font-size:13px; margin-bottom:12px;">Q1. Who wrote "The Third Level" in Class 12 English Vistas?</p>
-                <button class="btn-submit" style="background:#0f172a; margin-bottom:8px; text-align:left;" onclick="alert('Correct Answer!')">A) Jack Finney</button>
-                <button class="btn-submit" style="background:#0f172a; text-align:left;" onclick="alert('Wrong Answer!')">B) Kalki</button>
+                <p style="color:#94a3b8; font-size:13px; margin-bottom:12px;">Q. What is the fundamental unit of life in Science?</p>
+                <button class="btn-submit" style="background:#0f172a; margin-bottom:8px; text-align:left;" onclick="alert('Correct Answer! Cell is the basic unit.')">A) Cell</button>
+                <button class="btn-submit" style="background:#0f172a; text-align:left;" onclick="alert('Wrong Answer!')">B) Tissue</button>
             </div>
         </div>
 
@@ -148,54 +143,65 @@
 
     <div class="dev-footer">Developed with ❤️ by Ramesh Kumawat</div>
         <script>
-        // MASTER DATABASE FOR CLASS 6 TO 12
+        // COMPLETE NCERT DATABASE INCLUDING LOWER CLASSES (6 TO 12)
         const ncertDatabase = {
             "12": {
-                "English (Vistas)": ["The Third Level - Jack Finney", "The Tiger King - Kalki", "Journey to the end of the Earth - Tishani Doshi", "The Enemy - Pearl S. Buck", "On the face of It - Susan Hill", "Memories of Childhood - Zitkala-Sa & Bama"],
+                "English (Vistas)": ["The Third Level", "The Tiger King", "Journey to the end of the Earth", "The Enemy", "On the face of It", "Memories of Childhood"],
                 "English (Flamingo)": ["The Last Lesson", "Lost Spring", "Deep Water", "The Rattrap", "Indigo", "Poets and Pancakes", "The Interview", "Going Places"],
-                "Physics": ["Electric Charges and Fields", "Electrostatic Potential and Capacitance", "Current Electricity", "Moving Charges and Magnetism", "Magnetism and Matter", "Electromagnetic Induction", "Alternating Current", "Ray Optics", "Wave Optics", "Atoms", "Nuclei", "Semiconductor Electronics"],
-                "Chemistry": ["Solutions", "Electrochemistry", "Chemical Kinetics", "d- and f- Block Elements", "Coordination Compounds", "Haloalkanes and Haloarenes", "Alcohols, Phenols and Ethers", "Aldehydes and Ketones", "Amines", "Biomolecules"],
-                "Mathematics": ["Relations and Functions", "Inverse Trigonometric Functions", "Matrices", "Determinants", "Continuity and Differentiability", "Integrals", "Vector Algebra", "3D Geometry", "Probability"],
-                "Biology": ["Sexual Reproduction in Flowering Plants", "Human Reproduction", "Reproductive Health", "Principles of Inheritance", "Molecular Basis of Inheritance", "Evolution", "Human Health and Disease", "Biotechnology"]
+                "Physics": ["Electric Charges and Fields", "Electrostatic Potential", "Current Electricity", "Moving Charges and Magnetism", "Ray Optics", "Wave Optics", "Atoms", "Nuclei", "Semiconductor Electronics"],
+                "Chemistry": ["Solutions", "Electrochemistry", "Chemical Kinetics", "d and f Block Elements", "Coordination Compounds", "Organic Chemistry Basic Principles"],
+                "Mathematics": ["Relations and Functions", "Inverse Trigonometry", "Matrices", "Determinants", "Integrals", "Vector Algebra", "3D Geometry", "Probability"],
+                "Biology": ["Sexual Reproduction in Plants", "Human Reproduction", "Reproductive Health", "Principles of Inheritance", "Molecular Basis of Inheritance", "Biotechnology"]
             },
             "11": {
                 "Physics": ["Units and Measurements", "Motion in a Straight Line", "Motion in a Plane", "Laws of Motion", "Work, Energy and Power", "Gravitation", "Thermodynamics"],
-                "Chemistry": ["Basic Concepts of Chemistry", "Structure of Atom", "Classification of Elements", "Chemical Bonding", "Thermodynamics", "Organic Chemistry"],
-                "Mathematics": ["Sets", "Relations and Functions", "Trigonometric Functions", "Complex Numbers", "Linear Inequalities", "Limits and Derivatives"],
-                "English": ["The Portrait of a Lady", "We're Not Afraid to Die", "Discovering Tut: the Saga Continues"]
+                "Chemistry": ["Basic Concepts of Chemistry", "Structure of Atom", "Classification of Elements", "Chemical Bonding", "Thermodynamics"],
+                "Mathematics": ["Sets", "Relations and Functions", "Trigonometry", "Complex Numbers", "Linear Inequalities", "Limits and Derivatives"],
+                "English": ["The Portrait of a Lady", "We're Not Afraid to Die", "Discovering Tut"]
             },
             "10": {
-                "Science": ["Chemical Reactions and Equations", "Acids, Bases and Salts", "Metals and Non-metals", "Carbon and its Compounds", "Life Processes", "Control and Coordination", "Light Reflection and Refraction", "Electricity"],
+                "Science": ["Chemical Reactions and Equations", "Acids, Bases and Salts", "Metals and Non-metals", "Carbon and its Compounds", "Life Processes", "Control and Coordination", "Light Reflection", "Electricity"],
                 "Mathematics": ["Real Numbers", "Polynomials", "Linear Equations", "Quadratic Equations", "Triangles", "Trigonometry", "Circles", "Statistics"],
-                "English": ["A Letter to God", "Nelson Mandela: Long Walk to Freedom", "Two Stories about Flying", "From the Diary of Anne Frank"]
+                "English": ["A Letter to God", "Nelson Mandela", "Two Stories about Flying", "From the Diary of Anne Frank"],
+                "Social Science": ["Development", "Sectors of Indian Economy", "Resource and Development", "Power Sharing", "Gender, Religion and Caste"]
             },
             "9": {
-                "Science": ["Matter in Our Surroundings", "Is Matter Around Us Pure", "Atoms and Molecules", "The Fundamental Unit of Life", "Tissues", "Motion", "Force and Laws of Motion", "Gravitation"],
-                "Mathematics": ["Number Systems", "Polynomials", "Coordinate Geometry", "Linear Equations", "Lines and Angles", "Triangles", "Circles"],
-                "English": ["The Fun They Had", "The Sound of Music", "The Little Girl", "A Truly Beautiful Mind"]
+                "Science": ["Matter in Our Surroundings", "Is Matter Around Us Pure", "Atoms and Molecules", "Cell - The Fundamental Unit of Life", "Tissues", "Motion", "Force and Laws of Motion", "Gravitation"],
+                "Mathematics": ["Number Systems", "Polynomials", "Coordinate Geometry", "Linear Equations", "Lines and Angles", "Triangles", "Circles", "Heron's Formula"],
+                "English": ["The Fun They Had", "The Sound of Music", "The Little Girl", "A Truly Beautiful Mind"],
+                "Social Science": ["The French Revolution", "Socialism in Europe", "India Size and Location", "Physical Features of India", "What is Democracy?"]
             },
             "8": {
-                "Science": ["Crop Production and Management", "Microorganisms", "Coal and Petroleum", "Combustion and Flame", "Force and Pressure", "Friction", "Sound", "Light"],
-                "Mathematics": ["Rational Numbers", "Linear Equations", "Understanding Quadrilaterals", "Square and Square Roots", "Algebraic Expressions"]
+                "Science": ["Crop Production and Management", "Microorganisms: Friend and Foe", "Coal and Petroleum", "Combustion and Flame", "Conservation of Plants and Animals", "Reproduction in Animals", "Force and Pressure", "Friction", "Sound", "Light"],
+                "Mathematics": ["Rational Numbers", "Linear Equations in One Variable", "Understanding Quadrilaterals", "Data Handling", "Square and Square Roots", "Cube and Cube Roots", "Algebraic Expressions", "Mensuration"],
+                "Social Science": ["How, When and Where", "From Trade to Territory", "Resources", "Land, Soil, Water", "The Indian Constitution", "Understanding Secularism"],
+                "English": ["The Best Christmas Present in the World", "The Tsunami", "Glimpses of the Past", "A Short Monsoon Diary"],
+                "Hindi": ["ध्वनि", "लाख की चूड़ियाँ", "बस की यात्रा", "दीवानों की हस्ती", "भगवान के डाकिए"]
             },
             "7": {
-                "Science": ["Nutrition in Plants", "Nutrition in Animals", "Heat", "Acids, Bases and Salts", "Physical and Chemical Changes", "Respiration in Organisms", "Light"],
-                "Mathematics": ["Integers", "Fractions and Decimals", "Data Handling", "Simple Equations", "Lines and Angles", "Perimeter and Area"]
+                "Science": ["Nutrition in Plants", "Nutrition in Animals", "Heat", "Acids, Bases and Salts", "Physical and Chemical Changes", "Respiration in Organisms", "Transportation in Animals and Plants", "Reproduction in Plants", "Motion and Time", "Light"],
+                "Mathematics": ["Integers", "Fractions and Decimals", "Data Handling", "Simple Equations", "Lines and Angles", "The Triangle and its Properties", "Comparing Quantities", "Rational Numbers", "Perimeter and Area"],
+                "Social Science": ["Tracing Changes Through A Thousand Years", "New Kings and Kingdoms", "Environment", "Inside Our Earth", "On Equality", "Role of the Government in Health"],
+                "English (Poorvi/Honeycomb)": ["Three Questions", "A Gift of Chappals", "Gopal and the Hilsa Fish", "The Ashes That Made Trees Bloom"],
+                "Hindi (Malhar/Vasant)": ["हम पंछी उन्मुक्त गगन के", "दादी माँ", "हिमालय की बेटियाँ", "कठपुतली"],
+                "Sanskrit": ["सुभाषितानि", "दुर्बुद्धिः विनश्यति", "स्वावलम्बनम्"]
             },
             "6": {
-                "Science": ["Components of Food", "Sorting Materials into Groups", "Separation of Substances", "Getting to Know Plants", "Body Movements", "Electricity and Circuits", "Magnets"],
-                "Mathematics": ["Knowing Our Numbers", "Whole Numbers", "Playing with Numbers", "Basic Geometrical Ideas", "Integers", "Fractions", "Decimals", "Algebra"]
+                "Science": ["Components of Food", "Sorting Materials into Groups", "Separation of Substances", "Getting to Know Plants", "Body Movements", "Motion and Measurement of Distances", "Light, Shadows and Reflections", "Electricity and Circuits", "Fun with Magnets"],
+                "Mathematics": ["Knowing Our Numbers", "Whole Numbers", "Playing with Numbers", "Basic Geometrical Ideas", "Understanding Elementary Shapes", "Integers", "Fractions", "Decimals", "Data Handling", "Mensuration", "Algebra"],
+                "Social Science": ["What, Where, How and When?", "From Gathering to Growing Food", "In the Earliest Cities", "The Earth in the Solar System", "Globe: Latitudes and Longitudes", "Understanding Diversity", "What is Government?"],
+                "English": ["Who Did Patrick's Homework?", "How the Dog Found Himself a New Master!", "Taro's Reward", "An Indian-American Woman in Space"],
+                "Hindi": ["वह चिड़िया जो", "बचपन", "नादान दोस्त", "चाँद से थोड़ी सी गप्पें"],
+                "Sanskrit": ["शब्दपरिचयः I", "शब्दपरिचयः II", "शब्दपरिचयः III"]
             }
         };
 
-        // NAVIGATION SWITCHER
         function showPage(pageId) {
             document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
             window.scrollTo(0,0);
         }
 
-        // POPULATE CLASSES ON INITIALIZATION
         function initDropdowns() {
             ['bookClass', 'solClass'].forEach(classId => {
                 const select = document.getElementById(classId);
@@ -232,68 +238,54 @@
             });
         }
 
-        // BACKEND API CALL ROUTE
-        async function fetchContent(type) {
-            const cls = document.getElementById('bookClass').value;
-            const sub = document.getElementById('bookSubject').value;
-            const chap = document.getElementById('bookChapter').value;
+        // REAL AI API CALL ENGINE FOR NOTES & ANSWERS
+        async function fetchAIContent(mode) {
+            const isNotes = mode === 'notes';
+            const cls = document.getElementById(isNotes ? 'bookClass' : 'solClass').value;
+            const sub = document.getElementById(isNotes ? 'bookSubject' : 'solSubject').value;
+            const chap = document.getElementById(isNotes ? 'bookChapter' : 'solChapter').value;
 
-            const resDiv = document.getElementById('bookResult');
+            const resDiv = document.getElementById(isNotes ? 'bookResult' : 'solutionResult');
             resDiv.innerHTML = `
                 <div class="content-card">
                     <h4>📌 Class ${cls} - ${sub}: ${chap}</h4>
-                    <div class="content-body">⏳ Fetching comprehensive ${type} from backend server...</div>
+                    <div class="content-body">⏳ Connecting to AI Server... Generating real-time response...</div>
                 </div>
             `;
+
+            const promptQuery = isNotes 
+                ? `Provide complete NCERT textbook notes, main summary, key formulas, and 5 important questions with answers for Class ${cls}, Subject: ${sub}, Chapter: ${chap}.`
+                : `Provide step-by-step NCERT Textbook Exercise Solutions and exact Answer Key for Class ${cls}, Subject: ${sub}, Chapter: ${chap}.`;
 
             try {
                 const res = await fetch('/api/generate', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ prompt: `Provide detailed ${type}, chapter summary, key formulas, and important questions for Class ${cls}, Subject: ${sub}, Chapter: ${chap}.` })
+                    body: JSON.stringify({ prompt: promptQuery })
                 });
                 const data = await res.json();
-                resDiv.querySelector('.content-body').innerText = data.text || data.result || "Content generated successfully.";
+                
+                const outputText = data.text || data.result || data.choices?.[0]?.text || data.message;
+                if(outputText) {
+                    resDiv.querySelector('.content-body').innerText = outputText;
+                } else {
+                    resDiv.querySelector('.content-body').innerText = "API Response received, but no content text was returned. Verify server json payload key.";
+                }
             } catch(e) {
-                resDiv.querySelector('.content-body').innerText = `Error: Could not connect to backend server. Make sure /api/generate is handling post requests correctly.`;
+                resDiv.querySelector('.content-body').innerText = "Failed to fetch response. Make sure your server route '/api/generate' is active and configured to take JSON { prompt: '...' } requests.";
             }
         }
 
-        async function fetchSolutions() {
-            const cls = document.getElementById('solClass').value;
-            const sub = document.getElementById('solSubject').value;
-            const chap = document.getElementById('solChapter').value;
-
-            const resDiv = document.getElementById('solutionResult');
-            resDiv.innerHTML = `
-                <div class="content-card">
-                    <h4>💡 NCERT Answer Key: Class ${cls} - ${sub} (${chap})</h4>
-                    <div class="content-body">⏳ Fetching step-by-step textbook exercises & answers...</div>
-                </div>
-            `;
-
-            try {
-                const res = await fetch('/api/generate', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ prompt: `Provide complete step-by-step NCERT Solutions and Answer Key for Class ${cls}, Subject: ${sub}, Chapter: ${chap}.` })
-                });
-                const data = await res.json();
-                resDiv.querySelector('.content-body').innerText = data.text || data.result || "Solutions fetched successfully.";
-            } catch(e) {
-                resDiv.querySelector('.content-body').innerText = `Error connecting to backend API.`;
-            }
-        }
-
-        async function solveDoubt() {
-            const query = document.getElementById('doubtInput').value;
-            if(!query) return alert('Please enter a question');
+        // LIVE AI DOUBT SOLVER
+        async function solveAIDoubt() {
+            const query = document.getElementById('doubtInput').value.trim();
+            if(!query) return alert('Please enter your question / doubt first.');
 
             const resDiv = document.getElementById('doubtResult');
             resDiv.innerHTML = `
                 <div class="content-card">
-                    <h4>🤖 Query: ${query}</h4>
-                    <div class="content-body">⏳ AI Assistant is processing your query...</div>
+                    <h4>🤖 Question: ${query}</h4>
+                    <div class="content-body">⏳ AI is analyzing your doubt and writing detailed solution...</div>
                 </div>
             `;
 
@@ -301,12 +293,20 @@
                 const res = await fetch('/api/generate', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ prompt: `Answer the following student doubt in detail: ${query}` })
+                    body: JSON.stringify({ 
+                        prompt: `Act as an expert NCERT teacher. Solve this student doubt clearly step-by-step in easy language: "${query}"` 
+                    })
                 });
                 const data = await res.json();
-                resDiv.querySelector('.content-body').innerText = data.text || data.result || "Answer generated.";
+                const outputText = data.text || data.result || data.choices?.[0]?.text || data.message;
+                
+                if(outputText) {
+                    resDiv.querySelector('.content-body').innerText = outputText;
+                } else {
+                    resDiv.querySelector('.content-body').innerText = "AI Response error. Please try again.";
+                }
             } catch(e) {
-                resDiv.querySelector('.content-body').innerText = `Error fetching response.`;
+                resDiv.querySelector('.content-body').innerText = "Could not fetch AI solution. Server connection error.";
             }
         }
 
@@ -314,5 +314,3 @@
     </script>
 </body>
 </html>
-
-    
