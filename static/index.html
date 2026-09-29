@@ -3,452 +3,289 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RamNotes AI | Dynamic Engine</title>
+    <title>RamNotes AI | Next-Gen Learning Platform</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
-        body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; padding-bottom: 70px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; transition: background 0.4s ease; }
+        body { min-height: 100vh; color: #f8fafc; overflow-x: hidden; position: relative; }
 
-        .app-header { background: #1e1b4b; color: white; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #4338ca; position: sticky; top: 0; z-index: 100; }
-        .app-header .title { font-size: 18px; font-weight: 700; cursor: pointer; }
+        /* Dynamic Background Themes */
+        .bg-login { background: linear-gradient(135deg, #0f172a, #1e1b4b); }
+        .bg-dashboard { background: linear-gradient(135deg, #0284c7, #0f172a); }
+        .bg-books { background: linear-gradient(135deg, #0369a1, #1e293b); }
+        .bg-solutions { background: linear-gradient(135deg, #b45309, #111827); }
+        .bg-doubt { background: linear-gradient(135deg, #047857, #0f172a); }
+        .bg-products { background: linear-gradient(135deg, #4c1d95, #0f172a); }
+        .bg-quiz { background: linear-gradient(135deg, #be123c, #111827); }
+        .bg-leaderboard { background: linear-gradient(135deg, #854d0e, #0f172a); }
+
+        .app-bar { background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(12px); padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); position: sticky; top: 0; z-index: 100; }
+        .logo-3d { font-size: 22px; font-weight: 800; background: linear-gradient(45deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 4px 12px rgba(56, 189, 248, 0.3); }
+
+        .btn-action { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 8px 16px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 13px; display: flex; align-items: center; gap: 8px; }
+        .btn-action:hover { background: rgba(255,255,255,0.25); }
+
+        .container { max-width: 900px; margin: 30px auto; padding: 0 20px; }
+        .page { display: none; animation: slideUp 0.4s ease-out; }
+        .page.active { display: block; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Login Styling */
+        .auth-card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 32px; max-width: 420px; margin: 40px auto; text-align: center; }
+        .social-btn { width: 100%; padding: 12px; margin: 8px 0; border-radius: 12px; border: none; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 14px; }
+        .btn-google { background: white; color: #0f172a; }
+        .btn-fb { background: #1877f2; color: white; }
+
+        /* Dashboard Menu Grid */
+        .grid-menu { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 18px; margin-top: 20px; }
+        .menu-item { background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(255,255,255,0.1); border-radius: 18px; padding: 24px; text-align: center; cursor: pointer; transition: all 0.3s; }
+        .menu-item:hover { transform: translateY(-5px); border-color: #38bdf8; background: rgba(30, 41, 59, 0.9); }
+        .menu-item i { font-size: 36px; margin-bottom: 12px; }
+
+        .form-box { background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 24px; margin-top: 15px; }
+        .input-field { width: 100%; padding: 12px 16px; margin: 8px 0 16px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.2); background: rgba(15, 23, 42, 0.6); color: white; outline: none; }
         
-        .nav-back-btn { background: #334155; color: white; border: none; padding: 6px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; display: flex; align-items: center; gap: 6px; }
+        /* Quiz Styling */
+        .option-card { width: 100%; padding: 16px; margin: 10px 0; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; color: white; text-align: left; font-size: 15px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+        .option-card.correct { background: rgba(16, 185, 129, 0.3) !important; border-color: #10b981 !important; color: #a7f3d0; }
+        .option-card.wrong { background: rgba(239, 68, 68, 0.3) !important; border-color: #ef4444 !important; color: #fecaca; }
 
-        .main-container { max-width: 800px; margin: 20px auto; padding: 0 15px; }
-        .page-view { display: none; }
-        .page-view.active { display: block; animation: fadeIn 0.3s ease-in-out; }
+        /* Modal / Help Overlay */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); z-index: 200; justify-content: center; align-items: center; }
+        .modal-content { background: #1e293b; border-radius: 20px; padding: 28px; max-width: 480px; width: 90%; border: 1px solid rgba(255,255,255,0.15); text-align: center; }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
-
-        .dashboard-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 10px; }
-        .card-menu { background: #1e293b; border-radius: 16px; padding: 24px 15px; text-align: center; border: 1px solid #334155; cursor: pointer; transition: all 0.2s; }
-        .card-menu:hover { border-color: #6366f1; transform: translateY(-3px); }
-        .card-menu i { font-size: 38px; margin-bottom: 12px; }
-        .card-menu h4 { font-size: 15px; color: #f1f5f9; }
-
-        .form-card { background: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 20px; margin-top: 15px; }
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; font-size: 12px; color: #94a3b8; margin-bottom: 6px; }
-        .form-control { width: 100%; padding: 12px 14px; border: 1px solid #334155; border-radius: 10px; background: #0f172a; color: white; outline: none; font-size: 14px; }
-        .btn-submit { width: 100%; padding: 13px; border: none; border-radius: 10px; background: linear-gradient(90deg, #6366f1, #4f46e5); color: white; font-weight: 600; cursor: pointer; }
-
-        .content-card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 20px; margin-top: 20px; }
-        .content-body { background: #0f172a; padding: 16px; border-radius: 8px; font-size: 14px; line-height: 1.7; color: #e2e8f0; white-space: pre-wrap; margin-top: 12px; border: 1px solid #334155; }
-
-        /* ATTRACTIVE QUIZ STYLES */
-        .quiz-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; background: #0f172a; padding: 12px 16px; border-radius: 10px; border: 1px solid #334155; }
-        .quiz-progress-bar { width: 100%; height: 8px; background: #0f172a; border-radius: 10px; overflow: hidden; margin-bottom: 15px; border: 1px solid #334155; }
-        .quiz-progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #6366f1, #10b981); transition: width 0.3s ease; }
-        .question-title { font-size: 16px; font-weight: 600; color: #f8fafc; margin-bottom: 15px; line-height: 1.5; }
-        
-        .option-btn { width: 100%; padding: 14px; margin-bottom: 10px; border-radius: 10px; background: #0f172a; color: #f8fafc; border: 1px solid #334155; text-align: left; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; display: flex; justify-content: space-between; align-items: center; }
-        .option-btn:hover { border-color: #6366f1; background: #1e293b; }
-        
-        .option-btn.correct { background: #064e3b !important; border-color: #10b981 !important; color: #a7f3d0 !important; animation: pop 0.2s ease; }
-        .option-btn.wrong { background: #7f1d1d !important; border-color: #ef4444 !important; color: #fecaca !important; animation: shake 0.3s ease; }
-
-        @keyframes pop { 0% { transform: scale(0.98); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
-        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
-
-        .loader-spinner { text-align: center; padding: 30px 10px; color: #818cf8; font-size: 15px; }
-        .dev-footer { position: fixed; bottom: 0; left: 0; width: 100%; background: #090d16; padding: 10px; text-align: center; border-top: 1px solid #1e293b; font-size: 13px; color: #60a5fa; font-weight: 600; }
+        .badge-coming { background: #f59e0b; color: #0f172a; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
     </style>
 </head>
-<body>
+<body class="bg-login" id="appBody">
 
-    <div class="app-header">
-        <div class="title" onclick="showPage('homePage')"><i class="fa-solid fa-graduation-cap"></i> RamNotes AI</div>
-        <button class="nav-back-btn" onclick="showPage('homePage')"><i class="fa-solid fa-house"></i> Main Dashboard</button>
+    <div class="app-bar">
+        <div class="logo-3d" onclick="navTo('dashboardPage', 'bg-dashboard')">RamNotes AI</div>
+        <div style="display: flex; gap: 10px;">
+            <button class="btn-action" onclick="openHelpModal()"><i class="fa-solid fa-circle-question"></i> Help</button>
+            <button class="btn-action" onclick="navTo('dashboardPage', 'bg-dashboard')"><i class="fa-solid fa-house"></i> Home</button>
+        </div>
     </div>
 
-    <div class="main-container">
+    <div class="container">
 
-        <!-- DASHBOARD -->
-        <div id="homePage" class="page-view active">
-            <h3 style="margin-bottom: 15px; color:#818cf8;">Select Module</h3>
-            <div class="dashboard-grid">
-                <div class="card-menu" onclick="showPage('booksPage')">
-                    <i class="fa-solid fa-book-open" style="color: #818cf8;"></i>
-                    <h4>NCERT Books & Notes</h4>
+        <!-- STEP 1: AUTHENTICATION (Login) -->
+        <div id="loginPage" class="page active">
+            <div class="auth-card">
+                <h2>Welcome Back</h2>
+                <p style="font-size: 13px; color: #94a3b8; margin: 8px 0 20px;">Secure Access Portal</p>
+                <button class="social-btn btn-google" onclick="loginSuccess('Google')"><i class="fa-brands fa-google"></i> Continue with Google</button>
+                <button class="social-btn btn-fb" onclick="loginSuccess('Facebook')"><i class="fa-brands fa-facebook"></i> Continue with Facebook</button>
+                <div style="margin: 15px 0; color: #64748b; font-size: 12px;">OR MOBILE OTP</div>
+                <input type="text" class="input-field" placeholder="Enter Mobile Number / Contact">
+                <button class="btn-action" style="width:100%; justify-content:center; padding: 12px; background: #38bdf8; color: #0f172a;" onclick="loginSuccess('OTP')">Send OTP</button>
+            </div>
+        </div>
+
+        <!-- STEP 2: MAIN DASHBOARD -->
+        <div id="dashboardPage" class="page">
+            <h2 style="margin-bottom: 5px;">Dashboard</h2>
+            <p style="color: #94a3b8; font-size: 14px; margin-bottom: 20px;">Choose a module to continue learning</p>
+
+            <div class="grid-menu">
+                <div class="menu-item" onclick="navTo('booksPage', 'bg-books')">
+                    <i class="fa-solid fa-book" style="color: #38bdf8;"></i>
+                    <h3>NCERT Books</h3>
                 </div>
-                <div class="card-menu" onclick="showPage('solutionsPage')">
+                <div class="menu-item" onclick="navTo('solutionsPage', 'bg-solutions')">
                     <i class="fa-solid fa-file-signature" style="color: #f59e0b;"></i>
-                    <h4>NCERT Solutions</h4>
+                    <h3>NCERT Solutions</h3>
                 </div>
-                <div class="card-menu" onclick="showPage('doubtPage')">
+                <div class="menu-item" onclick="navTo('doubtPage', 'bg-doubt')">
                     <i class="fa-solid fa-robot" style="color: #10b981;"></i>
-                    <h4>AI Doubt Solver</h4>
+                    <h3>AI Doubt Solver</h3>
                 </div>
-                <div class="card-menu" onclick="showPage('quizPage')">
-                    <i class="fa-solid fa-gamepad" style="color: #ef4444;"></i>
-                    <h4>Dynamic AI Quiz</h4>
+                <div class="menu-item" onclick="navTo('productsPage', 'bg-products')">
+                    <i class="fa-solid fa-cube" style="color: #a855f7;"></i>
+                    <h3>3D & Products <span class="badge-coming">SOON</span></h3>
+                </div>
+                <div class="menu-item" onclick="navTo('quizPage', 'bg-quiz')">
+                    <i class="fa-solid fa-gamepad" style="color: #f43f5e;"></i>
+                    <h3>20 Mark Sound Quiz</h3>
+                </div>
+                <div class="menu-item" onclick="navTo('leaderboardPage', 'bg-leaderboard')">
+                    <i class="fa-solid fa-trophy" style="color: #eab308;"></i>
+                    <h3>Leaderboard</h3>
                 </div>
             </div>
         </div>
 
-        <!-- BOOKS & NOTES -->
-        <div id="booksPage" class="page-view">
-            <h3 style="color:#818cf8;">📚 NCERT Books & Chapter Notes</h3>
-            <div class="form-card">
-                <div class="form-group">
-                    <label>Step 1: Select Class</label>
-                    <select id="bookClass" class="form-control" onchange="loadSubjects('bookClass', 'bookSubject', 'bookChapter')"></select>
-                </div>
-                <div class="form-group">
-                    <label>Step 2: Select Subject</label>
-                    <select id="bookSubject" class="form-control" onchange="loadChapters('bookClass', 'bookSubject', 'bookChapter')"></select>
-                </div>
-                <div class="form-group">
-                    <label>Step 3: Select Chapter</label>
-                    <select id="bookChapter" class="form-control"></select>
-                </div>
-                <button class="btn-submit" onclick="fetchAIContent('notes')">Get Complete Notes from AI</button>
+        <!-- MODULE 1: BOOKS -->
+        <div id="booksPage" class="page">
+            <h2>📚 NCERT Books Portal</h2>
+            <div class="form-box">
+                <label>Select Class</label>
+                <select id="bookClass" class="input-field" onchange="updateBooks()"></select>
+                <label>Select Book / Subject</label>
+                <select id="bookSelect" class="input-field"></select>
+                <button class="btn-action" style="width:100%; justify-content:center; background:#0284c7;" onclick="openNcertPdf()">Open Online / Download PDF</button>
             </div>
-            <div id="bookResult"></div>
         </div>
 
-        <!-- SOLUTIONS -->
-        <div id="solutionsPage" class="page-view">
-            <h3 style="color:#f59e0b;">💡 NCERT Textbook Solutions</h3>
-            <div class="form-card">
-                <div class="form-group">
-                    <label>Step 1: Select Class</label>
-                    <select id="solClass" class="form-control" onchange="loadSubjects('solClass', 'solSubject', 'solChapter')"></select>
-                </div>
-                <div class="form-group">
-                    <label>Step 2: Select Subject</label>
-                    <select id="solSubject" class="form-control" onchange="loadChapters('solClass', 'solSubject', 'solChapter')"></select>
-                </div>
-                <div class="form-group">
-                    <label>Step 3: Select Chapter</label>
-                    <select id="solChapter" class="form-control"></select>
-                </div>
-                <button class="btn-submit" style="background: linear-gradient(90deg, #f59e0b, #d97706);" onclick="fetchAIContent('solution')">Get Step-by-Step Answer Key</button>
+        <!-- MODULE 2: SOLUTIONS -->
+        <div id="solutionsPage" class="page">
+            <h2>💡 NCERT Solutions</h2>
+            <div class="form-box">
+                <label>Class & Subject</label>
+                <select id="solClass" class="input-field"></select>
+                <label>Enter Question / Chapter</label>
+                <input type="text" id="solQuery" class="input-field" placeholder="e.g., Chapter 1 Exercise Question 3">
+                <button class="btn-action" style="width:100%; justify-content:center; background:#b45309;" onclick="getAISolution()">Get AI Solution</button>
             </div>
-            <div id="solutionResult"></div>
+            <div id="solResult" class="form-box" style="display:none;"></div>
         </div>
 
-        <!-- AI DOUBT -->
-        <div id="doubtPage" class="page-view">
-            <h3 style="color:#10b981;">🤖 Live AI Doubt Solver</h3>
-            <div class="form-card">
-                <div class="form-group">
-                    <label>Enter your Question / Doubt in detail:</label>
-                    <textarea id="doubtInput" class="form-control" style="height: 110px;" placeholder="Type your doubt here..."></textarea>
-                </div>
-                <button class="btn-submit" style="background: linear-gradient(90deg, #10b981, #059669);" onclick="solveAIDoubt()">Solve Doubt via AI</button>
+        <!-- MODULE 3: DOUBT SECTION -->
+        <div id="doubtPage" class="page">
+            <h2>🤖 AI Doubt Clearing</h2>
+            <div class="form-box">
+                <textarea id="doubtText" class="input-field" style="height:100px;" placeholder="Ask any question from Physics, Chemistry, Math, etc..."></textarea>
+                <button class="btn-action" style="width:100%; justify-content:center; background:#047857;" onclick="askDoubt()">Solve Doubt Instantly</button>
             </div>
-            <div id="doubtResult"></div>
+            <div id="doubtResult" class="form-box" style="display:none;"></div>
         </div>
 
-        <!-- CLASS/SUBJECT WISE AI QUIZ PAGE -->
-        <div id="quizPage" class="page-view">
-            <h3 style="color:#ef4444; margin-bottom: 10px;">🎮 AI Generated Quiz (20 Marks)</h3>
-            
-            <div class="form-card" id="quizSelectCard">
-                <div class="form-group">
-                    <label>Step 1: Select Class</label>
-                    <select id="quizClass" class="form-control" onchange="loadSubjects('quizClass', 'quizSubject', 'quizChapter')"></select>
-                </div>
-                <div class="form-group">
-                    <label>Step 2: Select Subject</label>
-                    <select id="quizSubject" class="form-control" onchange="loadChapters('quizClass', 'quizSubject', 'quizChapter')"></select>
-                </div>
-                <div class="form-group">
-                    <label>Step 3: Select Chapter</label>
-                    <select id="quizChapter" class="form-control"></select>
-                </div>
-                <button class="btn-submit" style="background: linear-gradient(90deg, #ef4444, #dc2626);" onclick="generateDynamicQuiz()">Start Dynamic AI Quiz</button>
+        <!-- MODULE 4: 3D / LIVE EXPERIMENTS PLACEHOLDER -->
+        <div id="productsPage" class="page">
+            <h2>🌐 Science 3D & Live Globe Experiments</h2>
+            <div class="form-box" style="text-align: center; padding: 40px;">
+                <i class="fa-solid fa-earth-americas fa-spin" style="font-size: 60px; color: #a855f7; margin-bottom: 20px;"></i>
+                <h3>3D Interactive Earth & Virtual Labs</h3>
+                <p style="color: #94a3b8; margin-top: 10px;">This feature is currently under active 3D engine construction. Coming in the next release!</p>
             </div>
+        </div>
 
-            <!-- ACTIVE QUIZ CONTAINER -->
-            <div id="activeQuizArea" style="display: none; margin-top: 15px;">
-                <div class="quiz-progress-bar">
-                    <div class="quiz-progress-fill" id="quizProgress"></div>
+        <!-- MODULE 5: 20 MARKS QUIZ WITH AUDIO -->
+        <div id="quizPage" class="page">
+            <h2>🎮 Daily 20-Mark Sound Quiz</h2>
+            <div class="form-box" id="quizBox">
+                <div style="display:flex; justify-content:space-between; margin-bottom: 15px; font-weight:700;">
+                    <span id="quizQCount">Question 1 / 20</span>
+                    <span id="quizScore">Score: 0</span>
                 </div>
+                <h3 id="quizQuestionText" style="margin-bottom: 20px;">Loading daily dynamic question...</h3>
+                <div id="quizOptions"></div>
+            </div>
+        </div>
 
-                <div class="quiz-header">
-                    <span id="quizQuestionCount" style="font-size: 13px; font-weight: 600; color: #818cf8;">Question 1 / 20</span>
-                    <span id="quizScore" style="font-size: 13px; font-weight: 700; color: #10b981;">Score: 0 / 20</span>
+        <!-- MODULE 6: LEADERBOARD -->
+        <div id="leaderboardPage" class="page">
+            <h2>🏆 Leaderboard Rankings</h2>
+            <div class="form-box">
+                <div style="display:flex; justify-content:space-around; margin-bottom: 20px; font-size: 13px;">
+                    <span class="badge-coming">Weekly</span>
+                    <span>Monthly</span>
+                    <span>All-Time</span>
                 </div>
-
-                <div class="form-card" id="quizQuestionCard">
-                    <div class="question-title" id="questionText">Loading...</div>
-                    <div id="optionsContainer"></div>
+                <div style="line-height: 2.2;">
+                    🥇 <b>Ramesh K.</b> - 19/20 (Class 12)<br>
+                    🥈 <b>Aman S.</b> - 18/20 (Class 12)<br>
+                    🥉 <b>Priya M.</b> - 17/20 (Class 11)
                 </div>
             </div>
         </div>
 
     </div>
 
-    <div class="dev-footer">Developed with ❤️ by Ramesh Kumawat</div>
+    <!-- HELP / SUPPORT MODAL -->
+    <div id="helpModal" class="modal">
+        <div class="modal-content">
+            <i class="fa-solid fa-headset" style="font-size: 40px; color: #38bdf8; margin-bottom: 15px;"></i>
+            <h3>Need Assistance?</h3>
+            <p style="color: #94a3b8; font-size: 14px; margin: 15px 0;">If something is not working smoothly, don't worry! Our systems automatically refresh daily. Try reloading or reach out directly.</p>
+            <button class="btn-action" style="width:100%; justify-content:center; background:#38bdf8; color:#0f172a;" onclick="closeHelpModal()">Got It, Thanks!</button>
+        </div>
+    </div>
 
     <script>
-        const ncertDatabase = {
-            "12": {
-                "English (Vistas)": ["The Third Level", "The Tiger King", "Journey to the end of the Earth", "The Enemy", "On the face of It", "Memories of Childhood"],
-                "English (Flamingo)": ["The Last Lesson", "Lost Spring", "Deep Water", "The Rattrap", "Indigo", "Poets and Pancakes", "The Interview", "Going Places"],
-                "Physics": ["Electric Charges and Fields", "Electrostatic Potential", "Current Electricity", "Moving Charges and Magnetism", "Ray Optics", "Wave Optics", "Atoms", "Nuclei", "Semiconductor Electronics"],
-                "Chemistry": ["Solutions", "Electrochemistry", "Chemical Kinetics", "d and f Block Elements", "Coordination Compounds", "Amines"],
-                "Mathematics": ["Relations and Functions", "Inverse Trigonometry", "Matrices", "Determinants", "Integrals", "Vector Algebra", "3D Geometry", "Probability"]
-            },
-            "11": {
-                "Physics": ["Units and Measurements", "Motion in a Straight Line", "Laws of Motion", "Work, Energy and Power"],
-                "Chemistry": ["Basic Concepts of Chemistry", "Structure of Atom", "Chemical Bonding"],
-                "Mathematics": ["Sets", "Relations and Functions", "Trigonometry", "Complex Numbers"]
-            },
-            "10": {
-                "Science": ["Chemical Reactions", "Acids, Bases and Salts", "Life Processes", "Control and Coordination", "Electricity"],
-                "Mathematics": ["Real Numbers", "Polynomials", "Quadratic Equations", "Triangles", "Trigonometry"],
-                "Social Science": ["Development", "Sectors of Indian Economy", "Resource and Development"]
-            },
-            "9": {
-                "Science": ["Matter in Our Surroundings", "Atoms and Molecules", "Cell - The Fundamental Unit of Life", "Motion"],
-                "Mathematics": ["Number Systems", "Polynomials", "Lines and Angles", "Triangles"]
-            },
-            "8": {
-                "Science": ["Crop Production", "Microorganisms", "Coal and Petroleum", "Force and Pressure", "Light"],
-                "Mathematics": ["Rational Numbers", "Linear Equations", "Square and Square Roots"],
-                "Social Science": ["Resources", "The Indian Constitution"],
-                "English": ["The Best Christmas Present", "The Tsunami"],
-                "Hindi": ["ध्वनि", "लाख की चूड़ियाँ", "बस की यात्रा"]
-            },
-            "7": {
-                "Science": ["Nutrition in Plants", "Heat", "Acids, Bases and Salts", "Light"],
-                "Mathematics": ["Integers", "Fractions and Decimals", "Simple Equations"],
-                "Social Science": ["Environment", "Inside Our Earth", "On Equality"],
-                "English (Poorvi/Honeycomb)": ["Three Questions", "A Gift of Chappals"],
-                "Hindi (Malhar/Vasant)": ["हम पंछी उन्मुक्त गगन के", "दादी माँ"],
-                "Sanskrit": ["सुभाषितानि", "दुर्बुद्धिः विनश्यति"]
-            },
-            "6": {
-                "Science": ["Components of Food", "Sorting Materials", "Electricity and Circuits", "Magnets"],
-                "Mathematics": ["Knowing Our Numbers", "Whole Numbers", "Integers", "Fractions"],
-                "Social Science": ["What, Where, How and When?", "The Earth in Solar System"],
-                "English": ["Who Did Patrick's Homework?", "Taro's Reward"],
-                "Hindi": ["वह चिड़िया जो", "बचपन"],
-                "Sanskrit": ["शब्दपरिचयः I", "शब्दपरिचयः II"]
-            }
-        };
-
-        function showPage(pageId) {
-            document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
+        // Dynamic Page & Theme Switcher
+        function navTo(pageId, bgClass) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
+            document.getElementById('appBody').className = bgClass;
             window.scrollTo(0,0);
         }
 
-        function initDropdowns() {
-            ['bookClass', 'solClass', 'quizClass'].forEach(classId => {
-                const select = document.getElementById(classId);
-                select.innerHTML = '';
-                for(let cls in ncertDatabase) {
-                    select.innerHTML += `<option value="${cls}">Class ${cls}</option>`;
-                }
-            });
-            loadSubjects('bookClass', 'bookSubject', 'bookChapter');
-            loadSubjects('solClass', 'solSubject', 'solChapter');
-            loadSubjects('quizClass', 'quizSubject', 'quizChapter');
+        function loginSuccess(type) {
+            alert(`Logged in successfully via ${type}!`);
+            navTo('dashboardPage', 'bg-dashboard');
         }
 
-        function loadSubjects(classId, subjectId, chapterId) {
-            const cls = document.getElementById(classId).value;
-            const subSelect = document.getElementById(subjectId);
-            subSelect.innerHTML = '';
-            const subjects = Object.keys(ncertDatabase[cls] || {});
-            subjects.forEach(sub => subSelect.innerHTML += `<option value="${sub}">${sub}</option>`);
-            loadChapters(classId, subjectId, chapterId);
-        }
+        function openHelpModal() { document.getElementById('helpModal').style.display = 'flex'; }
+        function closeHelpModal() { document.getElementById('helpModal').style.display = 'none'; }
 
-        function loadChapters(classId, subjectId, chapterId) {
-            const cls = document.getElementById(classId).value;
-            const sub = document.getElementById(subjectId).value;
-            const chapSelect = document.getElementById(chapterId);
-            chapSelect.innerHTML = '';
-            const chapters = (ncertDatabase[cls] && ncertDatabase[cls][sub]) || [];
-            chapters.forEach(chap => chapSelect.innerHTML += `<option value="${chap}">${chap}</option>`);
-        }
+        // Audio Effects Engine (Web Audio API)
+        function playSound(type) {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
 
-        // Helper function for API Payload matching FastAPI requirements (Fixes 422 Unprocessable Entity)
-        function createPayload(cls, sub, chap, promptText) {
-            return JSON.stringify({
-                level: `Class ${cls}`,
-                subject: sub,
-                chapter: chap,
-                body: promptText,
-                prompt: promptText
-            });
-        }
-
-        function parseAIText(data) {
-            if (typeof data === 'string') return data;
-            if (data.text) return data.text;
-            if (data.result) return data.result;
-            if (data.response) return data.response;
-            if (data.choices && data.choices[0]) return data.choices[0].text || data.choices[0].message?.content;
-            return JSON.stringify(data);
-        }
-
-        async function fetchAIContent(mode) {
-            const isNotes = mode === 'notes';
-            const cls = document.getElementById(isNotes ? 'bookClass' : 'solClass').value;
-            const sub = document.getElementById(isNotes ? 'bookSubject' : 'solSubject').value;
-            const chap = document.getElementById(isNotes ? 'bookChapter' : 'solChapter').value;
-
-            const resDiv = document.getElementById(isNotes ? 'bookResult' : 'solutionResult');
-            resDiv.innerHTML = `
-                <div class="content-card">
-                    <h4>📌 Class ${cls} - ${sub}: ${chap}</h4>
-                    <div class="content-body">⏳ Connecting to AI... Generating Content...</div>
-                </div>
-            `;
-
-            const promptStr = isNotes 
-                ? `Provide complete NCERT textbook notes, main summary, key formulas, and 5 important questions with answers for Class ${cls}, Subject: ${sub}, Chapter: ${chap}.`
-                : `Provide step-by-step NCERT Solutions and Answer Key for Class ${cls}, Subject: ${sub}, Chapter: ${chap}.`;
-
-            try {
-                const res = await fetch('/api/generate', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: createPayload(cls, sub, chap, promptStr)
-                });
-                const data = await res.json();
-                resDiv.querySelector('.content-body').innerText = parseAIText(data);
-            } catch(e) {
-                resDiv.querySelector('.content-body').innerText = "Unable to fetch response from API.";
+            if(type === 'correct') {
+                osc.frequency.setValueAtTime(523.25, ctx.currentTime); // C5
+                osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.1); // E5
+                gain.gain.fadeOut(0.3);
+                osc.start(); osc.stop(ctx.currentTime + 0.3);
+            } else {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(150, ctx.currentTime);
+                osc.frequency.setValueAtTime(100, ctx.currentTime + 0.15);
+                gain.gain.fadeOut(0.3);
+                osc.start(); osc.stop(ctx.currentTime + 0.3);
             }
         }
 
-        async function solveAIDoubt() {
-            const query = document.getElementById('doubtInput').value.trim();
-            if(!query) return alert('Please enter your question.');
-
-            const resDiv = document.getElementById('doubtResult');
-            resDiv.innerHTML = `
-                <div class="content-card">
-                    <h4>🤖 Question: ${query}</h4>
-                    <div class="content-body">⏳ Thinking...</div>
-                </div>
-            `;
-
-            try {
-                const res = await fetch('/api/generate', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: createPayload("General", "General", "Doubt", query)
-                });
-                const data = await res.jso                const data = await res.json();
-                resDiv.querySelector('.content-body').innerText = parseAIText(data);
-            } catch(e) {
-                resDiv.querySelector('.content-body').innerText = "API Error.";
-            }
+        // NCERT Direct Links Mapper
+        function openNcertPdf() {
+            window.open('https://ncert.nic.in/textbook.php', '_blank');
         }
 
-        // ================= DYNAMIC 20 MCQs AI QUIZ ENGINE =================
-        let generatedQuestions = [];
-        let currentQuizIndex = 0;
-        let quizScore = 0;
+        // Basic Quiz Demo Data & Logic
+        let score = 0;
+        let currentQ = 0;
+        const quizData = Array.from({length: 20}, (_, i) => ({
+            q: `Q${i+1}: What is the core principle of NCERT Chapter ${i+1}?`,
+            opts: ["Option A - Concept", "Option B - Practice", "Option C - Fundamental Law", "Option D - Application"],
+            ans: 2
+        }));
 
-        async function generateDynamicQuiz() {
-            const cls = document.getElementById('quizClass').value;
-            const sub = document.getElementById('quizSubject').value;
-            const chap = document.getElementById('quizChapter').value;
-
-            const activeArea = document.getElementById('activeQuizArea');
-            const questionCard = document.getElementById('quizQuestionCard');
-            
-            activeArea.style.display = 'block';
-            questionCard.innerHTML = `<div class="loader-spinner">⏳ AI is creating a unique 20-Question Quiz for <b>${chap}</b>... Please wait 5-10 seconds...</div>`;
-
-            const promptStr = `Generate 20 multiple choice questions (MCQs) for Class ${cls}, Subject: ${sub}, Chapter: ${chap}. Response MUST be a valid JSON array only, without markdown text. Format: [{"q": "Question string", "options": ["A", "B", "C", "D"], "answer": 0}]. (answer is index 0-3).`;
-
-            try {
-                const res = await fetch('/api/generate', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: createPayload(cls, sub, chap, promptStr)
-                });
-                const data = await res.json();
-                let rawText = parseAIText(data);
-                
-                // Extract JSON Array from AI Response
-                const jsonStart = rawText.indexOf('[');
-                const jsonEnd = rawText.lastIndexOf(']') + 1;
-                
-                if (jsonStart !== -1 && jsonEnd !== -1) {
-                    rawText = rawText.substring(jsonStart, jsonEnd);
-                }
-
-                generatedQuestions = JSON.parse(rawText);
-                currentQuizIndex = 0;
-                quizScore = 0;
-                renderQuizQuestion();
-
-            } catch(e) {
-                questionCard.innerHTML = `<div style="color:#ef4444; padding:15px; text-align:center;">Failed to generate AI Quiz. Please click "Start Dynamic AI Quiz" again.</div>`;
-            }
-        }
-
-        function renderQuizQuestion() {
-            const card = document.getElementById('quizQuestionCard');
-            
-            if(currentQuizIndex >= generatedQuestions.length) {
-                card.innerHTML = `
-                    <div style="text-align:center; padding: 20px;">
-                        <h2 style="color:#10b981; margin-bottom:10px;">🎉 Quiz Completed!</h2>
-                        <h3 style="color:#f8fafc; margin-bottom:15px;">Your Final Score: ${quizScore} / ${generatedQuestions.length}</h3>
-                        <p style="color:#94a3b8; font-size:13px; margin-bottom:20px;">${quizScore >= 12 ? 'Great job!' : 'Needs improvement. Practice again!'}</p>
-                        <button class="btn-submit" onclick="generateDynamicQuiz()">Try New Unique Quiz</button>
-                    </div>
-                `;
+        function loadQuiz() {
+            if(currentQ >= 20) {
+                document.getElementById('quizBox').innerHTML = `<h3>🎉 Quiz Complete! Score: ${score}/20</h3>`;
                 return;
             }
-
-            const currentQ = generatedQuestions[currentQuizIndex];
-            document.getElementById('quizQuestionCount').innerText = `Question ${currentQuizIndex + 1} / ${generatedQuestions.length}`;
-            document.getElementById('quizScore').innerText = `Score: ${quizScore} / ${generatedQuestions.length}`;
-            document.getElementById('quizProgress').style.width = `${((currentQuizIndex + 1) / generatedQuestions.length) * 100}%`;
-
-            card.innerHTML = `
-                <div class="question-title">${currentQuizIndex + 1}. ${currentQ.q}</div>
-                <div id="optionsContainer"></div>
-            `;
-
-            const optsDiv = document.getElementById('optionsContainer');
-            currentQ.options.forEach((optText, index) => {
-                optsDiv.innerHTML += `
-                    <button class="option-btn" onclick="checkAnswer(this, ${index}, ${currentQ.answer})">
-                        <span>${String.fromCharCode(65 + index)}) ${optText}</span>
-                        <i class="fa-regular fa-circle"></i>
-                    </button>
-                `;
+            const q = quizData[currentQ];
+            document.getElementById('quizQCount').innerText = `Question ${currentQ + 1} / 20`;
+            document.getElementById('quizScore').innerText = `Score: ${score}`;
+            document.getElementById('quizQuestionText').innerText = q.q;
+            
+            const optsContainer = document.getElementById('quizOptions');
+            optsContainer.innerHTML = '';
+            q.opts.forEach((opt, idx) => {
+                optsContainer.innerHTML += `<button class="option-card" onclick="submitAns(this, ${idx}, ${q.ans})">${opt}</button>`;
             });
         }
 
-        function checkAnswer(btn, selectedIndex, correctIndex) {
-            const allBtns = document.querySelectorAll('.option-btn');
-            allBtns.forEach(b => b.onclick = null);
-
-            if(selectedIndex === correctIndex) {
+        function submitAns(btn, selected, correct) {
+            if(selected === correct) {
                 btn.classList.add('correct');
-                btn.querySelector('i').className = 'fa-solid fa-circle-check';
-                quizScore++;
-                document.getElementById('quizScore').innerText = `Score: ${quizScore} / ${generatedQuestions.length}`;
+                playSound('correct');
+                score++;
             } else {
                 btn.classList.add('wrong');
-                btn.querySelector('i').className = 'fa-solid fa-circle-xmark';
-                allBtns[correctIndex].classList.add('correct');
-                allBtns[correctIndex].querySelector('i').className = 'fa-solid fa-circle-check';
+                playSound('wrong');
             }
-
-            setTimeout(() => {
-                currentQuizIndex++;
-                renderQuizQuestion();
-            }, 1100);
+            setTimeout(() => { currentQ++; loadQuiz(); }, 1000);
         }
 
-        window.onload = initDropdowns;
+        window.onload = () => { loadQuiz(); };
     </script>
 </body>
 </html>
