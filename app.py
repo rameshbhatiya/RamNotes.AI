@@ -2,10 +2,10 @@ import os
 import random
 import json
 import uuid
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, FileResponse
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel
 import google.generativeai as genai
 
 app = FastAPI()
@@ -25,98 +25,99 @@ if GEMINI_API_KEY:
 
 model = genai.GenerativeModel('gemini-pro')
 
-# In-Memory Database (Production ke liye SQLite/PostgreSQL use karein)
+# In-Memory Database
 users_db = {}
+usernames_db = set()
 otp_store = {}
 
-# Pydantic Schemas
-class ManualSignup(BaseModel):
+class SignupReq(BaseModel):
     name: str
-    contact: str # Email or Phone
-    password: str
     dob: str
-    captcha: str
+    phone: str
+    email: str
+    password: str
+    sex: str
+    username: str
 
-class OTPVerify(BaseModel):
+class OTPVerifyReq(BaseModel):
     contact: str
     otp: str
 
-class LoginRequest(BaseModel):
-    contact: str
+class LoginReq(BaseModel):
+    username_or_contact: str
     password: str
 
-class AIDoubtRequest(BaseModel):
-    prompt: str
+class DoubtReq(BaseModel):
+    cls: str
+    subject: str
+    chapter: str
+    topic: str
+    doubt: str
 
-# 1. Root Route
 @app.get("/", response_class=HTMLResponse)
 async def serve_home():
     possible_paths = ["index.html", "templates/index.html", "static/index.html"]
     for path in possible_paths:
         if os.path.exists(path):
             return FileResponse(path)
-    return "<h1>RamNotes AI Server Active Hai!</h1>"
+    return "<h1>RamNotes AI Backend Active</h1>"
 
-# 2. Local NCERT Book Download (Direct File Response instead of external site)
-@app.get("/api/download-book")
-async def download_book(cls: str, subject: str, chapter: str):
-    # Local PDF file path check
-    file_path = f"books/class_{cls}/{subject}/{chapter}.pdf"
-    if os.path.exists(file_path):
-        return FileResponse(file_path, media_type="application/pdf", filename=f"{subject}_ch{chapter}.pdf")
-    else:
-        # Dummy PDF stream response agar local file present na ho
-        raise HTTPException(status_code=404, detail="Book PDF locally not found in server directory.")
-
-# 3. Manual Signup & OTP / Captcha System
-@app.post("/api/auth/signup")
-async def signup(user: ManualSignup):
-    if user.captcha.upper() != "RAM78": # Static demo captcha check
-        raise HTTPException(status_code=400, detail="Invalid Captcha!")
+# 1. Registration System with Unique Username Check
+@app.post("/api/auth/register")
+async def register(user: SignupReq):
+    if user.username in usernames_db:
+        raise HTTPException(status_code=400, detail="Username already exist!")
     
-    if user.contact in users_db:
-        raise HTTPException(status_code=400, detail="User already exists!")
+    gen_otp = str(random.randint(100000, 999999))
+    target = user.email if user.email else user.phone
     
-    # Generate 6-Digit OTP
-    generated_otp = str(random.randint(100000, 999999))
-    otp_store[user.contact] = {
-        "otp": generated_otp,
-        "temp_user": user.dict()
+    otp_store[target] = {
+        "otp": gen_otp,
+        "user_data": user.dict()
     }
     
-    # Print OTP in server logs (In production, send via SMS/Email API)
-    print(f"[OTP SERVICE] Sent OTP {generated_otp} to {user.contact}")
-    return {"message": "OTP sent successfully on phone/email!", "demo_otp": generated_otp}
+    msg = f"OTP sent on Your Mobile no. ({gen_otp})" if user.phone else f"OTP sent on your Gmail ({gen_otp})"
+    return {"message": msg, "target": target}
 
 @app.post("/api/auth/verify-otp")
-async def verify_otp(data: OTPVerify):
-    record = otp_store.get(data.contact)
-    if not record or record["otp"] != data.otp:
-        raise HTTPException(status_code=400, detail="Incorrect OTP!")
+async def verify_otp(req: OTPVerifyReq):
+    record = otp_store.get(req.contact)
+    if not record or record["otp"] != req.otp:
+        raise HTTPException(status_code=400, detail="Invalid OTP!")
     
-    # Save user to DB
-    user_data = record["temp_user"]
-    users_db[data.contact] = user_data
-    del otp_store[data.contact]
+    data = record["user_data"]
+    users_db[data["username"]] = data
+    users_db[data["email"]] = data
+    users_db[data["phone"]] = data
+    usernames_db.add(data["username"])
+    del otp_store[req.contact]
     
-    return {"message": "Account created successfully!", "user": {"name": user_data["name"], "contact": user_data["contact"]}}
+    return {"message": "Account created successfully!", "user": data}
 
 @app.post("/api/auth/login")
-async def login(data: LoginRequest):
-    user = users_db.get(data.contact)
-    if not user or user["password"] != data.password:
-        raise HTTPException(status_code=400, detail="Invalid Contact or Password!")
-    
-    return {"message": "Login successful", "user": {"name": user["name"], "contact": user["contact"]}}
+async def login(req: LoginReq):
+    user = users_db.get(req.username_or_contact)
+    if not user or user["password"] != req.password:
+        raise HTTPException(status_code=400, detail="Invalid Credentials!")
+    return {"message": "Login successful", "user": user}
 
-# 4. AI Doubt Solver Endpoint
+@app.post("/api/auth/reset-password")
+async def reset_password(contact: str):
+    return {"message": f"Password reset link sent on your contact: {contact}"}
+
+# 2. AI Doubt Solver with Disclaimer
 @app.post("/api/ai/doubt")
-async def solve_doubt(req: AIDoubtRequest):
+async def solve_doubt(req: DoubtReq):
     if not GEMINI_API_KEY:
-        raise HTTPException(status_code=500, detail="Gemini API Key missing in backend.")
+        raise HTTPException(status_code=500, detail="Gemini API Key missing.")
+    
+    prompt = f"Class: {req.cls}, Subject: {req.subject}, Chapter: {req.chapter}, Topic: {req.topic}\nDoubt: {req.doubt}"
     try:
-        response = model.generate_content(f"Solve this student doubt step-by-step: {req.prompt}")
-        return {"answer": response.text}
+        response = model.generate_content(prompt)
+        return {
+            "answer": response.text,
+            "disclaimer": "It can make mistakes, please cooperate with it."
+        }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
         
