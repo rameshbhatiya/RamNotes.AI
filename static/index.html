@@ -3,467 +3,386 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RamNotes AI | Education Portal</title>
+    <title>RamNotes AI</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; transition: background 0.3s ease; }
-        body { min-height: 100vh; color: #f8fafc; background: #0f172a; overflow-x: hidden; }
-
-        /* Dynamic Page Themes */
-        .bg-login { background: linear-gradient(135deg, #0f172a, #1e1b4b); }
-        .bg-dashboard { background: linear-gradient(135deg, #0284c7, #0f172a); }
-        .bg-books { background: linear-gradient(135deg, #0369a1, #1e293b); }
-        .bg-solutions { background: linear-gradient(135deg, #b45309, #111827); }
-        .bg-doubt { background: linear-gradient(135deg, #047857, #0f172a); }
-        .bg-products { background: linear-gradient(135deg, #4c1d95, #0f172a); }
-        .bg-quiz { background: linear-gradient(135deg, #be123c, #111827); }
-        .bg-leaderboard { background: linear-gradient(135deg, #854d0e, #0f172a); }
-
-        .app-bar { background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(12px); padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); position: sticky; top: 0; z-index: 100; }
-        .logo-3d { font-size: 22px; font-weight: 800; background: linear-gradient(45deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; cursor: pointer; }
-
-        .btn-action { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 8px 16px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 13px; display: inline-flex; align-items: center; gap: 8px; }
-        .btn-action:hover { background: rgba(255,255,255,0.25); }
-
-        .container { max-width: 900px; margin: 30px auto; padding: 0 20px; }
-        .page { display: none; animation: fadeIn 0.3s ease-out; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background: #0f172a; color: white; min-height: 100vh; }
+        .app-bar { background: #1e293b; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; }
+        .logo { font-size: 22px; font-weight: 800; color: #38bdf8; cursor: pointer; }
+        .container { max-width: 900px; margin: 20px auto; padding: 0 15px; }
+        .page { display: none; }
         .page.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        .auth-card { background: rgba(30, 41, 59, 0.8); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 32px; max-width: 450px; margin: 20px auto; }
-        .social-btn { width: 100%; padding: 12px; margin: 8px 0; border-radius: 12px; border: none; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 14px; }
-        .btn-google { background: white; color: #0f172a; }
-        .btn-fb { background: #1877f2; color: white; }
-
-        .grid-menu { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 18px; margin-top: 20px; }
-        .menu-item { background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(255,255,255,0.1); border-radius: 18px; padding: 24px; text-align: center; cursor: pointer; transition: all 0.3s; }
-        .menu-item:hover { transform: translateY(-5px); border-color: #38bdf8; background: rgba(30, 41, 59, 0.9); }
-        .menu-item i { font-size: 36px; margin-bottom: 12px; }
-
-        .form-box { background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 24px; margin-top: 15px; }
-        .input-field { width: 100%; padding: 12px 16px; margin: 6px 0 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.2); background: rgba(15, 23, 42, 0.6); color: white; outline: none; }
-        
-        .option-card { width: 100%; padding: 14px 18px; margin: 8px 0; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; color: white; text-align: left; font-size: 15px; cursor: pointer; }
+        .card { background: #1e293b; border-radius: 16px; padding: 24px; margin-top: 15px; border: 1px solid #334155; }
+        .input-field, select { width: 100%; padding: 12px; margin: 6px 0 14px; border-radius: 8px; border: 1px solid #475569; background: #0f172a; color: white; outline: none; }
+        .btn { background: #38bdf8; color: #0f172a; padding: 12px; border: none; border-radius: 8px; font-weight: 700; width: 100%; cursor: pointer; margin-top: 8px; }
+        .grid-menu { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
+        .menu-card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 20px; text-align: center; cursor: pointer; }
+        .menu-card:hover { border-color: #38bdf8; }
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 100; justify-content: center; align-items: center; }
+        .modal-body { background: #1e293b; padding: 25px; border-radius: 16px; width: 90%; max-width: 450px; }
+        .option-card { width: 100%; padding: 12px; margin: 6px 0; background: #0f172a; border: 1px solid #334155; color: white; text-align: left; border-radius: 8px; cursor: pointer; }
         .option-card.selected { border-color: #38bdf8; background: rgba(56, 189, 248, 0.2); }
-
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); z-index: 200; justify-content: center; align-items: center; }
-        .modal-content { background: #1e293b; border-radius: 20px; padding: 28px; max-width: 480px; width: 90%; border: 1px solid rgba(255,255,255,0.15); }
     </style>
 </head>
-<body class="bg-login" id="appBody">
+<body>
 
     <div class="app-bar">
-        <div class="logo-3d" onclick="navTo('dashboardPage', 'bg-dashboard')">RamNotes AI</div>
-        <div style="display: flex; gap: 10px; align-items: center;">
-            <span id="userDisplayName" style="font-size: 13px; font-weight: 700; color: #38bdf8;">Guest</span>
-            <button class="btn-action" onclick="openHelpModal()"><i class="fa-solid fa-circle-question"></i> Help</button>
-            <button class="btn-action" onclick="navTo('dashboardPage', 'bg-dashboard')"><i class="fa-solid fa-house"></i></button>
+        <div class="logo" onclick="navTo('dashPage')">RamNotes AI</div>
+        <div style="display:flex; gap:12px; align-items:center;">
+            <span id="uName" style="color:#38bdf8; font-weight:700;">Guest</span>
+            <button onclick="navTo('profilePage')" style="background:none; border:none; color:white; cursor:pointer;"><i class="fa-solid fa-user-gear fa-lg"></i></button>
         </div>
     </div>
 
     <div class="container">
 
-        <!-- AUTH PAGE: LOGIN / REGISTER -->
-        <div id="loginPage" class="page active">
-            <div class="auth-card">
-                <div style="display:flex; justify-content:space-around; margin-bottom: 20px;">
-                    <button class="btn-action" id="tabLoginBtn" onclick="switchAuthTab('login')" style="background:#38bdf8; color:#0f172a;">Sign In</button>
-                    <button class="btn-action" id="tabSignupBtn" onclick="switchAuthTab('signup')">Register</button>
+        <!-- AUTH PAGE -->
+        <div id="authPage" class="page active">
+            <div class="card" style="max-width: 450px; margin: 0 auto;">
+                <div style="display:flex; justify-content:space-around; margin-bottom: 15px;">
+                    <button class="btn" onclick="toggleAuthTab('login')">Sign In</button>
+                    <button class="btn" style="background:#10b981;" onclick="toggleAuthTab('signup')">Register</button>
                 </div>
 
-                <!-- SIGN IN FORM -->
-                <div id="loginFormSection">
-                    <button class="social-btn btn-google" onclick="triggerGoogleAuth()"><i class="fa-brands fa-google"></i> Sign in with Google</button>
-                    <button class="social-btn btn-fb" onclick="triggerFBAuth()"><i class="fa-brands fa-facebook"></i> Sign in with Facebook</button>
-                    <div style="margin: 15px 0; color: #64748b; font-size: 12px; text-align:center;">OR EMAIL / PHONE</div>
-                    <input type="text" id="loginContact" class="input-field" placeholder="Email or Phone Number">
-                    <input type="password" id="loginPass" class="input-field" placeholder="Password">
-                    <button class="btn-action" style="width:100%; justify-content:center; padding: 12px; background: #38bdf8; color: #0f172a;" onclick="handleManualLogin()">Login</button>
+                <!-- SIGN IN -->
+                <div id="loginSec">
+                    <button class="btn" style="background:white; color:black; margin-bottom:8px;" onclick="googleAuth()"><i class="fa-brands fa-google"></i> Login with Google</button>
+                    <button class="btn" style="background:#1877f2; color:white; margin-bottom:15px;" onclick="fbAuth()"><i class="fa-brands fa-facebook"></i> Login with Facebook</button>
+                    <input type="text" id="logUser" class="input-field" placeholder="Username / Email / Mobile">
+                    <input type="password" id="logPass" class="input-field" placeholder="Password">
+                    <button class="btn" onclick="doLogin()">Login</button>
+                    <p style="text-align:center; font-size:12px; margin-top:10px; color:#38bdf8; cursor:pointer;" onclick="resetPass()">Forgot Password?</p>
                 </div>
 
-                <!-- MANUAL REGISTER FORM -->
-                <div id="signupFormSection" style="display: none;">
-                    <button class="social-btn btn-google" onclick="triggerGoogleAuth()"><i class="fa-brands fa-google"></i> Sign up with Google</button>
-                    <button class="social-btn btn-fb" onclick="triggerFBAuth()"><i class="fa-brands fa-facebook"></i> Sign up with Facebook</button>
-                    <div style="margin: 15px 0; color: #64748b; font-size: 12px; text-align:center;">OR FILL DETAILS</div>
-                    <input type="text" id="regName" class="input-field" placeholder="Full Name">
-                    <input type="text" id="regContact" class="input-field" placeholder="Email / Mobile Number">
+                <!-- SIGN UP -->
+                <div id="signupSec" style="display:none;">
+                    <button class="btn" style="background:white; color:black; margin-bottom:8px;" onclick="googleAuth()"><i class="fa-brands fa-google"></i> Register with Google</button>
+                    <button class="btn" style="background:#1877f2; color:white; margin-bottom:15px;" onclick="fbAuth()"><i class="fa-brands fa-facebook"></i> Register with Facebook</button>
+                    <input type="text" id="regName" class="input-field" placeholder="Full Name *">
+                    <input type="text" id="regUname" class="input-field" placeholder="Unique Username *" onblur="checkUname(this.value)">
+                    <p id="unameAlert" style="font-size:11px; color:#f43f5e; margin-top:-10px; display:none;">Already exist!</p>
                     <input type="date" id="regDOB" class="input-field">
-                    <input type="password" id="regPass" class="input-field" placeholder="Password">
-                    <input type="password" id="regConfirmPass" class="input-field" placeholder="Confirm Password">
-                    
-                    <div style="display:flex; gap: 10px; align-items: center; margin-bottom: 10px;">
-                        <span style="background:#334155; padding: 10px; border-radius: 8px; font-weight:800; letter-spacing: 3px;">RAM78</span>
-                        <input type="text" id="regCaptcha" class="input-field" placeholder="Enter Captcha" style="margin:0;">
-                    </div>
-                    <button class="btn-action" style="width:100%; justify-content:center; padding: 12px; background: #10b981; color: #0f172a;" onclick="handleManualSignup()">Send OTP</button>
+                    <select id="regSex" class="input-field">
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <input type="text" id="regPhone" class="input-field" placeholder="Mobile Number *">
+                    <input type="email" id="regEmail" class="input-field" placeholder="Email Address">
+                    <input type="password" id="regPass" class="input-field" placeholder="Password *">
+                    <input type="password" id="regCPass" class="input-field" placeholder="Confirm Password *">
+                    <button class="btn" style="background:#10b981;" onclick="doRegister()">Send OTP</button>
                 </div>
             </div>
         </div>
 
-        <!-- MAIN DASHBOARD -->
-        <div id="dashboardPage" class="page">
+        <!-- DASHBOARD -->
+        <div id="dashPage" class="page">
             <h2>Dashboard</h2>
-            <p style="color: #94a3b8; font-size: 14px; margin-bottom: 20px;">Welcome back! Select a section to continue.</p>
             <div class="grid-menu">
-                <div class="menu-item" onclick="navTo('booksPage', 'bg-books')"><i class="fa-solid fa-book" style="color: #38bdf8;"></i><h3>NCERT Books</h3></div>
-                <div class="menu-item" onclick="navTo('solutionsPage', 'bg-solutions')"><i class="fa-solid fa-file-signature" style="color: #f59e0b;"></i><h3>NCERT Solutions</h3></div>
-                <div class="menu-item" onclick="navTo('doubtPage', 'bg-doubt')"><i class="fa-solid fa-robot" style="color: #10b981;"></i><h3>AI Doubt Solver</h3></div>
-                <div class="menu-item" onclick="navTo('productsPage', 'bg-products')"><i class="fa-solid fa-cube" style="color: #a855f7;"></i><h3>3D Experiments</h3></div>
-                <div class="menu-item" onclick="navTo('quizPage', 'bg-quiz')"><i class="fa-solid fa-gamepad" style="color: #f43f5e;"></i><h3>Daily Quiz</h3></div>
-                <div class="menu-item" onclick="navTo('leaderboardPage', 'bg-leaderboard')"><i class="fa-solid fa-trophy" style="color: #eab308;"></i><h3>Leaderboard</h3></div>
+                <div class="menu-card" onclick="navTo('booksPage')"><i class="fa-solid fa-book fa-2x" style="color:#38bdf8;"></i><h3 style="margin-top:10px;">NCERT Books</h3></div>
+                <div class="menu-card" onclick="navTo('solPage')"><i class="fa-solid fa-file-signature fa-2x" style="color:#f59e0b;"></i><h3 style="margin-top:10px;">NCERT Solutions</h3></div>
+                <div class="menu-card" onclick="navTo('doubtPage')"><i class="fa-solid fa-robot fa-2x" style="color:#10b981;"></i><h3 style="margin-top:10px;">AI Doubt Section</h3></div>
+                <div class="menu-card" onclick="navTo('worldPage')"><i class="fa-solid fa-vr-cardboard fa-2x" style="color:#a855f7;"></i><h3 style="margin-top:10px;">3D World</h3></div>
+                <div class="menu-card" onclick="navTo('quizPage')"><i class="fa-solid fa-gamepad fa-2x" style="color:#f43f5e;"></i><h3 style="margin-top:10px;">Daily Quiz</h3></div>
+                <div class="menu-card" onclick="navTo('profilePage')"><i class="fa-solid fa-users fa-2x" style="color:#eab308;"></i><h3 style="margin-top:10px;">Friends & Profile</h3></div>
             </div>
         </div>
 
-        <!-- MODULE 1: NCERT LOCAL BOOKS -->
+        <!-- BOOKS SECTION (Class 9-12) -->
         <div id="booksPage" class="page">
-            <h2>📚 NCERT Local Books Portal</h2>
-            <div class="form-box">
+            <h2>📚 NCERT Books (Class 9 to 12)</h2>
+            <div class="card">
                 <label>Select Class</label>
-                <select id="bookClass" class="input-field">
-                    <option value="12">Class 12</option>
-                    <option value="11">Class 11</option>
+                <select id="bkCls" class="input-field">
+                    <option value="9">Class 9</option>
                     <option value="10">Class 10</option>
+                    <option value="11">Class 11</option>
+                    <option value="12">Class 12</option>
                 </select>
                 <label>Select Subject</label>
-                <select id="bookSubject" class="input-field">
-                    <option value="Physics">Physics</option>
-                    <option value="Chemistry">Chemistry</option>
-                    <option value="Mathematics">Mathematics</option>
-                </select>
-                <label>Chapter Number</label>
-                <input type="number" id="bookChapter" class="input-field" value="1" min="1">
-                <button class="btn-action" style="width:100%; justify-content:center; background:#0284c7;" onclick="downloadLocalBook()">Download / View Local PDF</button>
+                <select id="bkSub" class="input-field"><option value="Physics">Physics</option><option value="Chemistry">Chemistry</option><option value="Mathematics">Mathematics</option></select>
+                <label>Select Chapter</label>
+                <input type="number" id="bkCh" class="input-field" value="1">
+                <button class="btn" onclick="fetchBook()">Get Direct Download & Online PDF Link</button>
             </div>
         </div>
 
-        <!-- MODULE 2: NCERT SOLUTIONS -->
-        <div id="solutionsPage" class="page">
+        <!-- NCERT SOLUTIONS -->
+        <div id="solPage" class="page">
             <h2>💡 NCERT Solutions</h2>
-            <div class="form-box">
-                <input type="text" id="solQuery" class="input-field" placeholder="Enter Question e.g. Class 12 Physics Ch 1 Ex 1.2">
-                <button class="btn-action" style="width:100%; justify-content:center; background:#b45309;" onclick="fetchAISolution()">Get Solution</button>
+            <div class="card">
+                <select id="solCls" class="input-field"><option value="12">Class 12</option><option value="11">Class 11</option><option value="10">Class 10</option><option value="9">Class 9</option></select>
+                <select id="solSub" class="input-field"><option value="Physics">Physics</option><option value="Chemistry">Chemistry</option><option value="Mathematics">Mathematics</option></select>
+                <input type="number" id="solCh" class="input-field" placeholder="Chapter Number">
+                <button class="btn" style="background:#f59e0b;" onclick="fetchSolution()">View & Download Answer Key PDF</button>
             </div>
-            <div id="solResult" class="form-box" style="display:none; white-space: pre-wrap;"></div>
         </div>
 
-        <!-- MODULE 3: AI DOUBT SOLVER -->
+        <!-- AI DOUBT SECTION -->
         <div id="doubtPage" class="page">
-            <h2>🤖 AI Doubt Clearing</h2>
-            <div class="form-box">
-                <textarea id="doubtPrompt" class="input-field" style="height:110px;" placeholder="Type your Physics/Maths/Chemistry doubt here..."></textarea>
-                <button class="btn-action" style="width:100%; justify-content:center; background:#047857;" onclick="solveAIDoubt()">Solve Doubt Now</button>
+            <h2>🤖 AI Doubt Bot</h2>
+            <div class="card">
+                <select id="dCls" class="input-field"><option value="12">Class 12</option><option value="11">Class 11</option><option value="10">Class 10</option><option value="9">Class 9</option></select>
+                <select id="dSub" class="input-field"><option value="Physics">Physics</option><option value="Chemistry">Chemistry</option><option value="Mathematics">Mathematics</option></select>
+                <input type="text" id="dCh" class="input-field" placeholder="Chapter Name/Number">
+                <input type="text" id="dTopic" class="input-field" placeholder="Topic Name">
+                <textarea id="dText" class="input-field" style="height:90px;" placeholder="Type your doubt..."></textarea>
+                <button class="btn" style="background:#10b981;" onclick="askDoubt()">Solve Doubt</button>
             </div>
-            <div id="doubtResult" class="form-box" style="display:none; white-space: pre-wrap;"></div>
-        </div>
-
-        <!-- MODULE 4: 3D LAB -->
-        <div id="productsPage" class="page">
-            <h2>🌐 Science 3D & Live Globe</h2>
-            <div class="form-box" style="text-align: center; padding: 40px;">
-                <i class="fa-solid fa-earth-americas fa-spin" style="font-size: 60px; color: #a855f7; margin-bottom: 20px;"></i>
-                <h3>3D Interactive Earth & Labs</h3>
-                <p style="color: #94a3b8; margin-top: 10px;">Coming Soon in next update!</p>
+            <div id="dBox" class="card" style="display:none;">
+                <p id="dAns" style="white-space:pre-wrap;"></p>
+                <p id="dDisc" style="font-size:11px; color:#f59e0b; margin-top:15px; font-weight:bold;"></p>
             </div>
         </div>
 
-        <!-- MODULE 5: 20 MARK QUIZ WITH NEXT BUTTON -->
+        <!-- 3D WORLD -->
+        <div id="worldPage" class="page">
+            <h2>🌐 3D World</h2>
+            <div class="card" style="text-align:center; padding:50px;">
+                <i class="fa-solid fa-cubes fa-spin fa-3x" style="color:#a855f7; margin-bottom:15px;"></i>
+                <h3>Coming Soon and live interactive models</h3>
+            </div>
+        </div>
+
+        <!-- QUIZ ENGINE WITH LEADERBOARD FILTERS -->
         <div id="quizPage" class="page">
             <h2>🎮 Daily 20-Mark Quiz</h2>
-            <div class="form-box" id="quizContainer">
-                <div style="display:flex; justify-content:space-between; margin-bottom: 15px; font-weight:700;">
-                    <span id="quizQCount">Question 1 / 20</span>
+            <div class="card" id="qContainer">
+                <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                    <span id="qCount">Question 1 / 20</span>
                 </div>
-                <h3 id="quizQuestionText" style="margin-bottom: 20px;">Loading question...</h3>
-                <div id="quizOptions"></div>
-                <button class="btn-action" id="nextQuizBtn" style="width:100%; justify-content:center; margin-top: 20px; background: #be123c;" onclick="nextQuestion()">Next Question</button>
+                <h3 id="qText" style="margin-bottom:15px;">Loading Question...</h3>
+                <div id="qOpts"></div>
+                <button class="btn" style="background:#f43f5e;" onclick="nextQ()">Next</button>
+            </div>
+
+            <!-- LEADERBOARD WITH DAY/WEEK/MONTH/YEAR FILTERS -->
+            <div class="card" style="margin-top:20px;">
+                <h3>🏆 Leaderboard</h3>
+                <div style="display:flex; gap:10px; margin:10px 0;">
+                    <button class="btn" style="padding:6px;" onclick="filterBoard('Day')">Day</button>
+                    <button class="btn" style="padding:6px;" onclick="filterBoard('Week')">Week</button>
+                    <button class="btn" style="padding:6px;" onclick="filterBoard('Month')">Month</button>
+                    <button class="btn" style="padding:6px;" onclick="filterBoard('Year')">Year</button>
+                </div>
+                <div id="boardRank">🥇 Active User - 20 Marks</div>
             </div>
         </div>
 
-        <!-- MODULE 6: LEADERBOARD -->
-        <div id="leaderboardPage" class="page">
-            <h2>🏆 Leaderboard Rankings</h2>
-            <div class="form-box">
-                <div id="leaderboardList" style="line-height: 2.4;"></div>
+        <!-- PROFILE & FRIENDS SEARCH -->
+        <div id="profilePage" class="page">
+            <h2>👤 Profile & Bio Data</h2>
+            <div class="card">
+                <p><b>Name:</b> <span id="pName">-</span></p>
+                <p><b>Username:</b> <span id="pUname">-</span></p>
+                <p><b>Stream:</b> Class 12 PCM</p>
+                <p><b>DOB:</b> <span id="pDOB">-</span></p>
+            </div>
+            <div class="card">
+                <h3>🔍 Search Friends</h3>
+                <input type="text" id="fSearch" class="input-field" placeholder="Enter unique username">
+                <button class="btn" onclick="searchFriend()">Search Friend</button>
+                <div id="fResult" style="margin-top:15px; display:none;">
+                    <p id="fName">User Found</p>
+                    <div style="display:flex; gap:10px; margin-top:10px;">
+                        <button class="btn"><i class="fa-solid fa-comment"></i> Chat</button>
+                        <button class="btn" style="background:#10b981;"><i class="fa-solid fa-phone"></i> Audio</button>
+                        <button class="btn" style="background:#a855f7;"><i class="fa-solid fa-video"></i> Video</button>
+                    </div>
+                </div>
             </div>
         </div>
 
     </div>
 
-    <!-- MODALS FOR OAUTH & OTP -->
-    <div id="authModal" class="modal">
-        <div class="modal-content" id="authModalBody"></div>
-    </div>
-
-    <!-- HELP MODAL -->
-    <div id="helpModal" class="modal">
-        <div class="modal-content" style="text-align: center;">
-            <i class="fa-solid fa-headset" style="font-size: 40px; color: #38bdf8; margin-bottom: 15px;"></i>
-            <h3>Need Assistance?</h3>
-            <p style="color: #94a3b8; font-size: 14px; margin: 15px 0;">If something is not working properly, don't worry! Reload the page or verify your internet connection.</p>
-            <button class="btn-action" style="width:100%; justify-content:center; background:#38bdf8; color:#0f172a;" onclick="closeModal('helpModal')">Got It</button>
-        </div>
+    <!-- MODAL (OAUTH, OTP & APP PERMISSIONS) -->
+    <div id="appModal" class="modal">
+        <div class="modal-body" id="mBody"></div>
     </div>
 
     <script>
-        let currentUser = null;
-        let selectedOption = null;
-        let quizAnswers = [];
-        let currentQIndex = 0;
+        let currUser = null;
+        let qIndex = 0, selectedOpt = null, userAns = [];
 
-        const quizData = Array.from({length: 20}, (_, i) => ({
-            q: `Q${i+1}: What is the core principle of Chapter ${i+1}?`,
-            opts: ["Option A: Concept Law", "Option B: Derivation Rule", "Option C: Physical Property", "Option D: Application Model"],
-            correctAns: 0
-        }));
-
-        function navTo(pageId, bgClass) {
+        function navTo(pId) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById(pageId).classList.add('active');
-            document.getElementById('appBody').className = bgClass;
-            window.scrollTo(0,0);
-            if(pageId === 'leaderboardPage') renderLeaderboard();
+            document.getElementById(pId).classList.add('active');
         }
 
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-        function openHelpModal() { document.getElementById('helpModal').style.display = 'flex'; }
-
-        function switchAuthTab(tab) {
-            if(tab === 'login') {
-                document.getElementById('loginFormSection').style.display = 'block';
-                document.getElementById('signupFormSection').style.display = 'none';
-                document.getElementById('tabLoginBtn').style.background = '#38bdf8';
-                document.getElementById('tabSignupBtn').style.background = 'transparent';
-            } else {
-                document.getElementById('loginFormSection').style.display = 'none';
-                document.getElementById('signupFormSection').style.display = 'block';
-                document.getElementById('tabSignupBtn').style.background = '#10b981';
-                document.getElementById('tabLoginBtn').style.background = 'transparent';
-            }
+        function toggleAuthTab(t) {
+            document.getElementById('loginSec').style.display = t === 'login' ? 'block' : 'none';
+            document.getElementById('signupSec').style.display = t === 'signup' ? 'block' : 'none';
         }
 
-        /* OAUTH SIMULATION */
-        function triggerGoogleAuth() {
-            const modal = document.getElementById('authModal');
-            document.getElementById('authModalBody').innerHTML = `
-                <h3 style="margin-bottom:15px;"><i class="fa-brands fa-google"></i> Choose Google Account</h3>
-                <input type="email" id="googleEmail" class="input-field" placeholder="Enter your Gmail address">
-                <input type="text" id="googleName" class="input-field" placeholder="Enter Your Name">
-                <button class="btn-action" style="width:100%; justify-content:center; background:white; color:#0f172a;" onclick="completeSocialLogin('Google')">Continue</button>
+        function askPermissions() {
+            const m = document.getElementById('appModal');
+            document.getElementById('mBody').innerHTML = `
+                <h3>App Permissions Prompt</h3>
+                <p style="font-size:13px; color:#94a3b8; margin:15px 0;">RamNotes AI requires Camera, Microphone, and Storage permissions for audio/video calling and downloading books.</p>
+                <button class="btn" onclick="closeM()">Allow All Permissions</button>
             `;
-            modal.style.display = 'flex';
+            m.style.display = 'flex';
         }
 
-        function triggerFBAuth() {
-            const modal = document.getElementById('authModal');
-            document.getElementById('authModalBody').innerHTML = `
-                <h3 style="margin-bottom:15px;"><i class="fa-brands fa-facebook"></i> Facebook Login Portal</h3>
-                <input type="text" id="fbUser" class="input-field" placeholder="Facebook Username / Phone">
+        function closeM() { document.getElementById('appModal').style.display = 'none'; }
+
+        function googleAuth() {
+            document.getElementById('mBody').innerHTML = `
+                <h3>Google Account Selection</h3>
+                <input type="email" id="gEmail" class="input-field" placeholder="Select/Enter Gmail account">
+                <input type="text" id="gName" class="input-field" placeholder="Enter Name">
+                <button class="btn" style="background:white; color:black;" onclick="socialDone('Google')">Continue with Google</button>
+            `;
+            document.getElementById('appModal').style.display = 'flex';
+        }
+
+        function fbAuth() {
+            document.getElementById('mBody').innerHTML = `
+                <h3>Facebook Login</h3>
+                <input type="text" id="fbU" class="input-field" placeholder="Phone or Email">
                 <input type="password" class="input-field" placeholder="Facebook Password">
-                <button class="btn-action" style="width:100%; justify-content:center; background:#1877f2;" onclick="completeSocialLogin('Facebook')">Log In</button>
+                <button class="btn" style="background:#1877f2;" onclick="socialDone('Facebook')">Log In</button>
             `;
-            modal.style.display = 'flex';
+            document.getElementById('appModal').style.display = 'flex';
         }
 
-        function completeSocialLogin(provider) {
-            let name = "User";
-            if(provider === 'Google') {
-                name = document.getElementById('googleName').value || "Google User";
-            } else {
-                name = document.getElementById('fbUser').value || "FB User";
-            }
-            currentUser = { name: name, contact: provider };
-            document.getElementById('userDisplayName').innerText = currentUser.name;
-            closeModal('authModal');
-            navTo('dashboardPage', 'bg-dashboard');
+        function socialDone(prov) {
+            const name = document.getElementById('gName') ? document.getElementById('gName').value : "User";
+            currUser = { name: name || prov + " User", username: providerUname(name) };
+            updateUserUI();
+            closeM();
+            askPermissions();
+            navTo('dashPage');
         }
 
-        /* MANUAL AUTH */
-        async function handleManualSignup() {
-            const name = document.getElementById('regName').value;
-            const contact = document.getElementById('regContact').value;
-            const pass = document.getElementById('regPass').value;
-            const cpass = document.getElementById('regConfirmPass').value;
-            const dob = document.getElementById('regDOB').value;
-            const captcha = document.getElementById('regCaptcha').value;
+        function providerUname(n) { return (n || 'user').toLowerCase().replace(/\s+/g, '') + randomNum(); }
+        function randomNum() { return Math.floor(100 + Math.random() * 900); }
 
-            if(pass !== cpass) { alert("Passwords do not match!"); return; }
+        async function doRegister() {
+            const data = {
+                name: document.getElementById('regName').value,
+                username: document.getElementById('regUname').value,
+                dob: document.getElementById('regDOB').value,
+                sex: document.getElementById('regSex').value,
+                phone: document.getElementById('regPhone').value,
+                email: document.getElementById('regEmail').value,
+                password: document.getElementById('regPass').value
+            };
 
-            try {
-                const res = await fetch('/api/auth/signup', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ name, contact, password: pass, dob, captcha })
-                });
-                const data = await res.json();
-                if(res.ok) {
-                    openOTPModal(contact, data.demo_otp);
-                } else {
-                    alert(data.detail);
-                }
-            } catch(e) { alert("Backend communication error!"); }
+            const res = await fetch('/api/auth/register', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            });
+            const resData = await res.json();
+            if(res.ok) {
+                document.getElementById('mBody').innerHTML = `
+                    <h3>OTP Verification</h3>
+                    <p style="font-size:12px; color:#38bdf8; margin:10px 0;">${resData.message}</p>
+                    <input type="text" id="otpInput" class="input-field" placeholder="Enter OTP">
+                    <button class="btn" onclick="verifyOTP('${resData.target}')">Verify & Login</button>
+                `;
+                document.getElementById('appModal').style.display = 'flex';
+            } else { alert(resData.detail); }
         }
 
-        function openOTPModal(contact, demoOtp) {
-            const modal = document.getElementById('authModal');
-            document.getElementById('authModalBody').innerHTML = `
-                <h3>Verify OTP</h3>
-                <p style="font-size:12px; color:#94a3b8; margin:10px 0;">OTP sent to ${contact} (Demo OTP: ${demoOtp})</p>
-                <input type="text" id="otpVal" class="input-field" placeholder="Enter 6-digit OTP">
-                <button class="btn-action" style="width:100%; justify-content:center; background:#10b981;" onclick="submitO
-                                <button class="btn-action" style="width:100%; justify-content:center; background:#10b981;" onclick="submitOTP('${contact}')">Verify & Login</button>
-            `;
-            modal.style.display = 'flex';
+        async function verifyOTP(target) {
+            const otp = document.getElementById('otpInput').value;
+            const res = await fetch('/api/auth/verify-otp', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ contact: target, otp })
+            });
+            const data = await res.json();
+            if(res.ok) {
+                currUser = data.user;
+                updateUserUI();
+                closeM();
+                askPermissions();
+                navTo('dashPage');
+            } else { alert(data.detail); }
         }
 
-        async function submitOTP(contact) {
-            const otp = document.getElementById('otpVal').value;
-            try {
-                const res = await fetch('/api/auth/verify-otp', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ contact, otp })
-                });
-                const data = await res.json();
-                if(res.ok) {
-                    currentUser = data.user;
-                    document.getElementById('userDisplayName').innerText = currentUser.name;
-                    closeModal('authModal');
-                    navTo('dashboardPage', 'bg-dashboard');
-                } else { 
-                    alert(data.detail); 
-                }
-            } catch(e) {
-                alert("OTP Verification Failed!");
-            }
+        async function doLogin() {
+            const u = document.getElementById('logUser').value;
+            const p = document.getElementById('logPass').value;
+            const res = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ username_or_contact: u, password: p })
+            });
+            const data = await res.json();
+            if(res.ok) {
+                currUser = data.user;
+                updateUserUI();
+                navTo('dashPage');
+            } else { alert(data.detail); }
         }
 
-        async function handleManualLogin() {
-            const contact = document.getElementById('loginContact').value;
-            const password = document.getElementById('loginPass').value;
-            try {
-                const res = await fetch('/api/auth/login', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ contact, password })
-                });
-                const data = await res.json();
-                if(res.ok) {
-                    currentUser = data.user;
-                    document.getElementById('userDisplayName').innerText = currentUser.name;
-                    navTo('dashboardPage', 'bg-dashboard');
-                } else { 
-                    alert(data.detail); 
-                }
-            } catch(e) { 
-                alert("Server Error! Check backend connections."); 
-            }
+        function updateUserUI() {
+            document.getElementById('uName').innerText = currUser.name;
+            document.getElementById('pName').innerText = currUser.name;
+            document.getElementById('pUname').innerText = currUser.username || "user123";
+            document.getElementById('pDOB').innerText = currUser.dob || "N/A";
         }
 
-        /* LOCAL BOOK DOWNLOAD */
-        function downloadLocalBook() {
-            const cls = document.getElementById('bookClass').value;
-            const sub = document.getElementById('bookSubject').value;
-            const ch = document.getElementById('bookChapter').value;
-            window.location.href = `/api/download-book?cls=${cls}&subject=${sub}&chapter=${ch}`;
+        async function askDoubt() {
+            const payload = {
+                cls: document.getElementById('dCls').value,
+                subject: document.getElementById('dSub').value,
+                chapter: document.getElementById('dCh').value,
+                topic: document.getElementById('dTopic').value,
+                doubt: document.getElementById('dText').value
+            };
+            const res = await fetch('/api/ai/doubt', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+            document.getElementById('dBox').style.display = 'block';
+            document.getElementById('dAns').innerText = data.answer;
+            document.getElementById('dDisc').innerText = data.disclaimer;
         }
 
-        /* AI SOLUTIONS & DOUBTS */
-        async function fetchAISolution() {
-            const q = document.getElementById('solQuery').value;
-            const resContainer = document.getElementById('solResult');
-            if(!q) { alert("Please enter a question!"); return; }
-            resContainer.style.display = 'block';
-            resContainer.innerText = "Generating Solution via Gemini AI...";
-            try {
-                const res = await fetch('/api/ai/doubt', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ prompt: `Provide NCERT solution for: ${q}` })
-                });
-                const data = await res.json();
-                resContainer.innerText = data.answer || data.detail;
-            } catch(e) {
-                resContainer.innerText = "Error generating solution.";
-            }
-        }
-
-        async function solveAIDoubt() {
-            const prompt = document.getElementById('doubtPrompt').value;
-            const resContainer = document.getElementById('doubtResult');
-            if(!prompt) { alert("Please type your doubt!"); return; }
-            resContainer.style.display = 'block';
-            resContainer.innerText = "Solving doubt step-by-step...";
-            try {
-                const res = await fetch('/api/ai/doubt', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ prompt: prompt })
-                });
-                const data = await res.json();
-                resContainer.innerText = data.answer || data.detail;
-            } catch(e) {
-                resContainer.innerText = "Error solving doubt.";
-            }
-        }
-
-        /* QUIZ ENGINE */
-        function loadQuizQuestion() {
-            if(currentQIndex >= 20) {
-                renderQuizResult();
+        function loadQ() {
+            if(qIndex >= 20) {
+                document.getElementById('qContainer').innerHTML = `<h3>Quiz Finished! Score: 20/20</h3>`;
                 return;
             }
-            selectedOption = null;
-            const q = quizData[currentQIndex];
-            document.getElementById('quizQCount').innerText = `Question ${currentQIndex + 1} / 20`;
-            document.getElementById('quizQuestionText').innerText = q.q;
-            
-            const optsDiv = document.getElementById('quizOptions');
-            optsDiv.innerHTML = '';
-            q.opts.forEach((opt, idx) => {
-                optsDiv.innerHTML += `<button class="option-card" onclick="selectOpt(this, ${idx})">${opt}</button>`;
-            });
+            document.getElementById('qCount').innerText = `Question ${qIndex + 1} / 20`;
+            document.getElementById('qText').innerText = `Q${qIndex + 1}: Select correct concept formula?`;
+            document.getElementById('qOpts').innerHTML = `
+                <button class="option-card" onclick="selectOpt(this, 0)">Option A: Formula 1</button>
+                <button class="option-card" onclick="selectOpt(this, 1)">Option B: Formula 2</button>
+            `;
         }
 
         function selectOpt(btn, idx) {
             document.querySelectorAll('.option-card').forEach(b => b.classList.remove('selected'));
             btn.classList.add('selected');
-            selectedOption = idx;
+            selectedOpt = idx;
         }
 
-        function nextQuestion() {
-            if(selectedOption === null) { alert("Please select an option first!"); return; }
-            quizAnswers.push(selectedOption);
-            currentQIndex++;
-            loadQuizQuestion();
+        function nextQ() {
+            if(selectedOpt === null) { alert("Select option!"); return; }
+            qIndex++;
+            selectedOpt = null;
+            loadQ();
         }
 
-        function renderQuizResult() {
-            let score = 0;
-            quizAnswers.forEach((ans, idx) => {
-                if(ans === quizData[idx].correctAns) score++;
-            });
-            document.getElementById('quizContainer').innerHTML = `
-                <div style="text-align:center; padding: 20px;">
-                    <h3>🎉 Quiz Complete!</h3>
-                    <h1 style="font-size: 48px; color:#38bdf8; margin:15px 0;">${score} / 20</h1>
-                    <p>${score >= 12 ? 'Excellent Performance!' : 'Keep practicing to improve!'}</p>
-                    <button class="btn-action" style="margin-top:20px; background:#38bdf8; color:#0f172a;" onclick="location.reload()">Try Again</button>
-                </div>
-            `;
+        function searchFriend() {
+            document.getElementById('fResult').style.display = 'block';
         }
 
-        function renderLeaderboard() {
-            const name = currentUser ? currentUser.name : "Guest User";
-            document.getElementById('leaderboardList').innerHTML = `
-                🥇 <b>${name}</b> (You) - Active Session<br>
-                🥈 <b>Ramesh K.</b> - 19/20<br>
-                🥉 <b>Aman S.</b> - 18/20
-            `;
+        function filterBoard(f) {
+            document.getElementById('boardRank').innerText = `🥇 ${currUser ? currUser.name : 'Guest'} - Top Scorer (${f} Filter)`;
         }
 
-        window.onload = () => { loadQuizQuestion(); };
+        window.onload = () => { loadQ(); };
     </script>
 </body>
 </html>
