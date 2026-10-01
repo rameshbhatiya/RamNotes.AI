@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart School Portal & Admin App</title>
+    <title>Smart School Portal & Director Panel</title>
     <style>
         :root {
             --primary: #4f46e5;
@@ -14,18 +14,8 @@
             --border-color: #e2e8f0;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            padding-bottom: 50px;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-color); padding-bottom: 50px; }
 
         header {
             background-color: var(--primary);
@@ -46,12 +36,7 @@
             cursor: pointer;
         }
 
-        .container {
-            max-width: 900px;
-            margin: 20px auto;
-            padding: 0 15px;
-        }
-
+        .container { max-width: 900px; margin: 20px auto; padding: 0 15px; }
         .card {
             background: var(--card-bg);
             border-radius: 10px;
@@ -61,107 +46,101 @@
             border: 1px solid var(--border-color);
         }
 
-        h2, h3 {
-            margin-bottom: 15px;
-            color: #0f172a;
-        }
-
+        h2, h3 { margin-bottom: 15px; color: #0f172a; }
         .input-field, select, textarea {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 12px;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            font-size: 14px;
+            width: 100%; padding: 10px; margin-bottom: 12px;
+            border: 1px solid var(--border-color); border-radius: 6px; font-size: 14px;
         }
 
         .btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            width: 100%;
+            background: var(--primary); color: white; border: none;
+            padding: 10px 20px; border-radius: 6px; cursor: pointer;
+            font-weight: bold; width: 100%; margin-top: 5px;
         }
-
-        .btn:hover {
-            background: var(--primary-dark);
-        }
+        .btn:hover { background: var(--primary-dark); }
+        .btn-danger { background: #dc2626; }
+        .btn-danger:hover { background: #b91c1c; }
 
         .badge-soon {
-            background-color: #ef4444;
-            color: white;
-            padding: 3px 8px;
-            font-size: 11px;
-            border-radius: 12px;
-            margin-left: 8px;
-            vertical-align: middle;
+            background-color: #ef4444; color: white;
+            padding: 3px 8px; font-size: 11px; border-radius: 12px;
+            margin-left: 8px; vertical-align: middle;
+        }
+        .badge-active {
+            background-color: #22c55e; color: white;
+            padding: 3px 8px; font-size: 11px; border-radius: 12px;
+            margin-left: 8px; vertical-align: middle;
         }
 
         .option-card {
-            display: block;
-            width: 100%;
-            padding: 12px;
-            margin: 8px 0;
-            background: #f1f5f9;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            text-align: left;
-            cursor: pointer;
+            display: block; width: 100%; padding: 12px; margin: 8px 0;
+            background: #f1f5f9; border: 1px solid var(--border-color);
+            border-radius: 6px; text-align: left; cursor: pointer;
         }
-
-        .option-card.selected {
-            background: #e0e7ff;
-            border-color: var(--primary);
-        }
+        .option-card.selected { background: #e0e7ff; border-color: var(--primary); }
 
         .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
-            justify-content: center;
-            align-items: center;
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); justify-content: center; align-items: center;
         }
-
         .modal-content {
-            background: white;
-            padding: 25px;
-            border-radius: 8px;
-            width: 90%;
-            max-width: 400px;
+            background: white; padding: 25px; border-radius: 8px;
+            width: 90%; max-width: 400px;
         }
 
-        /* Chart Canvas */
-        #scoreChart {
-            max-width: 100%;
-            height: 200px;
-            background: #f1f5f9;
-            border-radius: 8px;
-            margin-top: 15px;
-        }
-
-        .admin-panel {
-            border: 2px dashed var(--primary);
-            background: #eef2ff;
-        }
+        #scoreChart { max-width: 100%; height: 200px; background: #f1f5f9; border-radius: 8px; margin-top: 15px; }
+        .admin-panel { border: 2px solid var(--primary); background: #eef2ff; }
+        .notice-banner { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 12px; margin-bottom: 20px; border-radius: 4px; }
     </style>
 </head>
 <body>
 
     <header>
-        <h1 style="font-size: 20px;">School Learning Portal</h1>
+        <h1 style="font-size: 20px;">Smart Learning Portal</h1>
         <div>
-            <button class="nav-btn" onclick="switchPage('mainPage')">Home</button>
-            <button class="nav-btn" id="loginBtnNav" onclick="document.getElementById('appModal').style.display='flex'">Login</button>
+            <button class="nav-btn" onclick="document.getElementById('appModal').style.display='flex'">Login</button>
         </div>
     </header>
 
-    <div class="container" id="mainPage">
+    <div class="container">
 
-        <!-- NCERT Books & Answer Keys -->
+        <!-- Global Announcement Board (Controlled by Admin) -->
+        <div class="notice-banner" id="noticeBanner">
+            <strong>📢 Announcement:</strong> <span id="noticeText">Welcome to Smart School Portal! Select your class to begin.</span>
+        </div>
+
+        <!-- 👑 DIRECTOR / SUPER ADMIN CONTROL PANEL -->
+        <div class="card admin-panel" id="adminPanel" style="display:none;">
+            <h2>👑 Director Control Panel</h2>
+            <p style="margin-bottom: 15px; color: #4338ca; font-weight: bold;">Full App Management Active</p>
+            
+            <div style="background: white; padding: 15px; border-radius: 6px; margin-bottom: 15px;">
+                <h3>1. Change Live Announcement Notice</h3>
+                <input type="text" id="adminNoticeInput" class="input-field" placeholder="Type new banner message...">
+                <button class="btn" onclick="updateNotice()">Update Notice Banner</button>
+            </div>
+
+            <div style="background: white; padding: 15px; border-radius: 6px; margin-bottom: 15px;">
+                <h3>2. Feature Status Toggle</h3>
+                <button class="btn" onclick="toggleFeature('ansKeyStatus')">Toggle Answer Key Status</button>
+                <button class="btn" onclick="toggleFeature('3dStatus')" style="background:#0284c7;">Toggle 3D World Status</button>
+            </div>
+
+            <div style="background: white; padding: 15px; border-radius: 6px; margin-bottom: 15px;">
+                <h3>3. Add Custom Quiz Question</h3>
+                <input type="text" id="customQ" class="input-field" placeholder="Question text">
+                <input type="text" id="customOpt1" class="input-field" placeholder="Option 1 (Correct Answer)">
+                <input type="text" id="customOpt2" class="input-field" placeholder="Option 2">
+                <button class="btn" onclick="addCustomQuestion()" style="background:#16a34a;">Add Question to Quiz Pool</button>
+            </div>
+
+            <div style="background: white; padding: 15px; border-radius: 6px;">
+                <h3>4. Manage User Comments</h3>
+                <button class="btn btn-danger" onclick="clearAllComments()">Delete All Comments</button>
+            </div>
+        </div>
+
+        <!-- NCERT Books Section -->
         <div class="card">
             <h2>NCERT Books & Materials</h2>
             <label>Select Class (Class 1 to 12):</label>
@@ -175,7 +154,7 @@
             </select>
 
             <p style="margin-top: 10px;">
-                <strong>Answer Key:</strong> <span class="badge-soon">Coming Soon</span>
+                <strong>Answer Key:</strong> <span id="ansKeyBadge" class="badge-soon">Coming Soon</span>
             </p>
             <p style="margin-top: 5px;">
                 <strong>NCERT Official Textbook Link:</strong> 
@@ -185,11 +164,11 @@
 
         <!-- 3D World Section -->
         <div class="card">
-            <h2>Interactive 3D World <span class="badge-soon">Coming Soon</span></h2>
-            <p style="color: #64748b;">Explore virtual labs and 3D models for Science and Maths concepts soon.</p>
+            <h2>Interactive 3D World <span id="3dBadge" class="badge-soon">Coming Soon</span></h2>
+            <p style="color: #64748b;">Explore virtual labs and 3D models for Science and Maths concepts.</p>
         </div>
 
-        <!-- AI Doubt Solver (Powered by Gemini) -->
+        <!-- AI Doubt Solver -->
         <div class="card">
             <h2>AI Doubt Solver (Gemini)</h2>
             <select id="dCls" class="input-field">
@@ -207,11 +186,10 @@
             <div id="dBox" style="display:none; margin-top: 15px; padding: 10px; background: #f0fdf4; border-left: 4px solid #22c55e;">
                 <h4>AI Answer:</h4>
                 <p id="dAns" style="margin: 5px 0;"></p>
-                <small id="dDisc" style="color: #64748b;"></small>
             </div>
         </div>
 
-        <!-- Daily Adaptive Quiz System -->
+        <!-- Quiz System -->
         <div class="card">
             <h2>Daily Chapter Quiz (20 Questions)</h2>
             <div id="quizSetup">
@@ -220,7 +198,7 @@
                     <option value="10">Class 10</option>
                     <option value="12">Class 12</option>
                 </select>
-                <input type="text" id="qSubject" class="input-field" placeholder="Subject (e.g. Hindi Veena)">
+                <input type="text" id="qSubject" class="input-field" placeholder="Subject">
                 <input type="text" id="qChapter" class="input-field" placeholder="Chapter Name">
                 <button class="btn" onclick="startQuiz()">Start Quiz</button>
             </div>
@@ -232,49 +210,35 @@
                 <button class="btn" style="margin-top: 15px;" onclick="nextQ()">Next Question</button>
             </div>
 
-            <!-- Quiz Result Block -->
             <div id="qResult" style="display:none;">
                 <h3>Quiz Summary</h3>
                 <p id="finalScore" style="font-size: 18px; font-weight: bold; color: #16a34a;"></p>
-                
                 <h4>Score Graph:</h4>
                 <canvas id="scoreChart"></canvas>
-
-                <h4 style="margin-top: 15px;">Answer Key & Solutions:</h4>
+                <h4 style="margin-top: 15px;">Answers & Solutions:</h4>
                 <div id="ansList" style="max-height: 200px; overflow-y: auto; background: #f8fafc; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;"></div>
             </div>
         </div>
 
-        <!-- Help & Feedback Section -->
+        <!-- Help & Comments -->
         <div class="card">
             <h2>Help & Support</h2>
             <p><strong>Email Support:</strong> Contact not available</p>
             
-            <h3 style="margin-top: 15px;">Discussion & Comments</h3>
-            <textarea id="commentInput" class="input-field" rows="2" placeholder="Leave a comment or ask for help..."></textarea>
+            <h3 style="margin-top: 15px;">Discussion Board</h3>
+            <textarea id="commentInput" class="input-field" rows="2" placeholder="Leave a comment..."></textarea>
             <button class="btn" onclick="postComment()">Submit Comment</button>
 
-            <div id="commentsList" style="margin-top: 15px;">
-                <!-- Comments rendered dynamically -->
-            </div>
-        </div>
-
-        <!-- Super Admin / Director Management Panel -->
-        <div class="card admin-panel" id="adminPanel" style="display:none;">
-            <h2>👑 Director / Super Admin Panel</h2>
-            <p style="margin-bottom: 10px; color: #4338ca;">Full Control Access Active</p>
-            
-            <button class="btn" style="background:#dc2626; margin-bottom: 10px;" onclick="clearAllComments()">Clear All User Comments</button>
-            <button class="btn" style="background:#0284c7;" onclick="alert('System database synced successfully!')">Sync Global App Settings</button>
+            <div id="commentsList" style="margin-top: 15px;"></div>
         </div>
 
     </div>
 
     <!-- Login Modal -->
     <div class="modal" id="appModal">
-        <div class="modal-content" id="mBody">
-            <h3>System Login</h3>
-            <input type="text" id="logUser" class="input-field" placeholder="Username / Email">
+        <div class="modal-content">
+            <h3>Login Panel</h3>
+            <input type="text" id="logUser" class="input-field" placeholder="Username">
             <input type="password" id="logPass" class="input-field" placeholder="Password">
             <button class="btn" onclick="doLogin()">Login</button>
             <button class="btn" style="background: #64748b; margin-top: 8px;" onclick="document.getElementById('appModal').style.display='none'">Cancel</button>
@@ -282,25 +246,71 @@
     </div>
 
     <script>
-        // Global States
         let currUser = null;
-        let qIndex = 0;
-        let userAnswers = [];
-        let generatedQuestions = [];
-        let selectedOpt = null;
-        let commentsData = ["Student1: Great app for NCERT preparation!", "User2: Please add Class 4 Veena solutions."];
+        let customQuestions = [];
+        let commentsData = ["Student1: Excellent portal!", "User2: Class 4 material is useful."];
+
+        // Admin Controls
+        function doLogin() {
+            const u = document.getElementById('logUser').value;
+            const p = document.getElementById('logPass').value;
+
+            if(u === "admin" && p === "Admin#9876@Secure") {
+                currUser = { name: "Director / Admin", role: "director" };
+                document.getElementById('adminPanel').style.display = 'block';
+                alert("Welcome Admin! Full Controls Unlocked.");
+            } else {
+                currUser = { name: u || "Student", role: "student" };
+                alert("Logged in as Student.");
+            }
+            document.getElementById('appModal').style.display = 'none';
+        }
+
+        function updateNotice() {
+            const txt = document.getElementById('adminNoticeInput').value;
+            if(txt) {
+                document.getElementById('noticeText').innerText = txt;
+                alert("Live Announcement Updated!");
+            }
+        }
+
+        function toggleFeature(id) {
+            const badge = id === 'ansKeyStatus' ? document.getElementById('ansKeyBadge') : document.getElementById('3dBadge');
+            if(badge.innerText === "Coming Soon") {
+                badge.innerText = "Active";
+                badge.className = "badge-active";
+            } else {
+                badge.innerText = "Coming Soon";
+                badge.className = "badge-soon";
+            }
+            alert("Status Toggled!");
+        }
+
+        function addCustomQuestion() {
+            const q = document.getElementById('customQ').value;
+            const o1 = document.getElementById('customOpt1').value;
+            const o2 = document.getElementById('customOpt2').value;
+
+            if(q && o1 && o2) {
+                customQuestions.push({ q, opts: [o1, o2, "Option C", "Option D"], correct: 0 });
+                alert("Custom Question Added Successfully!");
+                document.getElementById('customQ').value = "";
+                document.getElementById('customOpt1').value = "";
+                document.getElementById('customOpt2').value = "";
+            } else {
+                alert("Fill all fields!");
+            }
+        }
 
         function renderComments() {
-            const container = document.getElementById('commentsList');
-            container.innerHTML = commentsData.map((c, i) => `<p style="background:#f1f5f9; padding:8px; border-radius:4px; margin-bottom:5px;">💬 ${c}</p>`).join('');
+            document.getElementById('commentsList').innerHTML = commentsData.map(c => `<p style="background:#f1f5f9; padding:8px; border-radius:4px; margin-bottom:5px;">💬 ${c}</p>`).join('');
         }
         renderComments();
 
         function postComment() {
             const txt = document.getElementById('commentInput').value;
             if(!txt) return alert("Write something first!");
-            const author = currUser ? currUser.name : "Guest User";
-            commentsData.push(`${author}: ${txt}`);
+            commentsData.push(`${currUser ? currUser.name : 'Guest'}: ${txt}`);
             document.getElementById('commentInput').value = "";
             renderComments();
         }
@@ -308,71 +318,38 @@
         function clearAllComments() {
             commentsData = [];
             renderComments();
-            alert("All comments removed by Director.");
+            alert("All comments deleted!");
         }
 
         function openNcertLink() {
-            const val = document.getElementById('ncertClassSelect').value;
-            if(val) {
+            if(document.getElementById('ncertClassSelect').value) {
                 window.open("https://ncert.nic.in/textbook.php", "_blank");
             }
         }
 
-        async function doLogin() {
-            const u = document.getElementById('logUser').value;
-            const p = document.getElementById('logPass').value;
-
-            // Updated Strong Director / Super Admin Credentials
-            if(u === "admin" && p === "Admin#9876@Secure") {
-                currUser = { name: "Director / Admin", role: "director" };
-                document.getElementById('adminPanel').style.display = 'block';
-                alert("Welcome Director! Admin Management Enabled.");
-            } else {
-                currUser = { name: u || "Student", role: "student" };
-            }
-
-            document.getElementById('loginBtnNav').innerText = currUser.name;
-            document.getElementById('appModal').style.display = 'none';
-        }
-
         async function askDoubt() {
-            const cls = document.getElementById('dCls').value;
-            const sub = document.getElementById('dSub').value;
-            const chap = document.getElementById('dChap').value;
-            const doubt = document.getElementById('dText').value;
-
-            if(!doubt) return alert("Please enter your doubt!");
-
+            const d = document.getElementById('dText').value;
+            if(!d) return alert("Write your question!");
             document.getElementById('dBox').style.display = 'block';
-            document.getElementById('dAns').innerText = "Analyzing with Gemini AI...";
-            document.getElementById('dDisc').innerText = "";
-
-            try {
-                const res = await fetch('/api/ai/doubt', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ cls, subject: sub, chapter: chap, doubt })
-                });
-                const data = await res.json();
-                document.getElementById('dAns').innerText = data.answer || `AI Answer for "${doubt}": Detailed explanation based on Class ${cls} ${sub} syllabus.`;
-                document.getElementById('dDisc').innerText = data.disclaimer || "Generated by AI Gemini Model.";
-            } catch(e) {
-                document.getElementById('dAns').innerText = `Solution for "${doubt}": Step-by-step resolution according to Class ${cls} ${sub} curriculum.`;
-                document.getElementById('dDisc').innerText = "Generated by AI Gemini Engine.";
-            }
+            document.getElementById('dAns').innerText = "AI is thinking...";
+            setTimeout(() => {
+                document.getElementById('dAns').innerText = `Solution for "${d}": Explanation provided according to NCERT syllabus.`;
+            }, 1000);
         }
 
-        // Quiz Generation System
-        function startQuiz() {
-            qIndex = 0;
-            userAnswers = [];
-            generatedQuestions = [];
+        // Quiz Logic
+        let qIndex = 0, userAnswers = [], questions = [], selectedOpt = null;
 
-            const dateSeed = new Date().toDateString(); // Ensures unique mix per day
-            for(let i = 1; i <= 20; i++) {
-                generatedQuestions.push({
-                    q: `Q${i}: [${dateSeed}] Sample evaluation question ${i} for selected chapter?`,
-                    opts: [`Concept Option A`, `Concept Option B`, `Concept Option C`, `Concept Option D`],
+        function startQuiz() {
+            qIndex = 0; userAnswers = []; questions = [];
+            
+            // Mix custom admin questions + auto generated questions
+            questions = [...customQuestions];
+            while(questions.length < 20) {
+                let idx = questions.length + 1;
+                questions.push({
+                    q: `Q${idx}: Objective question ${idx} for selected chapter?`,
+                    opts: ["Correct Answer A", "Option B", "Option C", "Option D"],
                     correct: 0
                 });
             }
@@ -384,18 +361,12 @@
         }
 
         function loadQ() {
-            if(qIndex >= 20) {
-                finishQuiz();
-                return;
-            }
+            if(qIndex >= 20) { finishQuiz(); return; }
             document.getElementById('qCount').innerText = `Question ${qIndex + 1} / 20`;
-            document.getElementById('qText').innerText = generatedQuestions[qIndex].q;
-            
-            const optsHtml = generatedQuestions[qIndex].opts.map((opt, idx) => 
+            document.getElementById('qText').innerText = questions[qIndex].q;
+            document.getElementById('qOpts').innerHTML = questions[qIndex].opts.map((opt, idx) => 
                 `<button class="option-card" onclick="selectOpt(this, ${idx})">${opt}</button>`
             ).join('');
-            
-            document.getElementById('qOpts').innerHTML = optsHtml;
             selectedOpt = null;
         }
 
@@ -406,7 +377,7 @@
         }
 
         function nextQ() {
-            if(selectedOpt === null) { alert("Please select an option first!"); return; }
+            if(selectedOpt === null) return alert("Select an option!");
             userAnswers.push(selectedOpt);
             qIndex++;
             loadQ();
@@ -416,35 +387,25 @@
             document.getElementById('qContainer').style.display = 'none';
             document.getElementById('qResult').style.display = 'block';
 
-            let score = 0;
-            let ansHtml = "";
-            generatedQuestions.forEach((q, i) => {
-                const isCorrect = userAnswers[i] === q.correct;
+            let score = 0, ansHtml = "";
+            questions.forEach((q, i) => {
+                let isCorrect = userAnswers[i] === q.correct;
                 if(isCorrect) score++;
-                ansHtml += `<p style="margin-bottom: 5px;"><strong>${i+1}. ${q.q}</strong><br>Your Answer: ${q.opts[userAnswers[i]]} ${isCorrect ? '✅' : '❌'}<br>Correct: ${q.opts[q.correct]}</p><hr style="margin:5px 0;">`;
+                ansHtml += `<p><strong>${i+1}. ${q.q}</strong><br>Your Answer: ${q.opts[userAnswers[i]]} ${isCorrect ? '✅' : '❌'}</p><hr style="margin:5px 0;">`;
             });
 
             document.getElementById('finalScore').innerText = `Your Final Score: ${score} / 20`;
             document.getElementById('ansList').innerHTML = ansHtml;
-
             plotGraph(score);
         }
 
         function plotGraph(score) {
-            const canvas = document.getElementById('scoreChart');
-            const ctx = canvas.getContext('2d');
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            // Simple visual bar chart
-            ctx.fillStyle = "#cbd5e1";
-            ctx.fillRect(50, 20, 40, 110); // Total bar
-            ctx.fillStyle = "#22c55e";
-            ctx.fillRect(130, 130 - (score * 5.5), 40, score * 5.5); // Score bar
-
-            ctx.fillStyle = "#0f172a";
-            ctx.font = "12px sans-serif";
-            ctx.fillText("Total (20)", 45, 145);
-            ctx.fillText(`Score (${score})`, 125, 145);
+            const ctx = document.getElementById('scoreChart').getContext('2d');
+            ctx.clearRect(0, 0, 300, 200);
+            ctx.fillStyle = "#cbd5e1"; ctx.fillRect(50, 20, 40, 110);
+            ctx.fillStyle = "#22c55e"; ctx.fillRect(130, 130 - (score * 5.5), 40, score * 5.5);
+            ctx.fillStyle = "#0f172a"; ctx.font = "12px sans-serif";
+            ctx.fillText("Total (20)", 45, 145); ctx.fillText(`Score (${score})`, 125, 145);
         }
     </script>
 </body>
